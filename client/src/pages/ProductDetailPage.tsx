@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowRight, Star, Leaf, Wind, Droplets } from "lucide-react";
+import { ArrowRight, Star, Leaf, Wind } from "lucide-react";
 import Button from "../components/Button";
 import type { Product } from "../types";
 import type { TranslationData } from "../data/data";

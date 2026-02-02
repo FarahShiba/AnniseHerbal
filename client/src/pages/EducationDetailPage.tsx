@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { ArrowLeft, BookOpen, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { educationData } from "../data/educationData";
 import { Droplets } from "lucide-react";
 
