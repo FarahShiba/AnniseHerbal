@@ -334,7 +334,7 @@ const App: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-20">
             {/* Brand Section - 4 Columns */}
             <div className="md:col-span-4">
-              <div className="mb-8">
+              <div className="mb-3">
                 <img
                   src={logoAnnise}
                   alt="Annise Herbal"
