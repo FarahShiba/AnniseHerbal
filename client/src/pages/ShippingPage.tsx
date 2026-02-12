@@ -1,13 +1,9 @@
 import React from "react";
 import { Truck, RefreshCw, Clock, ShieldCheck } from "lucide-react";
 
-interface ShippingPageProps {
-  // Add props if needed, e.g., translation data
-}
-
-const ShippingPage: React.FC<ShippingPageProps> = () => {
+const ShippingPage: React.FC = () => {
   return (
-    <div className="animate-fade-in pt-48 pb-24 bg-white min-h-screen">
+    <div className="animate-fade-in pt-28 md:pt-48 pb-24 bg-white min-h-screen">
       <div className="container mx-auto px-6 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-16">

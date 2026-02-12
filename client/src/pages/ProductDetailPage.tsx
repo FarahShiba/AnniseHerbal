@@ -56,7 +56,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   };
 
   return (
-    <div className="animate-fade-in pt-48 pb-24 bg-white min-h-screen">
+    <div className="animate-fade-in pt-28 md:pt-48 pb-24 bg-white min-h-screen">
       <div className="container mx-auto px-6 relative">
         <button
           onClick={() => navigateTo("shop")}

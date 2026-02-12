@@ -33,7 +33,7 @@ const ShopPage: React.FC<ShopPageProps> = ({
     filter === "All" ? products : products.filter((p) => p.category === filter);
 
   return (
-    <div className="animate-fade-in pt-48 pb-24 min-h-screen bg-stone-50">
+    <div className="animate-fade-in pt-28 md:pt-48 pb-24 min-h-screen bg-stone-50">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-serif text-emerald-950 mb-4">

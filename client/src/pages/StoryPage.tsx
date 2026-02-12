@@ -8,7 +8,7 @@ interface StoryPageProps {
 }
 
 const StoryPage: React.FC<StoryPageProps> = ({ t }) => (
-  <div className="animate-fade-in pt-48 pb-24 bg-stone-50 min-h-screen">
+  <div className="animate-fade-in pt-28 md:pt-48 pb-24 bg-stone-50 min-h-screen">
     <div className="container mx-auto px-6 max-w-4xl">
       <div className="text-center mb-16">
         <h1 className="text-4xl md:text-5xl font-serif text-emerald-950 mb-4">

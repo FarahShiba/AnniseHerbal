@@ -16,7 +16,7 @@ interface ContactPageProps {
 
 const ContactPage: React.FC<ContactPageProps> = ({ t }) => {
   return (
-    <div className="animate-fade-in pt-48 pb-24 bg-white min-h-screen">
+    <div className="animate-fade-in pt-28 md:pt-48 pb-24 bg-white min-h-screen">
       <div className="container mx-auto px-6 max-w-6xl">
         {/* Header Section */}
         <div className="text-center mb-16">

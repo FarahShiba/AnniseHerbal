@@ -180,7 +180,7 @@ const App: React.FC = () => {
             : "bg-transparent py-4"
         }`}
       >
-        <div className="container mx-auto px-6 flex items-center justify-between">
+        <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
           {/* LOGO */}
           <div
             className="flex items-center gap-2 cursor-pointer"
@@ -189,7 +189,7 @@ const App: React.FC = () => {
             <img
               src={logoAnnise}
               alt="Annise Herbal"
-              className="h-20 md:h-28 w-auto object-contain transition-all hover:scale-105"
+              className="h-14 md:h-24 w-auto object-contain transition-all hover:scale-105"
             />
           </div>
 
