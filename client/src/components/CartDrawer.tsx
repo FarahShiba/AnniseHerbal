@@ -112,7 +112,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
                       </p>
                     </div>
 
-                    <div className="flex items-center justify-between mt-3">
+                    <div className="flex items-center mt-3">
                       <div className="flex items-center gap-3 bg-stone-50 rounded-lg p-1 border border-stone-100">
                         <button
                           onClick={() => onUpdateQty(item.id, item.qty - 1)}
@@ -130,9 +130,6 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
                         >
                           <Plus size={14} />
                         </button>
-                      </div>
-                      <div className="text-sm font-medium text-stone-900">
-                        Rp {(item.price * item.qty).toLocaleString("id-ID")}
                       </div>
                     </div>
                   </div>
