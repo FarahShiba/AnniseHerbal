@@ -36,7 +36,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ t }) => {
 
               <div className="space-y-8">
                 <a
-                  href="https://www.google.com/maps/search/?api=1&query=Jl.+Kesehatan+Raya+No.+123+Jakarta+Selatan+12345+Indonesia"
+                  href="https://www.google.com/maps/search/?api=1&query=Jl.+Kejaksaan+1+No.+3+Kreo+Larangan"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-4 group cursor-pointer"
@@ -49,11 +49,9 @@ const ContactPage: React.FC<ContactPageProps> = ({ t }) => {
                       Visit Us
                     </h4>
                     <p className="text-stone-600 leading-relaxed group-hover:text-emerald-800 transition-colors">
-                      Jl. Kesehatan Raya No. 123
+                      Jl. Kejaksaan 1, No. 3
                       <br />
-                      Jakarta Selatan, 12345
-                      <br />
-                      Indonesia
+                      Kreo Larangan
                     </p>
                   </div>
                 </a>
