@@ -111,7 +111,7 @@ const WhatsAppFloat: React.FC = () => {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Tulis pesan..."
-              className="flex-1 bg-stone-100 border-none rounded-full px-4 py-2 text-sm focus:ring-2 focus:ring-[#25D366] focus:outline-none"
+              className="flex-1 bg-stone-100 border-none rounded-full px-4 py-2 text-base focus:ring-2 focus:ring-[#25D366] focus:outline-none"
               autoFocus
             />
             <button
