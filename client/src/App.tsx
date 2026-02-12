@@ -347,7 +347,9 @@ const App: React.FC = () => {
               </p>
               <div className="flex gap-4">
                 <a
-                  href="#"
+                  href="https://www.instagram.com/anniseherbal/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 rounded-full bg-[#1c1209]/5 flex items-center justify-center text-[#1c1209] hover:bg-[#1c1209] hover:text-[#e6dbc9] transition-all duration-300 border border-[#1c1209]/10 hover:border-[#1c1209]"
                 >
                   <Instagram size={18} />
