@@ -144,7 +144,9 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               <Button onClick={() => addToCart(product)}>{t.add_cart}</Button>
               <Button
                 variant="secondary"
-                onClick={() => window.open("https://wa.me/", "_blank")}
+                onClick={() =>
+                  window.open("https://wa.me/628159118754", "_blank")
+                }
               >
                 {t.ask_wa}
               </Button>

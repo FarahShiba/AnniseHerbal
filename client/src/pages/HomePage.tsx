@@ -337,7 +337,9 @@ const HomePage: React.FC<HomePageProps> = ({
               </div>
 
               <Button
-                onClick={() => window.open("https://wa.me/", "_blank")}
+                onClick={() =>
+                  window.open("https://wa.me/628159118754", "_blank")
+                }
                 className="group mt-6 px-8 py-4 text-lg"
               >
                 <div className="flex items-center gap-3">
