@@ -245,7 +245,7 @@ const TestimonialsSection: React.FC = () => {
             <div className="h-4 w-px bg-stone-200"></div>
             <div className="flex gap-3">
               <a
-                href="https://www.tokopedia.com"
+                href="https://www.tokopedia.com/anniseherbal1?entrance_name=search_suggestion_store&source=universe&st=product"
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#42B549]/10 text-[#42B549] hover:bg-[#42B549] hover:text-white transition-all text-xs font-bold group"
@@ -254,7 +254,7 @@ const TestimonialsSection: React.FC = () => {
                 Tokopedia
               </a>
               <a
-                href="https://shopee.co.id"
+                href="https://shopee.co.id/anniseherbal"
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#EE4D2D]/10 text-[#EE4D2D] hover:bg-[#EE4D2D] hover:text-white transition-all text-xs font-bold group"
