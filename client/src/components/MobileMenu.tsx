@@ -75,7 +75,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
       : [];
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end">
+    <div className="fixed inset-0 z-[100] flex justify-end">
       {/* Backdrop */}
       <div
         className={`absolute inset-0 bg-stone-900/40 backdrop-blur-sm transition-opacity duration-300 ${

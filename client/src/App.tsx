@@ -158,16 +158,6 @@ const App: React.FC = () => {
         onStartShopping={() => navigateTo("shop")}
         t={t.cart}
       />
-      <MobileMenu
-        isOpen={mobileMenuOpen}
-        onClose={() => setMobileMenuOpen(false)}
-        navigateTo={navigateTo}
-        currentPage={currentPage}
-        t={t}
-        lang={lang}
-        toggleLang={toggleLang}
-        setProduct={handleSetProduct}
-      />
 
       {/* WHATSAPP FLOAT BUTTON */}
       <WhatsAppFloat />
@@ -488,6 +478,16 @@ const App: React.FC = () => {
           </div>
         </div>
       </footer>
+      <MobileMenu
+        isOpen={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        navigateTo={navigateTo}
+        currentPage={currentPage}
+        t={t}
+        lang={lang}
+        toggleLang={toggleLang}
+        setProduct={handleSetProduct}
+      />
     </div>
   );
 };
