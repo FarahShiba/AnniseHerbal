@@ -98,10 +98,7 @@ const HomePage: React.FC<HomePageProps> = ({
             {products.slice(0, 4).map((product) => (
               <div
                 key={product.id}
-                onClick={() => {
-                  setProduct(product);
-                  navigateTo("product");
-                }}
+                onClick={() => setProduct(product)}
                 className="group bg-white rounded-3xl overflow-hidden border border-stone-200 hover:border-emerald-300 hover:shadow-2xl transition-all duration-500 cursor-pointer"
               >
                 {/* Product Image Container */}
@@ -130,7 +127,6 @@ const HomePage: React.FC<HomePageProps> = ({
                     onClick={(e) => {
                       e.stopPropagation();
                       setProduct(product);
-                      navigateTo("product");
                     }}
                     className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-emerald-700 text-white px-6 py-2.5 rounded-full text-sm font-medium opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-xl hover:bg-emerald-800"
                   >
