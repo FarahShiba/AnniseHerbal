@@ -63,14 +63,6 @@ export const INDONESIA_DATA: Record<string, ProvinceData> = {
       { name: "Cilegon", zip: "42411" },
     ],
   },
-  Bali: {
-    cities: [
-      { name: "Denpasar", zip: "80111" },
-      { name: "Badung", zip: "80351" },
-      { name: "Gianyar", zip: "80511" },
-      { name: "Tabanan", zip: "82111" },
-    ],
-  },
   "DI Yogyakarta": {
     cities: [
       { name: "Yogyakarta", zip: "55122" },
@@ -78,6 +70,45 @@ export const INDONESIA_DATA: Record<string, ProvinceData> = {
       { name: "Bantul", zip: "55711" },
       { name: "Kulon Progo", zip: "55611" },
       { name: "Gunungkidul", zip: "55811" },
+    ],
+  },
+  "Sumatera Utara": {
+    cities: [
+      { name: "Medan", zip: "20111" },
+      { name: "Binjai", zip: "20711" },
+      { name: "Deli Serdang", zip: "20511" },
+    ],
+  },
+  "Sumatera Barat": {
+    cities: [
+      { name: "Padang", zip: "25111" },
+      { name: "Bukittinggi", zip: "26111" },
+    ],
+  },
+  Riau: {
+    cities: [
+      { name: "Pekanbaru", zip: "28111" },
+      { name: "Dumai", zip: "28811" },
+    ],
+  },
+  "Kalimantan Timur": {
+    cities: [
+      { name: "Samarinda", zip: "75111" },
+      { name: "Balikpapan", zip: "76111" },
+    ],
+  },
+  "Sulawesi Selatan": {
+    cities: [
+      { name: "Makassar", zip: "90111" },
+      { name: "Gowa", zip: "92111" },
+    ],
+  },
+  Bali: {
+    cities: [
+      { name: "Denpasar", zip: "80111" },
+      { name: "Badung", zip: "80351" },
+      { name: "Gianyar", zip: "80511" },
+      { name: "Tabanan", zip: "82111" },
     ],
   },
 };

@@ -8,7 +8,6 @@ import type { TranslationData } from "../data/data";
 interface SearchOverlayProps {
   isOpen: boolean;
   onClose: () => void;
-  navigateTo: (page: string) => void;
   setProduct: (product: Product) => void;
   t: TranslationData["search"];
 }
@@ -16,7 +15,6 @@ interface SearchOverlayProps {
 const SearchOverlay: React.FC<SearchOverlayProps> = ({
   isOpen,
   onClose,
-  navigateTo,
   setProduct,
   t,
 }) => {
@@ -36,7 +34,6 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
 
   const handleProductClick = (product: Product) => {
     setProduct(product);
-    navigateTo("product");
     onClose();
     setQuery("");
   };

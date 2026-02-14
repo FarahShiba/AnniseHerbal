@@ -58,7 +58,6 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
   const handleProductClick = (product: Product) => {
     if (setProduct) {
       setProduct(product);
-      navigateTo("product");
       onClose();
     }
   };

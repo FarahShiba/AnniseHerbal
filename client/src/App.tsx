@@ -10,12 +10,13 @@ import {
   Facebook,
   ArrowRight,
 } from "lucide-react";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 
 // Import Types (Wajib pakai "type")
 import type { Product, CartItem } from "./types";
 
 // Import Data
-import { translations } from "./data/data";
+import { translations, type TranslationData } from "./data/data";
 
 // Import Pages
 import HomePage from "./pages/HomePage";
@@ -43,15 +44,13 @@ import { getTranslatedProducts } from "./utils/productHelpers";
 const NavLink: React.FC<{
   page: string;
   label: string;
-  currentPage: string;
+  isActive: boolean;
   navigateTo: (page: string) => void;
-}> = ({ page, label, currentPage, navigateTo }) => (
+}> = ({ page, label, isActive, navigateTo }) => (
   <button
     onClick={() => navigateTo(page)}
     className={`text-sm font-medium tracking-wide transition-colors ${
-      currentPage === page
-        ? "text-emerald-800"
-        : "text-stone-700 hover:text-emerald-800"
+      isActive ? "text-emerald-800" : "text-stone-700 hover:text-emerald-800"
     }`}
   >
     {label}
@@ -59,11 +58,10 @@ const NavLink: React.FC<{
 );
 
 const App: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<string>("home");
+  const navigate = useNavigate();
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [selectedProductId, setSelectedProductId] = useState<number | null>(
-    null,
-  ); // Store ID only
+
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -73,26 +71,39 @@ const App: React.FC = () => {
 
   // Derived State for Products
   const products = React.useMemo(() => getTranslatedProducts(lang), [lang]);
-  const selectedProduct = React.useMemo(
-    () => products.find((p) => p.id === selectedProductId) || null,
-    [products, selectedProductId],
-  );
 
   // Wrapper for setting product to maintain API compatibility with children
   const handleSetProduct = (product: Product | null) => {
-    setSelectedProductId(product?.id || null);
+    if (product) {
+      navigate(`/product/${product.id}`);
+    }
   };
 
   // --- CART STATE ---
   const [cart, setCart] = useState<CartItem[]>(() => {
-    const savedCart = localStorage.getItem("cart");
-    return savedCart ? JSON.parse(savedCart) : [];
+    try {
+      const savedCart = localStorage.getItem("cart");
+      return savedCart ? JSON.parse(savedCart) : [];
+    } catch (error) {
+      console.error("Failed to parse cart from local storage", error);
+      return [];
+    }
   });
   const [cartOpen, setCartOpen] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
+
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const timer = setTimeout(() => {
+      setMobileMenuOpen(false);
+      setCartOpen(false);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -102,11 +113,12 @@ const App: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Adapter for old navigateTo prop pattern
   const navigateTo = (page: string) => {
-    setCurrentPage(page);
-    setMobileMenuOpen(false);
-    setCartOpen(false);
-    window.scrollTo(0, 0);
+    if (page === "home") navigate("/");
+    else if (page === "resources-safety") navigate("/education/safety");
+    else if (page === "resources-science") navigate("/education/science");
+    else navigate(`/${page}`);
   };
 
   const toggleLang = () => {
@@ -138,13 +150,17 @@ const App: React.FC = () => {
     );
   };
 
+  const isActive = (path: string) => {
+    if (path === "home" && location.pathname === "/") return true;
+    return location.pathname.startsWith(`/${path}`);
+  };
+
   return (
     <div className="font-sans text-stone-800 bg-[#fafaf9] selection:bg-emerald-200 selection:text-emerald-900 min-h-screen flex flex-col">
       {/* OVERLAYS */}
       <SearchOverlay
         isOpen={searchOpen}
         onClose={() => setSearchOpen(false)}
-        navigateTo={navigateTo}
         setProduct={handleSetProduct}
         t={t.search}
       />
@@ -158,16 +174,6 @@ const App: React.FC = () => {
         onStartShopping={() => navigateTo("shop")}
         t={t.cart}
       />
-      <MobileMenu
-        isOpen={mobileMenuOpen}
-        onClose={() => setMobileMenuOpen(false)}
-        navigateTo={navigateTo}
-        currentPage={currentPage}
-        t={t}
-        lang={lang}
-        toggleLang={toggleLang}
-        setProduct={handleSetProduct}
-      />
 
       {/* WHATSAPP FLOAT BUTTON */}
       <WhatsAppFloat />
@@ -180,7 +186,7 @@ const App: React.FC = () => {
             : "bg-transparent py-4"
         }`}
       >
-        <div className="container mx-auto px-6 flex items-center justify-between">
+        <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
           {/* LOGO */}
           <div
             className="flex items-center gap-2 cursor-pointer"
@@ -189,7 +195,7 @@ const App: React.FC = () => {
             <img
               src={logoAnnise}
               alt="Annise Herbal"
-              className="h-20 md:h-28 w-auto object-contain transition-all hover:scale-105"
+              className="h-14 md:h-24 w-auto object-contain transition-all hover:scale-105"
             />
           </div>
 
@@ -198,31 +204,31 @@ const App: React.FC = () => {
             <NavLink
               page="home"
               label={t.nav.home}
-              currentPage={currentPage}
+              isActive={isActive("home")}
               navigateTo={navigateTo}
             />
             <NavLink
               page="shop"
               label={t.nav.shop}
-              currentPage={currentPage}
+              isActive={isActive("shop")}
               navigateTo={navigateTo}
             />
             <NavLink
               page="story"
               label={t.nav.story}
-              currentPage={currentPage}
+              isActive={isActive("story")}
               navigateTo={navigateTo}
             />
             <NavLink
               page="resources"
               label={t.nav.resources}
-              currentPage={currentPage}
+              isActive={isActive("resources")}
               navigateTo={navigateTo}
             />
             <NavLink
               page="contact"
               label={t.nav.contact}
-              currentPage={currentPage}
+              isActive={isActive("contact")}
               navigateTo={navigateTo}
             />
           </nav>
@@ -271,62 +277,66 @@ const App: React.FC = () => {
       </header>
 
       <main className="grow">
-        {currentPage === "home" && (
-          <HomePage
-            navigateTo={navigateTo}
-            setProduct={handleSetProduct}
-            addToCart={addToCart}
-            t={t}
-            lang={lang}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <HomePage
+                navigateTo={navigateTo}
+                setProduct={handleSetProduct}
+                addToCart={addToCart}
+                t={t}
+                lang={lang}
+              />
+            }
           />
-        )}
-        {currentPage === "shipping" && <ShippingPage />}
-        {currentPage === "shop" && (
-          <ShopPage
-            navigateTo={navigateTo}
-            setProduct={handleSetProduct}
-            addToCart={addToCart}
-            t={t}
-            lang={lang}
+          <Route path="/shipping" element={<ShippingPage />} />
+          <Route
+            path="/shop"
+            element={
+              <ShopPage
+                setProduct={handleSetProduct}
+                addToCart={addToCart}
+                t={t}
+                lang={lang}
+              />
+            }
           />
-        )}
-        {currentPage === "product" && (
-          <ProductDetailPage
-            product={selectedProduct}
-            navigateTo={navigateTo}
-            addToCart={addToCart}
-            t={t.product}
+          <Route
+            path="/product/:id"
+            element={
+              <ProductWrapper
+                products={products}
+                navigateTo={navigateTo}
+                addToCart={addToCart}
+                t={t.product}
+              />
+            }
           />
-        )}
-        {currentPage === "checkout" && (
-          <CheckoutPage
-            cartItems={cart}
-            navigateTo={navigateTo}
-            clearCart={() => setCart([])}
-            t={t.checkout}
+          <Route
+            path="/checkout"
+            element={
+              <CheckoutPage
+                cartItems={cart}
+                navigateTo={navigateTo}
+                clearCart={() => setCart([])}
+                t={t.checkout}
+              />
+            }
           />
-        )}
-        {currentPage === "story" && <StoryPage t={t} />}
-        {currentPage === "resources" && (
-          <ResourcesPage t={t} navigateTo={navigateTo} />
-        )}
-        {currentPage === "resources-safety" && (
-          <EducationDetailPage
-            type="safety"
-            navigateTo={navigateTo}
-            lang={lang}
+          <Route path="/story" element={<StoryPage t={t} />} />
+          <Route
+            path="/resources"
+            element={<ResourcesPage t={t} navigateTo={navigateTo} />}
           />
-        )}
-        {currentPage === "resources-science" && (
-          <EducationDetailPage
-            type="science"
-            navigateTo={navigateTo}
-            lang={lang}
+          <Route
+            path="/education/:type"
+            element={<EducationWrapper navigateTo={navigateTo} lang={lang} />}
           />
-        )}
-        {currentPage === "contact" && <ContactPage t={t} />}
-        {currentPage === "faq" && <FAQPage t={t} />}
-        {currentPage === "admin" && <AdminPage />}
+          <Route path="/contact" element={<ContactPage t={t} />} />
+          <Route path="/faq" element={<FAQPage t={t} />} />
+          <Route path="/admin" element={<AdminPage />} />
+        </Routes>
       </main>
 
       <footer className="bg-[#e6dbc9] text-[#1c1209] pt-24 pb-12 border-t border-[#d4c5b0]">
@@ -347,7 +357,9 @@ const App: React.FC = () => {
               </p>
               <div className="flex gap-4">
                 <a
-                  href="#"
+                  href="https://www.instagram.com/anniseherbal/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 rounded-full bg-[#1c1209]/5 flex items-center justify-center text-[#1c1209] hover:bg-[#1c1209] hover:text-[#e6dbc9] transition-all duration-300 border border-[#1c1209]/10 hover:border-[#1c1209]"
                 >
                   <Instagram size={18} />
@@ -369,37 +381,25 @@ const App: React.FC = () => {
               <ul className="space-y-4 text-sm text-[#1c1209] font-medium">
                 <li
                   className="hover:text-[#8c6b4a] cursor-pointer transition-colors"
-                  onClick={() => {
-                    navigateTo("shop");
-                    window.scrollTo(0, 0);
-                  }}
+                  onClick={() => navigateTo("shop")}
                 >
                   Best Sellers
                 </li>
                 <li
                   className="hover:text-[#8c6b4a] cursor-pointer transition-colors"
-                  onClick={() => {
-                    navigateTo("shop");
-                    window.scrollTo(0, 0);
-                  }}
+                  onClick={() => navigateTo("shop")}
                 >
                   Pain Relief
                 </li>
                 <li
                   className="hover:text-[#8c6b4a] cursor-pointer transition-colors"
-                  onClick={() => {
-                    navigateTo("shop");
-                    window.scrollTo(0, 0);
-                  }}
+                  onClick={() => navigateTo("shop")}
                 >
                   Kids Series
                 </li>
                 <li
                   className="hover:text-[#8c6b4a] cursor-pointer transition-colors"
-                  onClick={() => {
-                    navigateTo("shop");
-                    window.scrollTo(0, 0);
-                  }}
+                  onClick={() => navigateTo("shop")}
                 >
                   All Products
                 </li>
@@ -413,37 +413,25 @@ const App: React.FC = () => {
               <ul className="space-y-4 text-sm text-[#1c1209] font-medium">
                 <li
                   className="hover:text-[#8c6b4a] cursor-pointer transition-colors"
-                  onClick={() => {
-                    navigateTo("contact");
-                    window.scrollTo(0, 0);
-                  }}
+                  onClick={() => navigateTo("contact")}
                 >
                   {t.nav.contact}
                 </li>
                 <li
                   className="hover:text-[#8c6b4a] cursor-pointer transition-colors"
-                  onClick={() => {
-                    navigateTo("resources");
-                    window.scrollTo(0, 0);
-                  }}
+                  onClick={() => navigateTo("resources")}
                 >
                   Safety Guide
                 </li>
                 <li
                   className="hover:text-[#8c6b4a] cursor-pointer transition-colors"
-                  onClick={() => {
-                    navigateTo("shipping");
-                    window.scrollTo(0, 0);
-                  }}
+                  onClick={() => navigateTo("shipping")}
                 >
                   Shipping & Returns
                 </li>
                 <li
                   className="hover:text-[#8c6b4a] cursor-pointer transition-colors"
-                  onClick={() => {
-                    navigateTo("faq");
-                    window.scrollTo(0, 0);
-                  }}
+                  onClick={() => navigateTo("faq")}
                 >
                   FAQ
                 </li>
@@ -486,7 +474,57 @@ const App: React.FC = () => {
           </div>
         </div>
       </footer>
+      <MobileMenu
+        isOpen={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        navigateTo={navigateTo}
+        currentPage={location.pathname.substring(1) || "home"}
+        t={t}
+        lang={lang}
+        toggleLang={toggleLang}
+        setProduct={handleSetProduct}
+      />
     </div>
+  );
+};
+
+// Wrapper components for handling Params
+import { useParams } from "react-router-dom";
+
+const ProductWrapper: React.FC<{
+  products: Product[];
+  navigateTo: (page: string) => void;
+  addToCart: (product: Product) => void;
+  t: TranslationData["product"];
+}> = ({ products, navigateTo, addToCart, t }) => {
+  const { id } = useParams<{ id: string }>();
+  // Handle both number/string IDs or Slugs if implemented
+  const product = products.find((p) => p.id === Number(id)) || null;
+
+  if (!product) {
+    return <div className="p-20 text-center">Product not found</div>;
+  }
+
+  return (
+    <ProductDetailPage
+      product={product}
+      navigateTo={navigateTo}
+      addToCart={addToCart}
+      t={t}
+    />
+  );
+};
+
+const EducationWrapper: React.FC<{
+  navigateTo: (page: string) => void;
+  lang: "id" | "en";
+}> = ({ navigateTo, lang }) => {
+  const { type } = useParams<{ type: string }>();
+  // Provide default logic or error handling if type is undefined
+  const safeType = type === "safety" || type === "science" ? type : "safety";
+
+  return (
+    <EducationDetailPage type={safeType} navigateTo={navigateTo} lang={lang} />
   );
 };
 

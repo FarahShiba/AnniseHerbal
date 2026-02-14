@@ -16,7 +16,7 @@ interface ContactPageProps {
 
 const ContactPage: React.FC<ContactPageProps> = ({ t }) => {
   return (
-    <div className="animate-fade-in pt-48 pb-24 bg-white min-h-screen">
+    <div className="animate-fade-in pt-28 md:pt-48 pb-24 bg-white min-h-screen">
       <div className="container mx-auto px-6 max-w-6xl">
         {/* Header Section */}
         <div className="text-center mb-16">
@@ -36,7 +36,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ t }) => {
 
               <div className="space-y-8">
                 <a
-                  href="https://www.google.com/maps/search/?api=1&query=Jl.+Kesehatan+Raya+No.+123+Jakarta+Selatan+12345+Indonesia"
+                  href="https://www.google.com/maps/search/?api=1&query=Jl.+Kejaksaan+1+No.+3+Kreo+Larangan"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-4 group cursor-pointer"
@@ -49,17 +49,15 @@ const ContactPage: React.FC<ContactPageProps> = ({ t }) => {
                       Visit Us
                     </h4>
                     <p className="text-stone-600 leading-relaxed group-hover:text-emerald-800 transition-colors">
-                      Jl. Kesehatan Raya No. 123
+                      Jl. Kejaksaan 1, No. 3
                       <br />
-                      Jakarta Selatan, 12345
-                      <br />
-                      Indonesia
+                      Kreo Larangan
                     </p>
                   </div>
                 </a>
 
                 <a
-                  href="https://wa.me/6281234567890"
+                  href="https://wa.me/628159118754"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-4 group cursor-pointer"
@@ -70,7 +68,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ t }) => {
                   <div>
                     <h4 className="font-bold text-emerald-950 mb-1">Call Us</h4>
                     <p className="text-stone-600 group-hover:text-emerald-800 transition-colors">
-                      +62 812-3456-7890
+                      +62 815-9118-754
                     </p>
                     <p className="text-stone-500 text-sm mt-1">
                       Mon-Fri, 9am-5pm
@@ -79,7 +77,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ t }) => {
                 </a>
 
                 <a
-                  href="mailto:hello@anniseherbal.com"
+                  href="mailto:anisherbal@gmail.com"
                   className="flex items-start gap-4 group cursor-pointer"
                 >
                   <div className="w-12 h-12 bg-stone-50 rounded-full flex items-center justify-center text-emerald-700 group-hover:bg-emerald-50 transition-colors">
@@ -90,10 +88,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ t }) => {
                       Email Us
                     </h4>
                     <p className="text-stone-600 group-hover:text-emerald-800 transition-colors">
-                      hello@anniseherbal.com
-                    </p>
-                    <p className="text-stone-600 group-hover:text-emerald-800 transition-colors">
-                      support@anniseherbal.com
+                      anisherbal@gmail.com
                     </p>
                   </div>
                 </a>

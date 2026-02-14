@@ -94,18 +94,15 @@ const HomePage: React.FC<HomePageProps> = ({
           <SectionTitle subtitle={t.section.best_seller_sub}>
             {t.section.best_seller}
           </SectionTitle>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8">
             {products.slice(0, 4).map((product) => (
               <div
                 key={product.id}
-                onClick={() => {
-                  setProduct(product);
-                  navigateTo("product");
-                }}
+                onClick={() => setProduct(product)}
                 className="group bg-white rounded-3xl overflow-hidden border border-stone-200 hover:border-emerald-300 hover:shadow-2xl transition-all duration-500 cursor-pointer"
               >
                 {/* Product Image Container */}
-                <div className="relative h-72 bg-linear-to-br from-stone-50 to-stone-100 overflow-hidden">
+                <div className="relative h-48 md:h-72 bg-linear-to-br from-stone-50 to-stone-100 overflow-hidden">
                   {/* Actual Product Image - Reduced padding for larger, more visible product */}
                   <div className="absolute inset-0 flex items-center justify-center p-4">
                     <img
@@ -130,7 +127,6 @@ const HomePage: React.FC<HomePageProps> = ({
                     onClick={(e) => {
                       e.stopPropagation();
                       setProduct(product);
-                      navigateTo("product");
                     }}
                     className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-emerald-700 text-white px-6 py-2.5 rounded-full text-sm font-medium opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-xl hover:bg-emerald-800"
                   >
@@ -138,7 +134,7 @@ const HomePage: React.FC<HomePageProps> = ({
                   </button>
                 </div>
                 {/* Product Info */}
-                <div className="p-6">
+                <div className="p-3 md:p-6">
                   <h3 className="font-serif text-lg md:text-xl text-emerald-950 mb-2 group-hover:text-emerald-700 transition-colors line-clamp-1">
                     {product.name}
                   </h3>
@@ -337,7 +333,9 @@ const HomePage: React.FC<HomePageProps> = ({
               </div>
 
               <Button
-                onClick={() => window.open("https://wa.me/", "_blank")}
+                onClick={() =>
+                  window.open("https://wa.me/628159118754", "_blank")
+                }
                 className="group mt-6 px-8 py-4 text-lg"
               >
                 <div className="flex items-center gap-3">

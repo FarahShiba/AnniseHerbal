@@ -43,6 +43,9 @@ export default {
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
       },
+      zIndex: {
+        100: "100",
+      },
     },
   },
   plugins: [],

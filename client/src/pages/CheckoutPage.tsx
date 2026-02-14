@@ -1,8 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import {
-  CreditCard,
   Banknote,
-  Wallet,
   CheckCircle,
   Truck,
   Zap,
@@ -112,16 +110,6 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
   const [isSuccess, setIsSuccess] = useState(false);
   const [pendingPayment, setPendingPayment] = useState(false);
 
-  // CC State
-  const [ccStep, setCcStep] = useState<"input" | "processing" | "otp">("input");
-  const [ccForm, setCcForm] = useState({ number: "", expiry: "", cvv: "" });
-  const [ccErrors, setCcErrors] = useState({
-    number: false,
-    expiry: false,
-    cvv: false,
-  });
-  const [otp, setOtp] = useState("");
-
   // Form State
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -216,45 +204,58 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
     // If no province selected, show "Select Province" or default
     if (!province) return [];
 
-    // Simple logic: if Jawa/Jakarta = cheaper/faster. Outside Java = more expensive/longer
-    const isJava =
-      province.includes("Jakarta") ||
-      province.includes("Jawa") ||
-      province.includes("Banten") ||
-      province.includes("Yogyakarta");
+    // Determine Zones
+    const isJabodetabek =
+      province === "DKI Jakarta" ||
+      province === "Banten" ||
+      province === "Jawa Barat";
 
-    // ... (rest of simple logic)
-    // For now, let's keep it simple as before but reactive to 'province'
+    const isJava =
+      province === "Jawa Tengah" ||
+      province === "Jawa Timur" ||
+      province === "DI Yogyakarta";
+
+    // JNE Rate determination
+    let jnePrice = 40000; // Default (Outside Java)
+    let jneEta = "3-5 Hari";
+
+    if (isJabodetabek) {
+      jnePrice = 10000;
+      jneEta = "1-2 Hari";
+    } else if (isJava) {
+      jnePrice = 20000;
+      jneEta = "2-3 Hari";
+    }
+
     return [
       {
-        id: "reg",
-        name: "Regular Shipping",
-        price: isJava ? 15000 : 35000,
-        eta: isJava ? "2-3 Days" : "4-7 Days",
+        id: "jne",
+        name: "JNE Regular",
+        price: jnePrice,
+        eta: jneEta,
         icon: Truck,
       },
       {
-        id: "express",
-        name: "Express Shipping",
-        price: isJava ? 30000 : 65000,
-        eta: isJava ? "1 Day" : "2-3 Days",
+        id: "gojek-instant",
+        name: "Gojek Instant",
+        price: 20000,
+        eta: "1-2 Jam",
         icon: Zap,
+        disabled: !isJabodetabek,
       },
       {
-        id: "sameday",
-        name: "Same Day Delivery",
-        price: 50000,
-        eta: "Today",
+        id: "gojek-sameday",
+        name: "Gojek Same Day",
+        price: 18000,
+        eta: "6-8 Jam",
         icon: Clock,
-        disabled: !province.includes("Jakarta"), // Only available in Jakarta
+        disabled: !isJabodetabek,
       },
     ];
   }, [province]);
 
   const paymentOptions: PaymentOption[] = [
-    { id: "cc", name: "Credit Card", icon: CreditCard },
-    { id: "tf", name: "Bank Transfer (BCA/Mandiri)", icon: Banknote },
-    { id: "ewallet", name: "E-Wallet (GoPay/Ovo/QRIS)", icon: Wallet },
+    { id: "tf", name: "Bank Transfer (BCA)", icon: Banknote },
   ];
 
   const handleNextStep1 = () => {
@@ -279,57 +280,6 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
 
   const handlePlaceOrder = () => {
     setPendingPayment(true);
-    // Reset CC step if that's the chosen method
-    if (payment?.id === "cc") {
-      setCcStep("input");
-      setCcForm({ number: "", expiry: "", cvv: "" });
-      setOtp("");
-    }
-  };
-
-  const handleCcNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, "");
-    const formatted = value.replace(/(\d{4})(?=\d)/g, "$1 ");
-    setCcForm({ ...ccForm, number: formatted });
-    if (ccErrors.number) setCcErrors({ ...ccErrors, number: false });
-  };
-
-  const handleCcExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, "");
-    if (value.length > 4) return;
-
-    let formatted = value;
-    if (value.length >= 2) {
-      formatted = value.substring(0, 2) + "/" + value.substring(2);
-    }
-    setCcForm({ ...ccForm, expiry: formatted });
-    if (ccErrors.expiry) setCcErrors({ ...ccErrors, expiry: false });
-  };
-
-  const processCreditCard = () => {
-    const newErrors = {
-      number: ccForm.number.length < 19, // 16 digits + 3 spaces
-      expiry: ccForm.expiry.length < 5,
-      cvv: ccForm.cvv.length < 3,
-    };
-
-    setCcErrors(newErrors);
-
-    if (Object.values(newErrors).some((err) => err)) {
-      return;
-    }
-
-    setCcStep("processing");
-    setTimeout(() => {
-      setCcStep("otp");
-    }, 2000);
-  };
-
-  const verifyOtp = () => {
-    setCcStep("processing");
-    setTimeout(() => {
-      confirmPayment();
-    }, 1500);
   };
 
   const confirmPayment = () => {
@@ -338,7 +288,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
       id: "ORD-" + Math.floor(Math.random() * 1000000),
       customer: {
         name: `${firstName} ${lastName}`,
-        email: "simulated@email.com", // In a real app we'd ask for this
+        email: "simulated@email.com",
         whatsapp: whatsapp,
       },
       items: cartItems,
@@ -354,7 +304,6 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
       JSON.stringify([newOrder, ...existingOrders]),
     );
 
-    // Simulate Email Email Notification
     console.log(
       `[EMAIL SIMULATION] Sending order confirmation to ${firstName} (${whatsapp})...`,
     );
@@ -373,180 +322,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
   };
 
   if (pendingPayment) {
-    // CREDIT CARD FLOW
-    if (payment?.id === "cc") {
-      return (
-        <div className="pt-32 pb-24 min-h-screen bg-stone-50 flex items-center justify-center animate-fade-in">
-          <div className="bg-white p-8 md:p-12 rounded-3xl shadow-xl max-w-lg w-full mx-4 border border-stone-100 relative overflow-hidden">
-            {ccStep === "processing" && (
-              <div className="absolute inset-0 bg-white/90 z-20 flex flex-col items-center justify-center">
-                <div className="w-12 h-12 border-4 border-emerald-100 border-t-emerald-600 rounded-full animate-spin mb-4"></div>
-                <p className="font-serif text-emerald-900 animate-pulse">
-                  Memproses Transaksi...
-                </p>
-                <p className="text-xs text-stone-500 mt-2">
-                  Jangan tutup halaman ini
-                </p>
-              </div>
-            )}
-
-            {ccStep === "input" && (
-              <div className="animate-fade-in">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-serif text-emerald-950">
-                    Kartu Kredit
-                  </h2>
-                  <div className="flex gap-2">
-                    <div className="w-8 h-5 bg-stone-200 rounded"></div>
-                    <div className="w-8 h-5 bg-stone-200 rounded"></div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">
-                      Nomor Kartu
-                    </label>
-                    <div className="relative">
-                      <CreditCard
-                        className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"
-                        size={20}
-                      />
-                      <input
-                        type="text"
-                        placeholder="0000 0000 0000 0000"
-                        maxLength={19}
-                        value={ccForm.number}
-                        onChange={handleCcNumberChange}
-                        className={`w-full pl-12 pr-4 py-3 rounded-xl border outline-none transition-colors font-mono text-stone-700 ${
-                          ccErrors.number
-                            ? "border-red-500 bg-red-50"
-                            : "border-stone-200 focus:border-emerald-500"
-                        }`}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">
-                        Berlaku Hingga
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="MM/YY"
-                        maxLength={5}
-                        value={ccForm.expiry}
-                        onChange={handleCcExpiryChange}
-                        className={`w-full px-4 py-3 rounded-xl border outline-none transition-colors font-mono text-stone-700 ${
-                          ccErrors.expiry
-                            ? "border-red-500 bg-red-50"
-                            : "border-stone-200 focus:border-emerald-500"
-                        }`}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">
-                        CVV
-                      </label>
-                      <input
-                        type="password"
-                        placeholder="123"
-                        maxLength={3}
-                        value={ccForm.cvv}
-                        onChange={(e) => {
-                          setCcForm({ ...ccForm, cvv: e.target.value });
-                          if (ccErrors.cvv)
-                            setCcErrors({ ...ccErrors, cvv: false });
-                        }}
-                        className={`w-full px-4 py-3 rounded-xl border outline-none transition-colors font-mono text-stone-700 ${
-                          ccErrors.cvv
-                            ? "border-red-500 bg-red-50"
-                            : "border-stone-200 focus:border-emerald-500"
-                        }`}
-                      />
-                    </div>
-                  </div>
-                  <div className="bg-stone-50 p-4 rounded-xl border border-stone-200 flex justify-between items-center mt-6">
-                    <span className="text-stone-600 font-medium">
-                      Total Tagihan
-                    </span>
-                    <span className="text-xl font-bold text-emerald-900">
-                      Rp {total.toLocaleString("id-ID")}
-                    </span>
-                  </div>
-                  <div className="flex gap-3 mt-4">
-                    <Button
-                      variant="secondary"
-                      onClick={() => setPendingPayment(false)}
-                      className="w-full"
-                    >
-                      Kembali
-                    </Button>
-                    <Button className="w-full" onClick={processCreditCard}>
-                      Bayar Sekarang
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {ccStep === "otp" && (
-              <div className="animate-fade-in text-center">
-                <div className="mb-6 flex justify-center">
-                  <div className="h-8 w-20 bg-blue-600 rounded flex items-center justify-center text-white font-bold text-xs italic">
-                    Visa
-                  </div>
-                </div>
-                <h3 className="text-xl font-bold text-stone-800 mb-2">
-                  Verifikasi 3D Secure
-                </h3>
-                <p className="text-sm text-stone-500 mb-6">
-                  Masukkan kode OTP yang telah dikirim ke nomor{" "}
-                  <span className="font-mono font-bold text-stone-800">
-                    +62 812-****-****
-                  </span>
-                </p>
-
-                <div className="mb-6">
-                  <input
-                    type="text"
-                    placeholder="Masukkan OTP"
-                    maxLength={6}
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-blue-500 outline-none transition-colors font-mono text-center text-2xl tracking-widest"
-                  />
-                  <p className="text-xs text-stone-400 mt-2">
-                    Tidak menerima kode?{" "}
-                    <button className="text-blue-600 hover:underline">
-                      Kirim Ulang
-                    </button>
-                  </p>
-                </div>
-
-                <div className="flex gap-3">
-                  <Button
-                    variant="secondary"
-                    className="w-full"
-                    onClick={() => {
-                      setCcStep("input");
-                      setPendingPayment(false);
-                    }}
-                  >
-                    Kembali ke Metode Pembayaran
-                  </Button>
-                  <Button className="w-full" onClick={verifyOtp}>
-                    Konfirmasi
-                  </Button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    }
-
-    // STANDARD FLOW (Bank Transfer / E-Wallet)
+    // STANDARD FLOW (Bank Transfer)
     return (
       <div className="pt-32 pb-24 min-h-screen bg-stone-50 flex items-center justify-center animate-fade-in">
         <div className="bg-white p-8 md:p-12 rounded-3xl shadow-xl max-w-lg w-full mx-4 border border-stone-100">
@@ -585,28 +361,32 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
 
             {payment?.id === "tf" && (
               <div className="bg-white p-4 rounded-xl border border-stone-200 relative group cursor-pointer hover:border-emerald-300 transition-colors">
-                <p className="text-xs text-stone-400 mb-1">
-                  Nomor Virtual Account (BCA)
+                <p className="text-xs text-stone-500 font-bold mb-2 uppercase tracking-wide">
+                  Bank Central Asia (BCA)
                 </p>
-                <div className="flex justify-between items-center">
-                  <p className="font-mono text-lg font-bold text-stone-800 tracking-wider">
-                    8801 2938 4728 1920
+                <div className="space-y-1 mb-3">
+                  <p className="text-sm text-stone-600">No. Rekening:</p>
+                  <div className="flex justify-between items-center bg-stone-50 p-2 rounded-lg border border-stone-100">
+                    <p className="font-mono text-lg font-bold text-stone-800 tracking-wider">
+                      4580-187-647
+                    </p>
+                    <button className="text-[10px] font-bold text-emerald-600 uppercase hover:text-emerald-700 px-2 py-1 bg-white rounded-md border border-emerald-100">
+                      Salin
+                    </button>
+                  </div>
+                </div>
+                <div className="space-y-0.5 text-sm text-stone-600">
+                  <p>
+                    <span className="text-stone-400">a/n:</span>{" "}
+                    <span className="font-medium text-emerald-950">
+                      Manistri Tambunan
+                    </span>
                   </p>
-                  <button className="text-xs font-bold text-emerald-600 uppercase hover:text-emerald-700 px-3 py-1 bg-emerald-50 rounded-md">
-                    Salin
-                  </button>
+                  <p>
+                    <span className="text-stone-400">Cabang:</span> Bursa Efek
+                    Sudirman
+                  </p>
                 </div>
-              </div>
-            )}
-
-            {payment?.id === "ewallet" && (
-              <div className="bg-white p-8 rounded-xl border border-stone-200 flex flex-col items-center justify-center text-center">
-                <div className="w-32 h-32 bg-stone-900 mb-4 flex items-center justify-center text-white text-xs">
-                  [QR Code Here]
-                </div>
-                <p className="text-sm text-stone-500">
-                  Scan QRIS menggunakan aplikasi pembayaran Anda
-                </p>
               </div>
             )}
           </div>

@@ -22,7 +22,7 @@ const EducationDetailPage: React.FC<EducationDetailPageProps> = ({
   }, []);
 
   return (
-    <div className="animate-fade-in pt-24 pb-24 min-h-screen bg-stone-50">
+    <div className="animate-fade-in pt-28 md:pt-40 pb-24 min-h-screen bg-stone-50">
       <div className="container mx-auto px-6 max-w-4xl">
         {/* Breadcrumb / Back Button */}
         <button

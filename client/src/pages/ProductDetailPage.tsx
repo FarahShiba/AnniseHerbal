@@ -56,7 +56,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   };
 
   return (
-    <div className="animate-fade-in pt-48 pb-24 bg-white min-h-screen">
+    <div className="animate-fade-in pt-28 md:pt-48 pb-24 bg-white min-h-screen">
       <div className="container mx-auto px-6 relative">
         <button
           onClick={() => navigateTo("shop")}
@@ -144,7 +144,9 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               <Button onClick={() => addToCart(product)}>{t.add_cart}</Button>
               <Button
                 variant="secondary"
-                onClick={() => window.open("https://wa.me/", "_blank")}
+                onClick={() =>
+                  window.open("https://wa.me/628159118754", "_blank")
+                }
               >
                 {t.ask_wa}
               </Button>

@@ -5,7 +5,6 @@ import type { TranslationData } from "../data/data";
 import { getTranslatedProducts } from "../utils/productHelpers";
 
 interface ShopPageProps {
-  navigateTo: (page: string) => void;
   setProduct: (product: Product | null) => void;
   addToCart: (product: Product) => void;
   t: TranslationData;
@@ -13,7 +12,6 @@ interface ShopPageProps {
 }
 
 const ShopPage: React.FC<ShopPageProps> = ({
-  navigateTo,
   setProduct,
   addToCart,
   t,
@@ -33,7 +31,7 @@ const ShopPage: React.FC<ShopPageProps> = ({
     filter === "All" ? products : products.filter((p) => p.category === filter);
 
   return (
-    <div className="animate-fade-in pt-48 pb-24 min-h-screen bg-stone-50">
+    <div className="animate-fade-in pt-28 md:pt-48 pb-24 min-h-screen bg-stone-50">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-serif text-emerald-950 mb-4">
@@ -60,10 +58,7 @@ const ShopPage: React.FC<ShopPageProps> = ({
           {filteredProducts.map((product) => (
             <div
               key={product.id}
-              onClick={() => {
-                setProduct(product);
-                navigateTo("product");
-              }}
+              onClick={() => setProduct(product)}
               className="group bg-white rounded-3xl overflow-hidden border border-stone-200 hover:border-emerald-300 hover:shadow-2xl transition-all duration-500 cursor-pointer"
             >
               {/* Product Image Container */}
@@ -92,7 +87,6 @@ const ShopPage: React.FC<ShopPageProps> = ({
                   onClick={(e) => {
                     e.stopPropagation();
                     setProduct(product);
-                    navigateTo("product");
                   }}
                   className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-emerald-700 text-white px-6 py-2.5 rounded-full text-sm font-medium opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-xl hover:bg-emerald-800"
                 >
