@@ -2,7 +2,7 @@ import express, {Request, Response} from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import {db} from './config/firebase';
-import { messaging } from 'firebase-admin';
+import { firestore, messaging } from 'firebase-admin';
 import { error, timeStamp } from 'node:console';
 
 
@@ -30,25 +30,37 @@ app.use(express.urlencoded({extended: true})); // Parse URL-encoded bodies
 // Health check endpoint
 app.get('/api/health', async (req: Request, res: Response)=>{
 try {
-    const testDoc = await db.collection('_healthcheck').doc('test').get();
+    // // Just check if db is initialized
+    const testRef = db.collection('healthCheck').doc('test');
+    // This will create a document if it doesn't exist, or update it if it does. We don't care about the content, just that it works.
+    await testRef.set({
+        lastChecked: new Date().toISOString(),
+        status:'ok'
+    }); 
+    
+    //read it back to verfiy 
+    const testdoc = await testRef.get();
+    if(!testdoc.exists){
+        throw new Error('Failed to verify Firestore connection');
+    }
     
     res.status(200).json({
         status:'ok', 
         message:'Server is running and connected to Firebase',
         timeStamp: new Date().toISOString(),
         firebase:'connected',
-        environment:process.env.NODE_ENV || "wr development"
+        // firestore: firestoreSettings,
+        environment:process.env.NODE_ENV || "development"
     });
 } catch (error) {
     console.error('health check error', error); 
     res.status(500).json({
-        status:'errror',
+        status:'error',
         message: 'Server is running but firebase connection failed',
         timeStamp: new Date().toISOString(),
-        error:error instanceof Error ? error.message : 'Unkown error ',
+        error:error instanceof Error ? error.message : 'Unknown error',
     });
 }
-
 });
 
 //welcome route 
@@ -88,7 +100,7 @@ app.use((err: Error, req:Request, res:Response, next: any)=>{
 //start server
 if(process.env.NODE_ENV !== 'production'){
     app.listen(PORT, ()=>{
-        console.log('server running on http://localhost:${PORT}');
+        console.log(`server running on http://localhost:${PORT}`);
         console.log(`Health check: http://localhost:${PORT}/api/health`);
     });
 }
