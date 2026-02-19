@@ -22,6 +22,7 @@ export function getTranslatedProducts(lang: "id" | "en"): Product[] {
       shortDesc: translation.shortDesc,
       description: translation.description,
       benefits: translation.benefits,
+      ingredients: translation.ingredients,
       usage: translation.usage,
     };
   });

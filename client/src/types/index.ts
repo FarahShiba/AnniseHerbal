@@ -8,8 +8,9 @@ export interface Product {
   shortDesc: string;
   description: string;
   benefits: string[];
-  ingredients: string;
+  ingredients: string[];
   usage: string;
+  caution?: string;
   imageColor: string;
   image: string;
   images?: string[];

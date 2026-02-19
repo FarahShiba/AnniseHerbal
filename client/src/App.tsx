@@ -507,6 +507,7 @@ const ProductWrapper: React.FC<{
 
   return (
     <ProductDetailPage
+      key={product.id}
       product={product}
       navigateTo={navigateTo}
       addToCart={addToCart}

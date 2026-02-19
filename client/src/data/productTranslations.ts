@@ -2,208 +2,341 @@
 export const productTranslations = {
   id: {
     1: {
-      name: "Max Pain Relief Oil",
+      name: "Max Pain Relief Oil - 100 ml",
       category: "Pain Relief",
-      shortDesc: "Essential Oil Alami untuk Nyeri Otot & Sendi",
+      shortDesc: "Minyak Pijat Herbal Pegal Linu, Nyeri Otot & Sendi",
       description:
-        "Minyak aromatherapy berbahan alami yang membantu mengurangi rasa nyeri, pegal, dan peradangan pada otot serta persendian. Cocok untuk rematik, nyeri pinggang, dan kram otot.",
+        "Max Pain Relief Oil adalah minyak pijat herbal hangat yang diformulasikan untuk membantu meredakan pegal linu, nyeri otot, rematik dan ketidak nyamanan pada sendi setelah aktivitas harian. Cocok digunakan sebagai minyak pijat pegal badan dewasa & lansia.",
       benefits: [
-        "Membantu meredakan nyeri otot dan sendi",
-        "Membantu mengurangi peradangan dan rasa kaku",
-        "Memberikan efek hangat dan relaksasi",
+        "Membantu meredakan pegal linu & nyeri otot",
+        "Membantu mengurangi nyeri sendi & rematik",
+        "Memberikan sensasi hangat & rileks pada tubuh",
+        "Cocok sebagai minyak pijat harian setelah kerja / olahraga",
+      ],
+      ingredients: [
+        "Olea europaea (Olive oil)",
+        "Calendula officinalis",
+        "Arnica",
+        "Matricaria Chamomila",
+        "Rosmarin officinale folium",
+        "Kombinasi herbal pilihan untuk minyak pijat nyeri otot & sendi dengan aroma alami yang menenangkan.",
       ],
       usage:
-        "Oleskan secukupnya pada area yang bermasalah sambil dipijat perlahan. Disarankan tidak dibasuh minimal 4 jam.",
+        "Oleskan secukupnya MPR pada area yang bermasalah sambil dipijat perlahan-lahan hingga meresap. Dianjurkan tidak dibasuh minimal 4jam.",
     },
     2: {
-      name: "Hemo Clear Oil",
+      name: "Hemo Clear Oil - 100 ml",
       category: "Specialty",
-      shortDesc: "Solusi Alami untuk Wasir Luar",
+      shortDesc: "Membantu meredakan wasir luar dan iritasi secara alami.",
       description:
-        "Membantu meredakan pembengkakan dan peradangan pada wasir luar dengan cara penggunaan yang praktis dan aman.",
+        "Pelukan hangat dalam botol untuk membantu meredakan wasir luar dan radang. Kombinasi Juniper, boswellia dan helichrysum menghadirkan sensasi menenangkan dengan aroma herbal sehat yang menemani rutinitas perawatan diri di rumah.",
       benefits: [
-        "Membantu mengurangi pembengkakan dan radang wasir",
-        "Memberikan rasa nyaman pada area sensitif",
+        "Membantu meredakan bengkak dan radang pada wasir luar",
+        "Membantu mengurangi rasa tidak nyaman akibat wasir",
+        "Mendukung penyembuhan secara alami",
       ],
-      usage: "Oleskan secukupnya pada area wasir di sekitar anus.",
+      ingredients: [
+        "Juniperus recurva",
+        "Boswellia rivae",
+        "Helichrysum italicum",
+      ],
+      usage:
+        "Oleskan tipis pada area wasir luar yang bersih dan kering. Diamkan sejenak, lalu tepuk perlahan hingga meresap. Ulangi sesuai kebutuhan.",
     },
     3: {
-      name: "Skincare Oil",
+      name: "Skincare Oil - 100 ml",
       category: "Skincare",
-      shortDesc: "Perawatan Kulit Alami untuk Kulit Lebih Sehat",
+      shortDesc: "Perawatan Kulit Alami",
       description:
-        "Diformulasikan dari essential oil alami untuk membantu merawat kulit, menjaga kelembapan, dan mendukung kesehatan kulit secara alami.",
-      benefits: [
-        "Membantu menutrisi dan melembapkan kulit",
-        "Mendukung perawatan kulit secara alami",
+        "Membantu menghaluskan kulit, melembapkan kulit kering dan merawat masalah kulit dengan kandungan minyak essential alami pilihan.",
+      benefits: ["Menghaluskan kulit", "Melembabkan kulit"],
+      ingredients: [
+        "Olea europaea (Olive Oil)",
+        "Simmondsia chinensis (Jojoba oil)",
+        "Rosa damascane (Rose)",
+        "Citrus aurantium (Neroli)",
+        "Daucus carota (Carrot seed)",
       ],
       usage:
-        "Oleskan secukupnya pada area kulit yang dibutuhkan sesuai anjuran.",
+        "Oleskan Skin Care herbal oil pada seluruh tubuh / area yang diperlukan sampai meresap. Digunakan setiap hari setelah mandi. Agar penyerapan efektif maka dianjurkan tidak mandi / dibasuh selama 6 jam.",
     },
     4: {
-      name: "Progest Oil",
+      name: "Progest Oil - 100 ml",
       category: "Digestion",
-      shortDesc: "Solusi Alami untuk Maag & Gangguan Pencernaan",
+      shortDesc: "Meringankan maag dan masalah pencernaan.",
       description:
-        "Membantu mengatasi gangguan pencernaan seperti maag, kembung, mual, diare, dan sembelit dengan pendekatan aromatherapy alami.",
+        "Membantu mengatasi gangguan pencernaan seperti maag, kembung, diare, sembelit dan mual.",
       benefits: [
-        "Membantu meredakan maag dan perut kembung",
-        "Membantu mengurangi mual, diare, dan sembelit",
+        "Membantu mengatasi gangguan pencernaan seperti : maag, kembung, diare, sembelit dan mual",
+      ],
+      ingredients: [
+        "Olea europaea fructus",
+        "Calendula officinalis",
+        "Foeniculi vulgrate fructus",
+        "Mentha piperita",
+        "Lavendula angustifolia",
+        "Rosmarin officinale folium",
       ],
       usage:
-        "Oleskan pada area perut dengan pijatan memutar searah jarum jam. Untuk diare, pijat berlawanan arah jarum jam. Gunakan 2-3 kali sehari.",
+        "Oleskan secukupnya progest pada area lambung memutar searah dengan jarum jam. Khusus diare, pijat memutar berlawanan arah jarum jam. Dilakukan 2-3 kali sehari sampai keluhan berkurang / reda.",
     },
     5: {
-      name: "Nozze Oil (Dewasa)",
+      name: "Nozze Oil Dewasa - 15 ml",
       category: "Respiratory",
-      shortDesc: "Essential Oil untuk Sinusitis & Hidung Tersumbat",
+      shortDesc: "Minyak Hidung Tersumbat, Minyak Oil Hidung Mampet",
       description:
-        "Membantu meredakan peradangan pada sinus, melancarkan pernapasan, dan membantu mengeluarkan lendir yang terperangkap di rongga sinus.",
+        "Nozze Oil Dewasa adalah minyak herbal berbahan essential oil murni yang membantu melegakan hidung tersumbat serta memberikan rasa segar dan lega pada saluran pernapasan. Cocok digunakan sebagai minyak oles hidung mampet dan aromaterapi pernapasan dewasa untuk penggunaan harian.",
       benefits: [
-        "Membantu mengatasi sinusitis, pilek, dan rhinitis",
-        "Membantu meredakan hidung tersumbat dan bersin-bersin",
+        "Membantu melegakan hidung tersumbat dan hidung mampet",
+        "Membantu meredakan pilek & bersin-bersin",
+        "Membantu memberikan rasa lega pada pernapasan",
+        "Memberikan sensasi segar dan hangat",
+        "Cocok sebagai essential oil pernapasan dewasa",
+      ],
+      ingredients: [
+        "Eucalyptus globulus labiil",
+        "Melaleuca alternifolia (Tea Tree Oil)",
+        "Mentha piperita (Peppermint Oil)",
       ],
       usage:
-        "Teteskan 3-5 tetes pada telapak tangan, lalu oleskan perlahan pada batang hidung, tulang pipi (maxillary), dan kening (frontalis).",
+        "Oleskan 3-5 tetes pada telapak tangan. Balurkan perlahan pada area : Batang hidung, Tulang pipi, Kening, Tenggorokan (dewasa) dan Gunakan sesuai kebutuhan.",
     },
     6: {
-      name: "Fluxent Oil",
+      name: "Fluxent oil - 10ml",
       category: "Respiratory",
-      shortDesc: "Atasi Flu & Pilek Secara Alami",
+      shortDesc: "Batuk, Flu & Amandel, Pernapasan",
       description:
-        "Memiliki sifat antibakteri, antivirus, dan antijamur yang membantu menjaga kebersihan saluran pernapasan serta membantu meredakan flu dan pilek.",
+        "Fluxent Oil Dewasa adalah minyak aromaterapi herbal berbahan essential oil murni yang membantu melegakan pernapasan serta meredakan ketidak nyamanan akibat flu, pilek, batuk dan tenggorokan tidak nyaman (amandel). Cocok digunakan sebagai aromaterapi pernapasan dewasa untuk penggunaan harian.",
       benefits: [
-        "Membantu meredakan flu, pilek, batuk, dan radang tenggorokan",
-        "Membantu mencegah perkembangan virus pada saluran pernapasan",
+        "Membantu meredakan flu & pilek",
+        "Membantu melegakan pernapasan",
+        "Membantu mengurangi batuk & rasa tidak nyaman di tenggorokan",
+        "Memberikan sensasi hangat & segar",
+        "Cocok sebagai essential oil pernapasan dewasa",
+      ],
+      ingredients: [
+        "Mentha piperita (Peppermint oil)",
+        "Rosmarinus officlinale folium (Rosemary oil)",
+        "Pinus slyvestris",
+        "Salvia sclarea",
+        "Cedrus atlantica",
       ],
       usage:
-        "Teteskan 2-4 tetes pada tisu, masker, atau saputangan. Hirup perlahan seperti bernapas biasa.",
+        "Tuangkan 2-3 tetes pada tisu, saputangan dan masker. Hirup perlahan seperti bernapas biasanya. Dapat digunakan beberapa kali sehari sesuai kebutuhan. Bisa juga digunakan diffuser.",
     },
     7: {
-      name: "Fluxent Kids",
+      name: "Fluxent Kids - 10 ml",
       category: "Kids",
-      shortDesc: "Perlindungan Alami Flu & Pilek untuk Anak",
+      shortDesc: "Essential Oil Pernapasan Anak, Batuk, Flu & Pilek",
       description:
-        "Diformulasikan khusus dengan bahan yang lebih lembut untuk membantu menjaga saluran pernapasan anak saat flu dan pilek.",
+        "Fluxent Oil Kids adalah minyak aromaterapi herbal khusus anak berbahan essential oil murni yang membantu melegakan pernapasan anak serta memberikan rasa nyaman saat mengalami flu, pilek, batuk dan ketidak nyamanan tenggorokan (amandel). Memiliki aroma lembut & ramah anak, cocok digunakan sebagai aromaterapi pernapasan anak sehari-hari.",
       benefits: [
-        "Membantu meredakan flu dan pilek pada anak",
-        "Memberikan rasa nyaman saat bernapas",
-      ],
-      usage: "Dihirupkan melalui diffuser minimal 3 jam pada saat anak tidur.",
-    },
-    8: {
-      name: "Respiro Kids",
-      category: "Kids",
-      shortDesc: "Batuk Berdahak & Perawatan Pernapasan Anak",
-      description:
-        "Membantu meredakan batuk berdahak dan membantu mengencerkan lendir pada saluran pernapasan anak.",
-      benefits: [
-        "Membantu meredakan batuk berdahak",
         "Membantu melegakan pernapasan anak",
+        "Membantu meredakan flu & pilek anak",
+        "Memberikan rasa nyaman saat batuk ringan",
+        "Aroma lembut, menenangkan & tidak menyengat",
+        "Aman digunakan sehari-hari sesuai anjuran",
+      ],
+      ingredients: [
+        "Citrus sinensis (Sweet orange)",
+        "Lavandula angustifolia (Lavender)",
+        "Citrus bergamia (Bergemot)",
+        "Pelargonium Roseum (Geranium)",
       ],
       usage:
-        "Gunakan sesuai panduan pemijatan tubuh anak atau anjuran aromatherapy.",
+        "Tuangkan 2-3 tetes pada tisu, saputangan / masker. Hirupkan perlahan seperti bernapas biasa. Dianjurkan digunakan saat anak beristirahat dan tidur. Gunakan dengan pengawasan orang tua.",
+    },
+    8: {
+      name: "Respiro Kids - 100 ml",
+      category: "Kids",
+      shortDesc: "Minyak Herbal Anak untuk Batuk & Lendir",
+      description:
+        "Respiro Oil Kids adalah minyak herbal khusus anak dengan aroma lembut yang membantu memberikan rasa nyaman pada saluran pernapasan anak saat mengalami batuk dan penumpukan lendir / dahak. Digunakan sebagai minyak pijat aromaterapi anak, membantu pernapasan terasa lebih lega dan nyaman, terutama saat anak beristirahat atau sebelum tidur.",
+      benefits: [
+        "Membantu meredakan batuk pada anak",
+        "Membantu mencairkan lendir / dahak",
+        "Membantu melegakan pernapasan anak",
+        "Memberikan rasa hangat & nyaman saat dipijat",
+        "Aroma lembut & ramah anak",
+      ],
+      ingredients: [
+        "Anthermis nobllis (Chamomile Oil)",
+        "Pelargonium Roseum (Geranium Oil)",
+        "Helichrysum italicum",
+        "Citrus bergamia (Bergemot oil)",
+      ],
+      usage:
+        "Tuangkan Respiro Oil Kids secukupnya pada telapak tangan / mangkuk kecil. Pijat perlahan pada dada dan punggung anak. Dianjurkan digunakan setelah mandi atau sebelum tidur. Sebaiknya anak tidak mandi selama ±4 jam setelah pemijatan. Gunakan dengan pengawasan orang tua.",
     },
   },
   en: {
     1: {
-      name: "Max Pain Relief Oil",
+      name: "Max Pain Relief Oil - 100 ml",
       category: "Pain Relief",
-      shortDesc: "Natural Essential Oil for Muscle & Joint Pain",
+      shortDesc:
+        "Herbal Massage Oil for Muscle Aches, Muscle Pain & Joint Pain",
       description:
-        "Natural aromatherapy oil that helps relieve pain, aches, and inflammation in muscles and joints. Suitable for rheumatism, back pain, and muscle cramps.",
+        "Max Pain Relief Oil is a warm herbal massage oil formulated to help relieve muscle aches, muscle pain, rheumatism, and joint discomfort after daily activities. Suitable for use as a massage oil for adults and seniors with body aches.",
       benefits: [
-        "Helps relieve muscle and joint pain",
-        "Helps reduce inflammation and stiffness",
-        "Provides warming and relaxation effects",
+        "Helps relieve muscle aches and pains",
+        "Helps reduce joint pain and rheumatism",
+        "Provides a warm and relaxing sensation to the body",
+        "Suitable as a daily massage oil after work or exercise",
+      ],
+      ingredients: [
+        "Olea europaea (Olive oil)",
+        "Calendula officinalis",
+        "Arnica",
+        "Matricaria Chamomila",
+        "Rosmarin officinale folium",
+        "A combination of selected herbs for massage oil to relieve muscle and joint pain with a soothing natural aroma.",
       ],
       usage:
-        "Apply generously to the affected area and gently massage. It is recommended not to wash for at least 4 hours.",
+        "Apply a sufficient amount of MPR to the affected area while massaging gently until absorbed. It is recommended not to wash it off for at least 4 hours.",
     },
     2: {
-      name: "Hemo Clear Oil",
+      name: "Hemo Clear Oil - 100 ml",
       category: "Specialty",
-      shortDesc: "Natural Solution for External Hemorrhoids",
+      shortDesc: "Helps relieve external hemorrhoids and irritation naturally.",
       description:
-        "Helps relieve swelling and inflammation of external hemorrhoids with practical and safe application.",
+        "A warm embrace in a bottle to help relieve external hemorrhoids and inflammation. The combination of juniper, boswellia, and helichrysum provides a soothing sensation with a healthy herbal aroma that accompanies your at-home self-care routine.",
       benefits: [
-        "Helps reduce hemorrhoid swelling and inflammation",
-        "Provides comfort to sensitive areas",
+        "Helps relieve swelling and inflammation of external hemorrhoids",
+        "Helps reduce discomfort caused by hemorrhoids",
+        "Supports natural healing",
       ],
-      usage: "Apply generously to the hemorrhoid area around the anus.",
+      ingredients: [
+        "Juniperus recurva",
+        "Boswellia rivae",
+        "Helichrysum italicum",
+      ],
+      usage:
+        "Apply a thin layer to the clean and dry external hemorrhoid area. Leave it on for a moment, then pat gently until absorbed. Repeat as needed.",
     },
     3: {
-      name: "Skincare Oil",
+      name: "Skincare Oil - 100 ml",
       category: "Skincare",
-      shortDesc: "Natural Skin Care for Healthier Skin",
+      shortDesc: "Natural Skin Care",
       description:
-        "Formulated from natural essential oils to help care for skin, maintain moisture, and support skin health naturally.",
-      benefits: [
-        "Helps nourish and moisturize skin",
-        "Supports natural skin care",
+        "Helps smooth the skin, moisturize dry skin, and treat skin problems with selected natural essential oils.",
+      benefits: ["Smoothes the skin", "Moisturizes the skin"],
+      ingredients: [
+        "Olea europaea (Olive Oil)",
+        "Simmondsia chinensis (Jojoba oil)",
+        "Rosa damascane (Rose)",
+        "Citrus aurantium (Neroli)",
+        "Daucus carota (Carrot seed)",
       ],
-      usage: "Apply generously to the needed skin area as directed.",
+      usage:
+        "Apply Skin Care herbal oil to the entire body/required areas until absorbed. Use daily after showering. For effective absorption, it is recommended not to shower/wash for 6 hours.",
     },
     4: {
-      name: "Progest Oil",
+      name: "Progest Oil - 100 ml",
       category: "Digestion",
-      shortDesc: "Natural Solution for Heartburn & Digestive Issues",
+      shortDesc: "Relieves stomach ulcers and digestive problems.",
       description:
-        "Helps treat digestive disorders such as heartburn, bloating, nausea, diarrhea, and constipation with a natural aromatherapy approach.",
+        "Helps overcome digestive disorders such as heartburn, bloating, diarrhea, constipation, and nausea.",
       benefits: [
-        "Helps relieve heartburn and bloating",
-        "Helps reduce nausea, diarrhea, and constipation",
+        "Helps overcome digestive disorders such as: heartburn, bloating, diarrhea, constipation, and nausea.",
+      ],
+      ingredients: [
+        "Olea europaea fruit",
+        "Calendula officinalis",
+        "Foeniculi vulgrate fruit",
+        "Mentha piperita",
+        "Lavendula angustifolia",
+        "Rosmarin officinale leaf",
       ],
       usage:
-        "Apply to the stomach area with circular motions clockwise. For diarrhea, massage counterclockwise. Use 2-3 times daily.",
+        "Apply a sufficient amount of progest to the stomach area, rubbing clockwise. For diarrhea, massage counterclockwise. Do this 2-3 times a day until symptoms subside.",
     },
     5: {
-      name: "Nozze Oil (Adult)",
+      name: "Nozze Oil Adult - 15 ml",
       category: "Respiratory",
-      shortDesc: "Essential Oil for Sinusitis & Nasal Congestion",
+      shortDesc: "Nasal Congestion Oil, Nasal Blockage Oil",
       description:
-        "Helps relieve sinus inflammation, clear breathing, and help remove mucus trapped in the sinus cavity.",
+        "Nozze Oil Dewasa is a herbal oil made from pure essential oils that helps relieve nasal congestion and provides a fresh and clear feeling in the respiratory tract. Suitable for use as a nasal congestion rub and adult respiratory aromatherapy for daily use.",
       benefits: [
-        "Helps treat sinusitis, cold, and rhinitis",
-        "Helps relieve nasal congestion and sneezing",
+        "Helps relieve nasal congestion and stuffiness",
+        "Helps relieve colds and sneezing",
+        "Helps provide relief for breathing",
+        "Provides a fresh and warm sensation",
+        "Suitable as an essential oil for adult breathing",
+      ],
+      ingredients: [
+        "Eucalyptus globulus labiil",
+        "Melaleuca alternifolia (Tea Tree Oil)",
+        "Mentha piperita (Peppermint Oil)",
       ],
       usage:
-        "Drop 3-5 drops in your palm, then gently apply to the bridge of the nose, cheekbones (maxillary), and forehead (frontalis).",
+        "Apply 3-5 drops to the palm of your hand. Gently rub onto the following areas: bridge of the nose, cheekbones, forehead, throat (adults), and use as needed.",
     },
     6: {
-      name: "Fluxent Oil",
+      name: "Fluxent oil - 10ml",
       category: "Respiratory",
-      shortDesc: "Fight Flu & Cold Naturally",
+      shortDesc: "Cough, Flu & Tonsils, Respiratory",
       description:
-        "Has antibacterial, antiviral, and antifungal properties that help maintain respiratory tract cleanliness and help relieve flu and colds.",
+        "Fluxent Adult Oil is a herbal aromatherapy oil made from pure essential oils that helps ease breathing and relieve discomfort caused by flu, colds, coughs, and sore throats (tonsils). Suitable for use as adult respiratory aromatherapy for daily use.",
       benefits: [
-        "Helps relieve flu, cold, cough, and sore throat",
-        "Helps prevent virus development in the respiratory tract",
+        "Helps relieve flu & colds",
+        "Helps ease breathing",
+        "Helps reduce coughing & throat discomfort",
+        "Provides a warm & refreshing sensation",
+        "Suitable as an essential oil for adult respiratory use",
+      ],
+      ingredients: [
+        "Mentha piperita (Peppermint oil)",
+        "Rosmarinus officinalis folium (Rosemary oil)",
+        "Pinus sylvestris",
+        "Salvia sclarea",
+        "Cedrus atlantica",
       ],
       usage:
-        "Drop 2-4 drops on tissue, mask, or handkerchief. Inhale slowly like normal breathing.",
+        "Put 2-3 drops on a tissue, handkerchief, or mask. Inhale slowly as you would normally breathe. Can be used several times a day as needed. Can also be used in a diffuser.",
     },
     7: {
-      name: "Fluxent Kids",
+      name: "Fluxent Kids - 10 ml",
       category: "Kids",
-      shortDesc: "Natural Flu & Cold Protection for Children",
+      shortDesc: "Essential Oil for Children's Breathing, Cough, Flu & Cold",
       description:
-        "Specially formulated with gentler ingredients to help maintain children's respiratory tract during flu and cold.",
+        "Fluxent Oil Kids is a herbal aromatherapy oil specifically for children, made from pure essential oils that help ease children's breathing and provide comfort when they have the flu, a cold, a cough, or throat discomfort (tonsils). It has a mild aroma that is child-friendly, making it suitable for use as daily aromatherapy for children's breathing.",
       benefits: [
-        "Helps relieve flu and cold in children",
-        "Provides comfortable breathing",
+        "Helps ease children's breathing",
+        "Helps relieve children's flu and colds",
+        "Provides comfort during mild coughs",
+        "Soft, soothing, and non-irritating scent",
+        "Safe for daily use as directed.",
       ],
-      usage: "Use in diffuser for at least 3 hours while the child sleeps.",
+      ingredients: [
+        "Citrus sinensis (Sweet orange)",
+        "Lavandula angustifolia (Lavender)",
+        "Citrus bergamia (Bergemot)",
+        "Pelargonium Roseum (Geranium)",
+      ],
+      usage:
+        "Put 2-3 drops on a tissue, handkerchief, or mask. Inhale slowly as you would normally breathe. Recommended for use when your child is resting or sleeping. Use under parental supervision.",
     },
     8: {
-      name: "Respiro Kids",
+      name: "Respiro Kids - 100 ml",
       category: "Kids",
-      shortDesc: "Wet Cough & Children's Respiratory Care",
+      shortDesc: "Herbal Oil for Children's Cough & Mucus",
       description:
-        "Helps relieve wet cough and helps thin mucus in children's respiratory tract.",
-      benefits: ["Helps relieve wet cough", "Helps ease children's breathing"],
+        "Respiro Oil Kids is a special herbal oil for children with a soft aroma that helps provide comfort to children's respiratory tracts when they have a cough and mucus/phlegm buildup. Used as an aromatherapy massage oil for children, it helps breathing feel easier and more comfortable, especially when children are resting or before bedtime.",
+      benefits: [
+        "Helps relieve coughs in children",
+        "Helps thin mucus/phlegm",
+        "Helps ease breathing in children",
+        "Provides a warm and comfortable feeling when massaged",
+        "Soft and child-friendly scent",
+      ],
+      ingredients: [
+        "Anthermis nobllis (Chamomile Oil)",
+        "Pelargonium Roseum (Geranium Oil)",
+        "Helichrysum italicum",
+        "Citrus bergamia (Bergemot oil)",
+      ],
       usage:
-        "Use according to child body massage guidelines or aromatherapy recommendations.",
+        "Pour a sufficient amount of Respiro Oil Kids onto your palm or a small bowl. Gently massage onto your child's chest and back. Recommended for use after bathing or before bedtime. It is best for children not to bathe for approximately 4 hours after massage. Use under parental supervision.",
     },
   },
 };

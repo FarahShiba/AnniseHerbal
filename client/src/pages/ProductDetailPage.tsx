@@ -1,5 +1,12 @@
-import React from "react";
-import { ArrowRight, Star, Leaf, Wind } from "lucide-react";
+import React, { useState, useRef, useLayoutEffect } from "react";
+import {
+  ArrowRight,
+  Star,
+  Leaf,
+  Wind,
+  AlertCircle,
+  ChevronDown,
+} from "lucide-react";
 import Button from "../components/Button";
 import type { Product } from "../types";
 import type { TranslationData } from "../data/data";
@@ -11,21 +18,88 @@ interface ProductDetailPageProps {
   t: TranslationData["product"];
 }
 
+const AccordionItem: React.FC<{
+  title: string;
+  isOpen: boolean;
+  onClick: () => void;
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+}> = ({ title, isOpen, onClick, icon, children }) => {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (wrapperRef.current && contentRef.current) {
+      wrapperRef.current.style.height = isOpen
+        ? `${contentRef.current.scrollHeight}px`
+        : "0px";
+    }
+  }, [isOpen, children]);
+
+  return (
+    <div className="border-b border-stone-200 last:border-0">
+      <button
+        onClick={onClick}
+        className="w-full flex items-center justify-between py-5 text-left group transition-all"
+      >
+        <div className="flex items-center gap-3">
+          <span
+            className={`text-emerald-600 transition-colors duration-300 ${
+              isOpen
+                ? "text-emerald-700"
+                : "text-stone-400 group-hover:text-emerald-600"
+            }`}
+          >
+            {icon}
+          </span>
+          <span
+            className={`font-serif text-lg font-medium transition-colors duration-300 ${
+              isOpen
+                ? "text-emerald-900"
+                : "text-stone-600 group-hover:text-emerald-900"
+            }`}
+          >
+            {title}
+          </span>
+        </div>
+        <ChevronDown
+          className={`text-stone-400 transition-transform duration-300 ${
+            isOpen
+              ? "rotate-180 text-emerald-600"
+              : "group-hover:text-emerald-600"
+          }`}
+          size={20}
+        />
+      </button>
+      <div
+        ref={wrapperRef}
+        className="overflow-hidden transition-[height] duration-300 ease-in-out h-0"
+      >
+        <div
+          ref={contentRef}
+          className="pb-6 pt-1 text-stone-600 leading-relaxed"
+        >
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   product,
   navigateTo,
   addToCart,
   t,
 }) => {
-  const [activeImageIndex, setActiveImageIndex] = React.useState(0);
-  const [isZoomOpen, setIsZoomOpen] = React.useState(false);
-  const [zoomLevel, setZoomLevel] = React.useState(1);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [isZoomOpen, setIsZoomOpen] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [openSection, setOpenSection] = useState<string | null>("benefits");
 
   // Initialize active image index or reset when product changes
-  React.useEffect(() => {
-    setActiveImageIndex(0);
-    setZoomLevel(1);
-  }, [product?.id]);
+  // Using key on component in App.tsx is preferred, but keeping this logic simple here for now
+  // or relying on parent key. (Parent has key, so this mount is fresh).
 
   if (!product) return <div className="pt-32 text-center">Loading...</div>;
 
@@ -34,6 +108,13 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       ? product.images
       : [product.image];
   const activeImage = images[activeImageIndex];
+
+  // Parse Name and Volume
+  // Assuming format like "Max Pain Relief Oil - 100 ml"
+  // If no dash, volume is hidden or part of name
+  const nameParts = product.name.split(" - ");
+  const productName = nameParts[0];
+  const productVolume = nameParts.length > 1 ? nameParts[1] : null;
 
   const handleNextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -55,6 +136,10 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     setZoomLevel((prev) => Math.max(prev - 0.5, 1));
   };
 
+  const toggleSection = (section: string) => {
+    setOpenSection(openSection === section ? null : section);
+  };
+
   return (
     <div className="animate-fade-in pt-28 md:pt-48 pb-24 bg-white min-h-screen">
       <div className="container mx-auto px-6 relative">
@@ -68,80 +153,100 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           />{" "}
           {t.back}
         </button>
+
         <div className="flex flex-col lg:flex-row gap-16">
+          {/* LEFT COLUMN: Gallery */}
           <div className="lg:w-1/2">
-            {/* Main Image Container */}
-            <div
-              className={`aspect-square rounded-3xl ${product.imageColor} flex items-center justify-center relative overflow-hidden group cursor-zoom-in border border-stone-100`}
-              onClick={() => setIsZoomOpen(true)}
-            >
-              <img
-                src={activeImage}
-                alt={product.name}
-                className="w-full h-full object-contain p-2 transition-transform duration-500 hover:scale-105"
-              />
+            <div className="sticky top-32">
+              {/* Main Image Container - ORIGINAL DESIGN RESTORED */}
+              <div
+                className={`aspect-square rounded-3xl ${product.imageColor} flex items-center justify-center relative overflow-hidden group cursor-zoom-in border border-stone-100`}
+                onClick={() => setIsZoomOpen(true)}
+              >
+                <img
+                  src={activeImage}
+                  alt={product.name}
+                  className="w-full h-full object-contain p-8 md:p-12 transition-transform duration-500 hover:scale-105"
+                />
 
-              {/* Carousel Controls */}
+                {/* Carousel Controls */}
+                {images.length > 1 && (
+                  <>
+                    <button
+                      onClick={handlePrevImage}
+                      className="absolute left-4 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg text-emerald-900 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <ArrowRight className="rotate-180" size={20} />
+                    </button>
+                    <button
+                      onClick={handleNextImage}
+                      className="absolute right-4 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg text-emerald-900 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <ArrowRight size={20} />
+                    </button>
+                  </>
+                )}
+
+                <div className="absolute top-6 left-6">
+                  <span className="bg-emerald-50 text-emerald-800 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border border-emerald-100">
+                    {product.category}
+                  </span>
+                </div>
+              </div>
+
+              {/* Thumbnails */}
               {images.length > 1 && (
-                <>
-                  <button
-                    onClick={handlePrevImage}
-                    className="absolute left-4 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg text-emerald-900 opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <ArrowRight className="rotate-180" size={20} />
-                  </button>
-                  <button
-                    onClick={handleNextImage}
-                    className="absolute right-4 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg text-emerald-900 opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <ArrowRight size={20} />
-                  </button>
-                </>
+                <div className="flex gap-4 mt-6 justify-center overflow-x-auto py-2 px-2">
+                  {images.map((img, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setActiveImageIndex(idx)}
+                      className={`relative w-20 h-20 rounded-2xl overflow-hidden transition-all duration-300 ${
+                        idx === activeImageIndex
+                          ? "ring-2 ring-emerald-600 ring-offset-2 scale-105 shadow-md"
+                          : "opacity-60 hover:opacity-100 hover:scale-105 grayscale hover:grayscale-0"
+                      }`}
+                    >
+                      <img
+                        src={img}
+                        alt={`Thumbnail ${idx}`}
+                        className="w-full h-full object-cover bg-white"
+                      />
+                    </button>
+                  ))}
+                </div>
               )}
-
-              <div className="absolute top-8 right-8">
-                <span className="bg-white/80 backdrop-blur text-emerald-900 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border border-white">
-                  {product.category}
-                </span>
-              </div>
             </div>
-
-            {/* Thumbnails */}
-            {images.length > 1 && (
-              <div className="flex gap-4 mt-6 justify-center overflow-x-auto py-2">
-                {images.map((img, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveImageIndex(idx)}
-                    className={`w-20 h-20 rounded-xl border-2 overflow-hidden transition-all ${
-                      idx === activeImageIndex
-                        ? "border-emerald-600 shadow-md scale-105"
-                        : "border-transparent opacity-70 hover:opacity-100"
-                    }`}
-                  >
-                    <img
-                      src={img}
-                      alt={`Thumbnail ${idx}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
           </div>
 
-          <div className="lg:w-1/2">
-            <h1 className="text-4xl lg:text-5xl font-serif text-emerald-950 mb-4">
-              {product.name}
-            </h1>
-            <p className="text-2xl text-emerald-700 font-medium mb-6">
+          {/* RIGHT COLUMN: Info & Accordion */}
+          <div className="lg:w-1/2 flex flex-col">
+            <div className="mb-2">
+              <h1 className="text-4xl lg:text-5xl font-serif text-emerald-950 leading-tight">
+                {productName}
+              </h1>
+              {productVolume && (
+                <p className="text-stone-500 text-lg font-medium mt-2">
+                  {productVolume}
+                </p>
+              )}
+            </div>
+
+            <p className="text-2xl text-emerald-700 font-medium mt-4 mb-6">
               Rp {product.price.toLocaleString("id-ID")}
             </p>
-            <p className="text-stone-600 text-lg leading-relaxed mb-8">
+
+            <div className="prose prose-stone prose-lg max-w-none text-stone-600 mb-10 leading-relaxed font-light">
               {product.description}
-            </p>
-            <div className="flex gap-4 mb-10">
-              <Button onClick={() => addToCart(product)}>{t.add_cart}</Button>
+            </div>
+
+            <div className="flex gap-4 mb-12">
+              <Button
+                onClick={() => addToCart(product)}
+                className="px-8 shadow-emerald-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
+              >
+                {t.add_cart}
+              </Button>
               <Button
                 variant="secondary"
                 onClick={() =>
@@ -151,41 +256,76 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 {t.ask_wa}
               </Button>
             </div>
-            <div className="space-y-8">
-              <div>
-                <h3 className="text-lg font-serif text-emerald-950 mb-3 flex items-center">
-                  <Star size={18} className="mr-2 text-emerald-500" />{" "}
-                  {t.benefits}
-                </h3>
-                <ul className="space-y-2">
+
+            {/* Accordion Section */}
+            <div className="border-t border-stone-200">
+              <AccordionItem
+                title={t.benefits}
+                isOpen={openSection === "benefits"}
+                onClick={() => toggleSection("benefits")}
+                icon={<Star size={20} />}
+              >
+                <ul className="grid gap-3 pl-2">
                   {product.benefits.map((benefit, idx) => (
-                    <li key={idx} className="flex items-start text-stone-600">
-                      <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mt-2 mr-3 shrink-0"></span>
-                      {benefit}
+                    <li
+                      key={idx}
+                      className="flex items-start text-stone-600 group/item"
+                    >
+                      <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mt-2.5 mr-4 shrink-0 group-hover/item:scale-150 transition-transform"></span>
+                      <span className="group-hover/item:text-emerald-800 transition-colors">
+                        {benefit}
+                      </span>
                     </li>
                   ))}
                 </ul>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                  <h3 className="text-lg font-serif text-emerald-950 mb-3 flex items-center">
-                    <Leaf size={18} className="mr-2 text-emerald-500" />{" "}
-                    {t.composition}
-                  </h3>
-                  <p className="text-stone-600 text-sm leading-relaxed">
-                    {product.ingredients}
-                  </p>
+              </AccordionItem>
+
+              <AccordionItem
+                title={t.composition}
+                isOpen={openSection === "ingredients"}
+                onClick={() => toggleSection("ingredients")}
+                icon={<Leaf size={20} />}
+              >
+                {Array.isArray(product.ingredients) ? (
+                  <ul className="grid gap-2 pl-2">
+                    {product.ingredients.map((ing, idx) => (
+                      <li
+                        key={idx}
+                        className="flex items-center text-stone-600 text-sm italic font-medium"
+                      >
+                        <span className="w-1 h-1 bg-emerald-300 rounded-full mr-3 shrink-0"></span>
+                        {ing}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-stone-600">{product.ingredients}</p>
+                )}
+              </AccordionItem>
+
+              <AccordionItem
+                title={t.usage}
+                isOpen={openSection === "usage"}
+                onClick={() => toggleSection("usage")}
+                icon={<Wind size={20} />}
+              >
+                <div className="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100/50">
+                  <p className="text-stone-600">{product.usage}</p>
                 </div>
-                <div>
-                  <h3 className="text-lg font-serif text-emerald-950 mb-3 flex items-center">
-                    <Wind size={18} className="mr-2 text-emerald-500" />{" "}
-                    {t.usage}
-                  </h3>
-                  <p className="text-stone-600 text-sm leading-relaxed">
-                    {product.usage}
-                  </p>
-                </div>
-              </div>
+              </AccordionItem>
+
+              {product.caution && (
+                <AccordionItem
+                  title={t.caution || "Caution"}
+                  isOpen={openSection === "caution"}
+                  onClick={() => toggleSection("caution")}
+                  icon={<AlertCircle size={20} />}
+                >
+                  <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 text-amber-900/80 text-sm leading-relaxed">
+                    <p>{product.caution}</p>
+                  </div>
+                </AccordionItem>
+              )}
             </div>
           </div>
         </div>
@@ -194,62 +334,66 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       {/* Zoom Modal */}
       {isZoomOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center animate-fade-in"
+          className="fixed inset-0 z-50 bg-stone-900/95 backdrop-blur-sm flex items-center justify-center animate-fade-in"
           onClick={() => {
             setIsZoomOpen(false);
             setZoomLevel(1);
           }}
         >
+          {/* Controls Container */}
           <div
-            className="absolute top-4 right-4 flex gap-4 z-50"
+            className="absolute top-6 right-6 flex gap-4 z-50"
             onClick={(e) => e.stopPropagation()}
           >
-            <button
-              onClick={handleZoomOut}
-              className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full backdrop-blur transition-colors"
-              disabled={zoomLevel <= 1}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+            <div className="flex gap-2 bg-white/10 p-2 rounded-full backdrop-blur-md border border-white/10">
+              <button
+                onClick={handleZoomOut}
+                className="text-white/80 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors disabled:opacity-30"
+                disabled={zoomLevel <= 1}
               >
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                <line x1="8" y1="11" x2="14" y2="11" />
-              </svg>
-            </button>
-            <button
-              onClick={handleZoomIn}
-              className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full backdrop-blur transition-colors"
-              disabled={zoomLevel >= 3}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  <line x1="8" y1="11" x2="14" y2="11" />
+                </svg>
+              </button>
+              <button
+                onClick={handleZoomIn}
+                className="text-white/80 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors disabled:opacity-30"
+                disabled={zoomLevel >= 3}
               >
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                <line x1="11" y1="8" x2="11" y2="14" />
-                <line x1="8" y1="11" x2="14" y2="11" />
-              </svg>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  <line x1="11" y1="8" x2="11" y2="14" />
+                  <line x1="8" y1="11" x2="14" y2="11" />
+                </svg>
+              </button>
+            </div>
+
             <button
               onClick={() => setIsZoomOpen(false)}
-              className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full backdrop-blur transition-colors"
+              className="bg-white/10 hover:bg-white/20 text-white p-4 rounded-full backdrop-blur-md transition-colors border border-white/10"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -268,34 +412,33 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             </button>
           </div>
 
-          {/* Zoom Modal Navigation Controls */}
+          {/* Modal Navigation */}
           {images.length > 1 && (
             <>
               <button
                 onClick={handlePrevImage}
-                className="absolute left-4 md:left-8 z-50 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full backdrop-blur transition-colors hidden md:block"
+                className="absolute left-4 md:left-8 z-50 bg-white/10 hover:bg-white/20 text-white p-4 rounded-full backdrop-blur transition-all hidden md:block hover:scale-110"
               >
-                <ArrowRight className="rotate-180" size={32} />
+                <ArrowRight className="rotate-180" size={24} />
               </button>
               <button
                 onClick={handleNextImage}
-                className="absolute right-4 md:right-8 z-50 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full backdrop-blur transition-colors hidden md:block"
+                className="absolute right-4 md:right-8 z-50 bg-white/10 hover:bg-white/20 text-white p-4 rounded-full backdrop-blur transition-all hidden md:block hover:scale-110"
               >
-                <ArrowRight size={32} />
+                <ArrowRight size={24} />
               </button>
             </>
           )}
 
           <div
             className="w-full h-full flex items-center justify-center p-4 md:p-12 overflow-hidden"
-            /* Removed stopPropagation to allow clicking image/bg to close */
+            onClick={(e) => e.stopPropagation()}
           >
             <img
               src={activeImage}
               alt="Zoomed Product"
-              className="max-w-full max-h-full object-contain transition-transform duration-300"
+              className="max-w-full max-h-full object-contain transition-transform duration-300 drop-shadow-2xl"
               style={{ transform: `scale(${zoomLevel})` }}
-              /* Removed stopPropagation here too */
             />
           </div>
         </div>

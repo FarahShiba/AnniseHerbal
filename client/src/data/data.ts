@@ -86,6 +86,7 @@ export const translations = {
       back: "Kembali ke Belanja",
       add_cart: "Masukkan Keranjang",
       ask_wa: "Tanya via WA",
+      caution: "Peringatan",
     },
     cart: {
       title: "Keranjang Belanja",
@@ -281,6 +282,7 @@ export const translations = {
       back: "Back to Shop",
       add_cart: "Add to Cart",
       ask_wa: "Ask via WA",
+      caution: "Caution",
     },
     cart: {
       title: "Shopping Cart",
@@ -422,21 +424,30 @@ export type TranslationData = typeof translations.id;
 export const products: Product[] = [
   {
     id: 1,
-    name: "Max Pain Relief Oil",
+    name: "Max Pain Relief Oil - 100 ml",
     category: "Pain Relief",
     price: 185000,
-    shortDesc: "Essential Oil Alami untuk Nyeri Otot & Sendi",
+    shortDesc: "Minyak Pijat Herbal Pegal Linu, Nyeri Otot & Sendi",
     description:
-      "Minyak aromatherapy berbahan alami yang membantu mengurangi rasa nyeri, pegal, dan peradangan pada otot serta persendian. Cocok untuk rematik, nyeri pinggang, dan kram otot.",
+      "Max Pain Relief Oil adalah minyak pijat herbal hangat yang diformulasikan untuk membantu meredakan pegal linu, nyeri otot, rematik dan ketidak nyamanan pada sendi setelah aktivitas harian. Cocok digunakan sebagai minyak pijat pegal badan dewasa & lansia.",
     benefits: [
-      "Membantu meredakan nyeri otot dan sendi",
-      "Membantu mengurangi peradangan dan rasa kaku",
-      "Memberikan efek hangat dan relaksasi",
+      "Membantu meredakan pegal linu & nyeri otot",
+      "Membantu mengurangi nyeri sendi & rematik",
+      "Memberikan sensasi hangat & rileks pada tubuh",
+      "Cocok sebagai minyak pijat harian setelah kerja / olahraga",
     ],
-    ingredients:
-      "Olea europaea fructus, Calendula officinalis, Arnica, Matricaria chamomilla, Origanum marjorana, Piperis nigri fructus, Rosmarinus officinale folium",
+    ingredients: [
+      "Olea europaea (Olive oil)",
+      "Calendula officinalis",
+      "Arnica",
+      "Matricaria Chamomila",
+      "Rosmarin officinale folium",
+      "Kombinasi herbal pilihan untuk minyak pijat nyeri otot & sendi dengan aroma alami yang menenangkan.",
+    ],
     usage:
-      "Oleskan secukupnya pada area yang bermasalah sambil dipijat perlahan. Disarankan tidak dibasuh minimal 4 jam.",
+      "Oleskan secukupnya MPR pada area yang bermasalah sambil dipijat perlahan-lahan hingga meresap. Dianjurkan tidak dibasuh minimal 4jam.",
+    caution:
+      "Hanya untuk pemakaian luar. Hindari kontak dengan mata dan luka terbuka. Jauhkan dari jangkauan anak-anak. Simpan di tempat sejuk dan kering.",
     imageColor: "bg-white",
     image: mpr1,
     images: [mpr1, mprDesc1, mprDesc2],
@@ -444,18 +455,26 @@ export const products: Product[] = [
   },
   {
     id: 2,
-    name: "Hemo Clear Oil",
+    name: "Hemo Clear Oil - 100 ml",
     category: "Specialty",
     price: 195000,
-    shortDesc: "Solusi Alami untuk Wasir Luar",
+    shortDesc: "Membantu meredakan wasir luar dan iritasi secara alami.",
     description:
-      "Membantu meredakan pembengkakan dan peradangan pada wasir luar dengan cara penggunaan yang praktis dan aman.",
+      "Pelukan hangat dalam botol untuk membantu meredakan wasir luar dan radang. Kombinasi Juniper, boswellia dan helichrysum menghadirkan sensasi menenangkan dengan aroma herbal sehat yang menemani rutinitas perawatan diri di rumah.",
     benefits: [
-      "Membantu mengurangi pembengkakan dan radang wasir",
-      "Memberikan rasa nyaman pada area sensitif",
+      "Membantu meredakan bengkak dan radang pada wasir luar",
+      "Membantu mengurangi rasa tidak nyaman akibat wasir",
+      "Mendukung penyembuhan secara alami",
     ],
-    ingredients: "Juniperus recurva, Boswellia rivae, Helichrysum italicum",
-    usage: "Oleskan secukupnya pada area wasir di sekitar anus.",
+    ingredients: [
+      "Juniperus recurva",
+      "Boswellia rivae",
+      "Helichrysum italicum",
+    ],
+    usage:
+      "Oleskan tipis pada area wasir luar yang bersih dan kering. Diamkan sejenak, lalu tepuk perlahan hingga meresap. Ulangi sesuai kebutuhan.",
+    caution:
+      "Hanya untuk pemakaian luar pada area yang terkena wasir. Hentikan penggunaan jika terjadi iritasi. Konsultasikan dengan dokter jika gejala berlanjut.",
     imageColor: "bg-white",
     image: hemo1,
     images: [hemo1, hemoDesc1, hemoDesc2, hemoDesc3],
@@ -463,18 +482,24 @@ export const products: Product[] = [
   },
   {
     id: 3,
-    name: "Skincare Oil",
+    name: "Skincare Oil - 100 ml",
     category: "Skincare",
     price: 210000,
-    shortDesc: "Perawatan Kulit Alami untuk Kulit Lebih Sehat",
+    shortDesc: "Perawatan Kulit Alami",
     description:
-      "Diformulasikan dari essential oil alami untuk membantu merawat kulit, menjaga kelembapan, dan mendukung kesehatan kulit secara alami.",
-    benefits: [
-      "Membantu menutrisi dan melembapkan kulit",
-      "Mendukung perawatan kulit secara alami",
+      "Membantu menghaluskan kulit, melembapkan kulit kering dan merawat masalah kulit dengan kandungan minyak essential alami pilihan.",
+    benefits: ["Menghaluskan kulit", "Melembabkan kulit"],
+    ingredients: [
+      "Olea europaea (Olive Oil)",
+      "Simmondsia chinensis (Jojoba oil)",
+      "Rosa damascane (Rose)",
+      "Citrus aurantium (Neroli)",
+      "Daucus carota (Carrot seed)",
     ],
-    ingredients: "Campuran essential oil alami pilihan untuk kulit.",
-    usage: "Oleskan secukupnya pada area kulit yang dibutuhkan sesuai anjuran.",
+    usage:
+      "Oleskan Skin Care herbal oil pada seluruh tubuh / area yang diperlukan sampai meresap. Digunakan setiap hari setelah mandi. Agar penyerapan efektif maka dianjurkan tidak mandi / dibasuh selama 6 jam.",
+    caution:
+      "Hanya untuk pemakaian luar. Lakukan uji tempel (patch test) sebelum penggunaan pertama. Hentikan jika terjadi reaksi alergi.",
     imageColor: "bg-white",
     image: skin1,
     images: [skin1, skinDesc1, skinDesc2],
@@ -482,20 +507,27 @@ export const products: Product[] = [
   },
   {
     id: 4,
-    name: "Progest Oil",
+    name: "Progest Oil - 100 ml",
     category: "Digestion",
     price: 175000,
-    shortDesc: "Solusi Alami untuk Maag & Gangguan Pencernaan",
+    shortDesc: "Meringankan maag dan masalah pencernaan.",
     description:
-      "Membantu mengatasi gangguan pencernaan seperti maag, kembung, mual, diare, dan sembelit dengan pendekatan aromatherapy alami.",
+      "Membantu mengatasi gangguan pencernaan seperti maag, kembung, diare, sembelit dan mual.",
     benefits: [
-      "Membantu meredakan maag dan perut kembung",
-      "Membantu mengurangi mual, diare, dan sembelit",
+      "Membantu mengatasi gangguan pencernaan seperti : maag, kembung, diare, sembelit dan mual",
     ],
-    ingredients:
-      "Olea europaea fructus, Calendula officinalis, Foeniculi vulgare fructus, Mentha piperita, Lavandula angustifolia, Rosmarinus officinale folium",
+    ingredients: [
+      "Olea europaea fructus",
+      "Calendula officinalis",
+      "Foeniculi vulgrate fructus",
+      "Mentha piperita",
+      "Lavendula angustifolia",
+      "Rosmarin officinale folium",
+    ],
     usage:
-      "Oleskan pada area perut dengan pijatan memutar searah jarum jam. Untuk diare, pijat berlawanan arah jarum jam. Gunakan 2-3 kali sehari.",
+      "Oleskan secukupnya progest pada area lambung memutar searah dengan jarum jam. Khusus diare, pijat memutar berlawanan arah jarum jam. Dilakukan 2-3 kali sehari sampai keluhan berkurang / reda.",
+    caution:
+      "Hanya untuk pemakaian luar. Tidak untuk diminum. Jauhkan dari jangkauan anak-anak.",
     imageColor: "bg-white",
     image: progest1,
     images: [progest1, progestDesc1, progestDesc2],
@@ -503,40 +535,58 @@ export const products: Product[] = [
   },
   {
     id: 5,
-    name: "Nozze Oil (Dewasa)",
+    name: "Nozze Oil Dewasa - 15 ml",
     category: "Respiratory",
     price: 165000,
-    shortDesc: "Essential Oil untuk Sinusitis & Hidung Tersumbat",
+    shortDesc: "Minyak Hidung Tersumbat, Minyak Oil Hidung Mampet",
     description:
-      "Membantu meredakan peradangan pada sinus, melancarkan pernapasan, dan membantu mengeluarkan lendir yang terperangkap di rongga sinus.",
+      "Nozze Oil Dewasa adalah minyak herbal berbahan essential oil murni yang membantu melegakan hidung tersumbat serta memberikan rasa segar dan lega pada saluran pernapasan. Cocok digunakan sebagai minyak oles hidung mampet dan aromaterapi pernapasan dewasa untuk penggunaan harian.",
     benefits: [
-      "Membantu mengatasi sinusitis, pilek, dan rhinitis",
-      "Membantu meredakan hidung tersumbat dan bersin-bersin",
+      "Membantu melegakan hidung tersumbat dan hidung mampet",
+      "Membantu meredakan pilek & bersin-bersin",
+      "Membantu memberikan rasa lega pada pernapasan",
+      "Memberikan sensasi segar dan hangat",
+      "Cocok sebagai essential oil pernapasan dewasa",
     ],
-    ingredients:
-      "Eucalyptus globulus labill, Melaleuca alternifolia, Mentha piperita",
+    ingredients: [
+      "Eucalyptus globulus labiil",
+      "Melaleuca alternifolia (Tea Tree Oil)",
+      "Mentha piperita (Peppermint Oil)",
+    ],
     usage:
-      "Teteskan 3-5 tetes pada telapak tangan, lalu oleskan perlahan pada batang hidung, tulang pipi (maxillary), dan kening (frontalis).",
+      "Oleskan 3-5 tetes pada telapak tangan. Balurkan perlahan pada area : Batang hidung, Tulang pipi, Kening, Tenggorokan (dewasa) dan Gunakan sesuai kebutuhan.",
+    caution:
+      "Hanya untuk pemakaian luar. Hindari area mata dan selaput lendir. Tidak disarankan untuk anak di bawah 2 tahun tanpa pengawasan medis.",
     imageColor: "bg-teal-100",
     image: nozze1,
     tags: ["sinus", "hidung", "pilek", "pernapasan", "napas"],
   },
   {
     id: 6,
-    name: "Fluxent Oil",
+    name: "Fluxent oil - 10ml",
     category: "Respiratory",
     price: 165000,
-    shortDesc: "Atasi Flu & Pilek Secara Alami",
+    shortDesc: "Batuk, Flu & Amandel, Pernapasan",
     description:
-      "Memiliki sifat antibakteri, antivirus, dan antijamur yang membantu menjaga kebersihan saluran pernapasan serta membantu meredakan flu dan pilek.",
+      "Fluxent Oil Dewasa adalah minyak aromaterapi herbal berbahan essential oil murni yang membantu melegakan pernapasan serta meredakan ketidak nyamanan akibat flu, pilek, batuk dan tenggorokan tidak nyaman (amandel). Cocok digunakan sebagai aromaterapi pernapasan dewasa untuk penggunaan harian.",
     benefits: [
-      "Membantu meredakan flu, pilek, batuk, dan radang tenggorokan",
-      "Membantu mencegah perkembangan virus pada saluran pernapasan",
+      "Membantu meredakan flu & pilek",
+      "Membantu melegakan pernapasan",
+      "Membantu mengurangi batuk & rasa tidak nyaman di tenggorokan",
+      "Memberikan sensasi hangat & segar",
+      "Cocok sebagai essential oil pernapasan dewasa",
     ],
-    ingredients:
-      "Mentha piperita, Rosmarinus officinalis folium, Pinus sylvestris, Salvia sclarea, Cedrus atlantica",
+    ingredients: [
+      "Mentha piperita (Peppermint oil)",
+      "Rosmarinus officlinale folium (Rosemary oil)",
+      "Pinus slyvestris",
+      "Salvia sclarea",
+      "Cedrus atlantica",
+    ],
     usage:
-      "Teteskan 2-4 tetes pada tisu, masker, atau saputangan. Hirup perlahan seperti bernapas biasa.",
+      "Tuangkan 2-3 tetes pada tisu, saputangan dan masker. Hirup perlahan seperti bernapas biasanya. Dapat digunakan beberapa kali sehari sesuai kebutuhan. Bisa juga digunakan diffuser.",
+    caution:
+      "Hanya untuk inhalasi (dihirup) atau penggunaan pada diffuser. Hindari kontak langsung dengan kulit sensitif tanpa pengenceran.",
     imageColor: "bg-white",
     image: fluxent1,
     images: [fluxent1, fluxentDesc1],
@@ -544,19 +594,29 @@ export const products: Product[] = [
   },
   {
     id: 7,
-    name: "Fluxent Kids",
+    name: "Fluxent Kids - 10 ml",
     category: "Kids",
     price: 155000,
-    shortDesc: "Perlindungan Alami Flu & Pilek untuk Anak",
+    shortDesc: "Essential Oil Pernapasan Anak, Batuk, Flu & Pilek",
     description:
-      "Diformulasikan khusus dengan bahan yang lebih lembut untuk membantu menjaga saluran pernapasan anak saat flu dan pilek.",
+      "Fluxent Oil Kids adalah minyak aromaterapi herbal khusus anak berbahan essential oil murni yang membantu melegakan pernapasan anak serta memberikan rasa nyaman saat mengalami flu, pilek, batuk dan ketidak nyamanan tenggorokan (amandel). Memiliki aroma lembut & ramah anak, cocok digunakan sebagai aromaterapi pernapasan anak sehari-hari.",
     benefits: [
-      "Membantu meredakan flu dan pilek pada anak",
-      "Memberikan rasa nyaman saat bernapas",
+      "Membantu melegakan pernapasan anak",
+      "Membantu meredakan flu & pilek anak",
+      "Memberikan rasa nyaman saat batuk ringan",
+      "Aroma lembut, menenangkan & tidak menyengat",
+      "Aman digunakan sehari-hari sesuai anjuran",
     ],
-    ingredients:
-      "Citrus sinensis, Lavandula angustifolia, Citrus bergamia, Pelargonium roseum",
-    usage: "Dihirupkan melalui diffuser minimal 3 jam pada saat anak tidur.",
+    ingredients: [
+      "Citrus sinensis (Sweet orange)",
+      "Lavandula angustifolia (Lavender)",
+      "Citrus bergamia (Bergemot)",
+      "Pelargonium Roseum (Geranium)",
+    ],
+    usage:
+      "Tuangkan 2-3 tetes pada tisu, saputangan / masker. Hirupkan perlahan seperti bernapas biasa. Dianjurkan digunakan saat anak beristirahat dan tidur. Gunakan dengan pengawasan orang tua.",
+    caution:
+      "Produk khusus anak. Gunakan di bawah pengawasan orang tua. Hentikan penggunaan jika terjadi reaksi negatif.",
     imageColor: "bg-white",
     image: fluxentKids1,
     images: [fluxentKids1, fluxentKidsDesc1],
@@ -564,20 +624,29 @@ export const products: Product[] = [
   },
   {
     id: 8,
-    name: "Respiro Kids",
+    name: "Respiro Kids - 100 ml",
     category: "Kids",
     price: 155000,
-    shortDesc: "Batuk Berdahak & Perawatan Pernapasan Anak",
+    shortDesc: "Minyak Herbal Anak untuk Batuk & Lendir",
     description:
-      "Membantu meredakan batuk berdahak dan membantu mengencerkan lendir pada saluran pernapasan anak.",
+      "Respiro Oil Kids adalah minyak herbal khusus anak dengan aroma lembut yang membantu memberikan rasa nyaman pada saluran pernapasan anak saat mengalami batuk dan penumpukan lendir / dahak. Digunakan sebagai minyak pijat aromaterapi anak, membantu pernapasan terasa lebih lega dan nyaman, terutama saat anak beristirahat atau sebelum tidur.",
     benefits: [
-      "Membantu meredakan batuk berdahak",
+      "Membantu meredakan batuk pada anak",
+      "Membantu mencairkan lendir / dahak",
       "Membantu melegakan pernapasan anak",
+      "Memberikan rasa hangat & nyaman saat dipijat",
+      "Aroma lembut & ramah anak",
     ],
-    ingredients:
-      "Anthemis nobilis, Pelargonium roseum, Helichrysum italicum, Citrus bergamia",
+    ingredients: [
+      "Anthermis nobllis (Chamomile Oil)",
+      "Pelargonium Roseum (Geranium Oil)",
+      "Helichrysum italicum",
+      "Citrus bergamia (Bergemot oil)",
+    ],
     usage:
-      "Gunakan sesuai panduan pemijatan tubuh anak atau anjuran aromatherapy.",
+      "Tuangkan Respiro Oil Kids secukupnya pada telapak tangan / mangkuk kecil. Pijat perlahan pada dada dan punggung anak. Dianjurkan digunakan setelah mandi atau sebelum tidur. Sebaiknya anak tidak mandi selama ±4 jam setelah pemijatan. Gunakan dengan pengawasan orang tua.",
+    caution:
+      "Produk khusus anak. Hanya untuk pemakaian luar. Hindari area wajah dan mata.",
     imageColor: "bg-white",
     image: respiroKids1,
     images: [respiroKids1, respiroKidsDesc1, respiroKidsDesc2],
