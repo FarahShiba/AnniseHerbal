@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import heros1 from "../assets/heros1.jpg";
-import heros2 from "../assets/heros2.jpg";
 import heros3 from "../assets/heros3.jpg";
+import mpr1 from "../assets/MPR1.png"; // importing Max Pain Relief image
 
 interface HeroSliderProps {
   navigateTo: (page: string) => void;
@@ -47,7 +47,7 @@ const HeroSlider: React.FC<HeroSliderProps> = ({ navigateTo, t }) => {
       accentColor: "text-orange-700",
       buttonText: t.s2_btn,
       target: "shop",
-      image: heros2,
+      image: mpr1, // Max Pain Relief image for Bebas Nyeri Otot
       patternColor: "text-orange-100",
     },
     {
@@ -129,7 +129,7 @@ const HeroSlider: React.FC<HeroSliderProps> = ({ navigateTo, t }) => {
                   <img
                     src={slide.image}
                     alt={slide.title}
-                    className="w-full h-full object-cover"
+                    className={`w-full h-full object-cover ${slide.id === 2 ? "drop-shadow-[0_15px_15px_rgba(0,0,0,0.5)]" : ""}`}
                   />
                   {/* Overlay gradient */}
                   <div
