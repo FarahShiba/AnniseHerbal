@@ -104,11 +104,11 @@ const HomePage: React.FC<HomePageProps> = ({
                 {/* Product Image Container */}
                 <div className="relative h-48 md:h-64 lg:h-72 bg-linear-to-br from-stone-50 to-stone-100 overflow-hidden shrink-0">
                   {/* Actual Product Image - Reduced padding for larger, more visible product */}
-                  <div className="absolute inset-0 flex items-center justify-center p-0 md:p-2 lg:p-4">
+                  <div className="absolute inset-0 flex items-center justify-center p-0 lg:p-4">
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="w-full h-full object-contain scale-[1.7] md:scale-[1.5] lg:scale-[1.35] group-hover:scale-[1.9] md:group-hover:scale-[1.7] lg:group-hover:scale-[1.5] transition-transform duration-700"
+                      className="w-full h-full object-contain scale-[1.7] md:scale-[2.0] lg:scale-[1.4] group-hover:scale-[1.9] md:group-hover:scale-[2.2] lg:group-hover:scale-[1.6] transition-transform duration-700"
                     />
                   </div>
 
