@@ -166,7 +166,11 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 <img
                   src={activeImage}
                   alt={product.name}
-                  className="w-full h-full object-contain p-8 md:p-12 transition-transform duration-500 hover:scale-105"
+                  className={`w-full h-full object-contain transition-transform duration-500 ${
+                    activeImageIndex === 0
+                      ? "p-2 md:p-4 scale-[1.3] md:scale-[1.5] hover:scale-[1.4] md:hover:scale-[1.6]"
+                      : "p-4 md:p-8 hover:scale-105"
+                  }`}
                 />
 
                 {/* Carousel Controls */}
@@ -210,7 +214,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                       <img
                         src={img}
                         alt={`Thumbnail ${idx}`}
-                        className="w-full h-full object-cover bg-white"
+                        className="w-full h-full object-contain bg-white p-1 scale-110"
                       />
                     </button>
                   ))}
