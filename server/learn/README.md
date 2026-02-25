@@ -21,10 +21,20 @@ learn/
 ├── 04-testing/
 │   ├── testing-tools.md
 │   └── api-testing-guide.md
-└── 05-advanced/
-    ├── pagination.md
-    ├── filtering.md
-    └── error-handling.md
+├── 05-advanced/
+│   ├── pagination.md
+│   ├── filtering.md
+│   └── error-handling.md
+└── 07-payment-system-indonesia/    ← NEW! 💳
+    ├── README.md
+    ├── 01-overview.md
+    ├── 02-setup-account.md
+    ├── 03-installation.md (coming soon)
+    ├── 04-backend-integration.md (coming soon)
+    ├── 05-webhook-handling.md (coming soon)
+    ├── 06-frontend-integration.md (coming soon)
+    ├── 07-testing-guide.md (coming soon)
+    └── 08-go-live-checklist.md (coming soon)
 ```
 
 ## 🎯 Learning Path
@@ -49,6 +59,11 @@ learn/
 
 ### **Phase 5: Level Up**
 11. Add features from `05-advanced/` folder
+
+### **Phase 6: Payment Integration** 💰
+12. Start with `07-payment-system-indonesia/README.md`
+13. Follow guides 01-08 to integrate Midtrans payment gateway
+14. Accept GoPay, Bank Transfer, QRIS, and more!
 
 ---
 
@@ -106,7 +121,29 @@ Before moving forward, make sure you can answer:
 ✅ How to test APIs with tools  
 ✅ How to handle errors properly  
 ✅ How to add pagination and filtering  
+✅ How to integrate payment gateway (Midtrans) 💳  
+✅ How to process online payments securely  
+
+---
+
+## 💳 Payment Integration (Indonesia)
+
+Once you've mastered the basics, head to **`07-payment-system-indonesia/`** to learn:
+
+- 🇮🇩 Accept payments from Indonesian customers
+- 💰 Support GoPay, ShopeePay, Bank Transfer, QRIS
+- 🔐 Secure payment processing with Midtrans
+- 📱 Handle webhooks and order confirmations
+- ✅ Only **0.7% fee** for e-wallets!
+
+**Why Midtrans?**
+- Lowest fees in Indonesia (0.7% for e-wallets)
+- Owned by Gojek (trusted brand)
+- Supports all Indonesian payment methods
+- Easy integration with your API
 
 ---
 
 **Ready to start? Head to `01-fundamentals/rest-api-basics.md`!**
+
+**After mastering APIs? Head to `07-payment-system-indonesia/README.md` for payments!**

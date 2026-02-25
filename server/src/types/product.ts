@@ -22,5 +22,5 @@ export interface ProductTypes {
   promotionalTag_en?: string;
   createdAt?: Date;
   updatedAt?: Date;
-  sizeName:sizeName,
+  sizeName: string;
 }

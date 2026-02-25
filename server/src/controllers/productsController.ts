@@ -55,3 +55,65 @@ export const getAllProducts = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to fetch products" });
   }
 };
+
+
+// function to get products by id from the firestore database
+export const getProductById = async (req: Request, res: Response) => {
+   try {
+      // get the product id from the request parameters
+      // for instance :- products/pain relief/size 100ml/doc_id(unique)/
+      const {category, sizeName, id } = req.params;
+
+      console.log(`🔍 Fetching product with ID: ${category}/${sizeName}/${id}`);
+
+
+      //build path to specific product 
+      const productRef = db
+      .collection("products")
+      .doc(category)
+      .collection(sizeName)
+      .doc(id);
+
+      // fetch the product 
+      const productDoc = await productRef.get();
+
+      if(!productDoc.exists){
+         console.log(`❌ Product not found : ${category}/${sizeName}/${id}`);
+         // 404 not found issue raised 
+         return res.status(404).json({
+            success:false,
+            error:"Product not found",
+            message:`Product with ID '${id}' not found in category '${category}' and size '${sizeName}'`
+         });
+      }
+
+      // else get the product data
+      const productData = productDoc.data() as ProductTypes;
+
+      //Build complete product 
+      const product: ProductTypes ={
+         ...productData,
+         id: productDoc.id,
+         category:category,
+         sizeName:sizeName
+      }
+
+      console.log(`product found ${product}`);
+
+      // send successful response
+      res.send(200).json({
+         success:true,
+         data:product
+      });
+
+
+
+   } catch (error) {
+      console.error("❌ Error fetching product by ID:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to fetch product",
+      message: "An error occurred while fetching the product. Please try again."
+    });
+   }
+};
