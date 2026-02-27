@@ -5,6 +5,9 @@ import { db } from "./config/firebase";
 import { firestore, messaging } from "firebase-admin";
 import { error, timeStamp } from "node:console";
 import productsRouter from "./routes/products";
+import contactRoutes from "./routes/contacts";
+import newsletterSubscriberRoutes from "./routes/newsletter";
+
 // load environment variables
 dotenv.config();
 
@@ -66,6 +69,20 @@ app.get("/api/health", async (req: Request, res: Response) => {
 // Mount products routes
 app.use("/api/products", productsRouter);
 
+// Mount get product by id route
+app.use("/api/products/:category/:sizeName/:id", productsRouter);
+
+
+// Mount send the contact data and sending email
+app.use("/api", contactRoutes);
+
+
+// Mount newsletter subscriber route
+app.use("/api", newsletterSubscriberRoutes);
+
+
+
+
 //welcome route
 app.get("/", (req: Request, res: Response) => {
   res.json({
@@ -75,11 +92,11 @@ app.get("/", (req: Request, res: Response) => {
       health: "/api/health",
       products: "/api/products",
       orders: "/api/orders (coming soon)",
+      contact: "/api/contact",
+      newsletter: "/api/newsLetterSubscriber",
     },
   });
 });
-
-
 
 // 404 handler
 app.use((req: Request, res: Response) => {

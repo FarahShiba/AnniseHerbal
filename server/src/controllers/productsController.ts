@@ -2,6 +2,13 @@ import { Request, Response } from "express";
 import { db } from "../config/firebase";
 import { ProductTypes } from "../types/product";  // Import the existing type!
 
+// At the top of your file
+interface ProductParams {
+  category: string;  // Define exactly what you expect
+  sizeName: string;
+  id: string;
+}
+
 // function to get all products from the firestore database
 export const getAllProducts = async (req: Request, res: Response) => {
   try {
@@ -57,15 +64,16 @@ export const getAllProducts = async (req: Request, res: Response) => {
 };
 
 
+
+
 // function to get products by id from the firestore database
-export const getProductById = async (req: Request, res: Response) => {
+export const getProductById = async (req: Request<ProductParams>, res: Response) => {
    try {
       // get the product id from the request parameters
       // for instance :- products/pain relief/size 100ml/doc_id(unique)/
       const {category, sizeName, id } = req.params;
 
       console.log(`🔍 Fetching product with ID: ${category}/${sizeName}/${id}`);
-
 
       //build path to specific product 
       const productRef = db
@@ -98,22 +106,22 @@ export const getProductById = async (req: Request, res: Response) => {
          sizeName:sizeName
       }
 
-      console.log(`product found ${product}`);
+      console.log(`product found ${JSON.stringify(product)}`);
 
       // send successful response
-      res.send(200).json({
+      res.status(200).json({
          success:true,
          data:product
       });
 
 
-
    } catch (error) {
       console.error("❌ Error fetching product by ID:", error);
-    res.status(500).json({
-      success: false,
-      error: "Failed to fetch product",
-      message: "An error occurred while fetching the product. Please try again."
-    });
+
+      res.status(500).json({
+         success: false,
+         error: "Failed to fetch product",
+         message: "An error occurred while fetching the product. Please try again."
+      });
    }
 };

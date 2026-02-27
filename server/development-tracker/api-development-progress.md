@@ -2,7 +2,7 @@
 
 **Project:** Annise Herbal E-Commerce Backend  
 **Started:** February 25, 2026  
-**Last Updated:** February 25, 2026
+**Last Updated:** February 26, 2026
 
 ---
 
@@ -11,9 +11,9 @@
 This document tracks the development progress of all API endpoints for the Annise Herbal e-commerce platform.
 
 **Current Status:**
-- 🟢 Completed: 1/10 endpoints
+- 🟢 Completed: 2/10 endpoints
 - 🟡 In Progress: 0/10 endpoints
-- ⚪ Not Started: 9/10 endpoints
+- ⚪ Not Started: 8/10 endpoints
 
 ---
 
@@ -34,34 +34,46 @@ This document tracks the development progress of all API endpoints for the Annis
 ---
 
 ### 2. Get Single Product by ID
-- **Status:** ⚪ NOT STARTED
+- **Status:** 🟢 COMPLETED
 - **Endpoint:** `GET /api/products/:category/:size/:id`
+- **Controller:** `productsController.ts` → `getProductById()`
 - **Purpose:** Fetch individual product details for product detail page
-- **Required Fields:**
-  - Product ID (from URL params)
-  - Category name
-  - Size name
+- **Features:**
+  - ✅ Fetches single product from Firestore path
+  - ✅ URL parameters: category, sizeName, productId
+  - ✅ Returns 404 if product not found
+  - ✅ Helpful error messages
+  - ✅ TypeScript type safety with ProductParams interface
+  - ✅ Error handling implemented
+- **Tested:** 🟢 COMPLETED
+- **Completed:** February 26, 2026
+- **Testing Guide:** See [postman-testing-guide.md](postman-testing-guide.md)
 - **Response Example:**
   ```json
   {
-    "id": "prod-123",
-    "name": "Max Pain Relief 100ml",
-    "price": 110000,
-    "category": "pain-relief",
-    "sizeName": "100ml",
-    "description": "...",
-    "benefits": [...],
-    "composition": "...",
-    "usage": "...",
-    "images": [...]
+    "success": true,
+    "data": {
+      "id": "prod-001",
+      "name": "Max Pain Relief Oil",
+      "price": 185000,
+      "category": "pain-relief",
+      "sizeName": "100ml",
+      "description": "...",
+      "benefits": [...],
+      "composition": "...",
+      "usage": "...",
+      "images": [...]
+    }
   }
   ```
-- **Estimated Time:** 15 minutes
-- **Notes:** Should validate that product exists, return 404 if not found
+- **Notes:** 
+  - Best for direct product access (SEO-friendly URLs)
+  - Faster than loading all products for single view
+  - Use alongside getAllProducts() for optimal UX
 
 ---
 
-### 3. Search Products
+### 3. Search Products dont need i guess for now comments by ANOOP
 - **Status:** ⚪ NOT STARTED
 - **Endpoint:** `GET /api/products/search?q=keyword`
 - **Purpose:** Allow customers to search products by name/keyword
@@ -84,7 +96,7 @@ This document tracks the development progress of all API endpoints for the Annis
 
 ---
 
-### 4. Filter Products
+### 4. Filter Products dont need i guess for now comments by ANOOP
 - **Status:** ⚪ NOT STARTED
 - **Endpoint:** `GET /api/products/filter?category=pain-relief&size=100ml&minPrice=50000&maxPrice=200000`
 - **Purpose:** Filter products by category, size, price range
@@ -104,10 +116,12 @@ This document tracks the development progress of all API endpoints for the Annis
 ## 📝 Phase 2: Customer Interaction APIs (Priority: HIGH)
 
 ### 5. Contact Form Submission
-- **Status:** ⚪ NOT STARTED
+
+- **Status:** 🟡  working in progress just waiting on bravo to get this done
 - **Endpoint:** `POST /api/contact`
 - **Purpose:** Handle customer inquiries from contact page
 - **Request Body:**
+
   ```json
   {
     "name": "John Doe",
@@ -115,6 +129,7 @@ This document tracks the development progress of all API endpoints for the Annis
     "message": "Inquiry about products..."
   }
   ```
+
 - **Features Needed:**
   - ✅ Validate input (name, contact, message required)
   - ✅ Save to Firestore `contacts` collection
@@ -122,6 +137,7 @@ This document tracks the development progress of all API endpoints for the Annis
   - ✅ Send auto-reply to customer
   - ✅ Return success/error response
 - **Response:**
+
   ```json
   {
     "success": true,
@@ -129,10 +145,11 @@ This document tracks the development progress of all API endpoints for the Annis
     "contactId": "contact-xyz"
   }
   ```
+
 - **Estimated Time:** 30 minutes (including email setup)
 - **Database Structure:**
-  ```
-  contacts/
+
+  ```contacts/
   └── {contactId}/
       ├── name: string
       ├── contact: string (email or phone)
@@ -141,35 +158,42 @@ This document tracks the development progress of all API endpoints for the Annis
       ├── createdAt: timestamp
       └── repliedAt: timestamp (optional)
   ```
+
 - **Notes:** Need to setup email service (Nodemailer with Gmail or SendGrid)
 
 ---
 
 ### 6. Newsletter Subscription
-- **Status:** ⚪ NOT STARTED
+
+- **Status:** 🟡  working in progress just waiting on bravo to get this done
 - **Endpoint:** `POST /api/newsletter/subscribe`
 - **Purpose:** Collect email subscribers
 - **Request Body:**
+
   ```json
   {
     "email": "customer@email.com",
     "name": "John Doe" (optional)
   }
   ```
+
 - **Features:**
   - ✅ Validate email format
   - ✅ Check if email already subscribed (prevent duplicates)
   - ✅ Save to Firestore `subscribers` collection
   - ✅ Send welcome email
 - **Response:**
+
   ```json
   {
     "success": true,
     "message": "Terima kasih telah berlangganan!"
   }
   ```
+
 - **Estimated Time:** 20 minutes
 - **Database Structure:**
+
   ```
   subscribers/
   └── {subscriberId}/
@@ -217,6 +241,7 @@ This document tracks the development progress of all API endpoints for the Annis
 - **Purpose:** Manage educational content for Resources page
 - **Estimated Time:** 45 minutes
 - **Database Structure:**
+
   ```
   articles/
   └── {articleId}/
@@ -351,8 +376,9 @@ ADMIN_EMAIL=anisherbal@gmail.com
 - [Firebase Firestore Docs](https://firebase.google.com/docs/firestore)
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 - Server learning guides: `server/learn/`
+- **API Testing Guide:** [postman-testing-guide.md](postman-testing-guide.md) ⭐ NEW!
 
 ---
 
-**Last Reviewed:** February 25, 2026  
+**Last Reviewed:** February 26, 2026  
 **Next Review:** Check after completing Phase 1 & 2
