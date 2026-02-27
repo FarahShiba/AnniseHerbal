@@ -1,3 +1,5 @@
+//Tailwind is a utility-first CSS framework. Instead of writing traditional CSS files, I use predefined utility classes directly in my components. It allows me to build consistent and responsive layouts quickly. In my AnniseHerbal project, I extended the Tailwind configuration with custom brand colours and fonts to match the brand identity.
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],

@@ -56,7 +56,7 @@ export const translations = {
       t3: "Sejak 2005",
       t3_desc: "Terpercaya selama 20 tahun",
       t4: "Aman Keluarga",
-      t4_desc: "Untuk dewasa & anak-anak",
+      t4_desc: "Di racik khusus untuk dewasa & anak",
     },
     section: {
       best_seller: "Koleksi Terlaris",
