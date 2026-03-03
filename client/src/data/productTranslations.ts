@@ -6,7 +6,7 @@ export const productTranslations = {
       category: "Pain Relief",
       shortDesc: "Minyak Pijat Herbal Pegal Linu, Nyeri Otot & Sendi",
       description:
-        "Max Pain Relief Oil adalah minyak pijat herbal hangat yang diformulasikan untuk membantu meredakan pegal linu, nyeri otot, rematik dan ketidak nyamanan pada sendi setelah aktivitas harian. Cocok digunakan sebagai minyak pijat pegal badan dewasa & lansia.",
+        "Max Pain Relief Oil (MPR) adalah minyak oles herbal hangat yang diformulasikan dari bahan herbal pilihan untuk membantu meredakan pegal linu, nyeri otot, rematik, saraf terjepit, dan ketidaknyamanan pada sendi. Sensasi hangatnya membantu merilekskan otot, melancarkan sirkulasi darah, dan memberikan kenyamanan pada tubuh.",
       benefits: [
         "Membantu meredakan pegal linu & nyeri otot",
         "Membantu mengurangi nyeri sendi & rematik",
@@ -29,7 +29,7 @@ export const productTranslations = {
       category: "Specialty",
       shortDesc: "Membantu meredakan wasir luar dan iritasi secara alami.",
       description:
-        "Pelukan hangat dalam botol untuk membantu meredakan wasir luar dan radang. Kombinasi Juniper, boswellia dan helichrysum menghadirkan sensasi menenangkan dengan aroma herbal sehat yang menemani rutinitas perawatan diri di rumah.",
+        "Merupakan inovasi perawatan herbal premium yang dirancang untuk membantu meredakan wasir secara alami, menghadirkan kenyamanan optimal dan mendukung pemulihan dengan lembut.",
       benefits: [
         "Membantu meredakan bengkak dan radang pada wasir luar",
         "Membantu mengurangi rasa tidak nyaman akibat wasir",
@@ -41,24 +41,27 @@ export const productTranslations = {
         "Helichrysum italicum",
       ],
       usage:
-        "Oleskan tipis pada area wasir luar yang bersih dan kering. Diamkan sejenak, lalu tepuk perlahan hingga meresap. Ulangi sesuai kebutuhan.",
+        "Oleskan tipis pada area wasir luar yang bersih dan kering. Diamkan sejenak, hingga meresap. Ulangi sesuai kebutuhan.",
     },
     3: {
       name: "Skincare Oil - 100 ml",
       category: "Skincare",
       shortDesc: "Perawatan Kulit Alami",
       description:
-        "Membantu menghaluskan kulit, melembapkan kulit kering dan merawat masalah kulit dengan kandungan minyak essential alami pilihan.",
-      benefits: ["Menghaluskan kulit", "Melembabkan kulit"],
+        "Perpaduan eksklusif botanical premium dan essential oil alami untuk membantu merawat, melembapkan, dan menyempurnakan tampilan kulit. Menghadirkan sensasi kulit yang lebih halus, lebih bercahaya, dan tampak sempurna dengan kemewahan alami.",
+      benefits: [
+        "Membantu menghaluskan kulit",
+        "Membantu menghaluskan kulit",
+        "Membantu menyamarkan flek wajah",
+      ],
       ingredients: [
-        "Olea europaea (Olive Oil)",
         "Simmondsia chinensis (Jojoba oil)",
-        "Rosa damascane (Rose)",
+        "Rosa damascena (Rose)",
         "Citrus aurantium (Neroli)",
         "Daucus carota (Carrot seed)",
       ],
       usage:
-        "Oleskan Skin Care herbal oil pada seluruh tubuh / area yang diperlukan sampai meresap. Digunakan setiap hari setelah mandi. Agar penyerapan efektif maka dianjurkan tidak mandi / dibasuh selama 6 jam.",
+        "Oleskan Skin Care herbal oil pada wajah atau bagian tubuh / area yang diperlukan sampai meresap. Digunakan setiap hari setelah mandi. Agar penyerapan efektif maka dianjurkan tidak mandi / dibasuh selama 6 jam.",
     },
     4: {
       name: "Progest Oil - 100 ml",
