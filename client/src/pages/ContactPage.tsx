@@ -49,9 +49,9 @@ const ContactPage: React.FC<ContactPageProps> = ({ t }) => {
                       Visit Us
                     </h4>
                     <p className="text-stone-600 leading-relaxed group-hover:text-emerald-800 transition-colors">
-                      Jl. Kejaksaan 1, No. 3
+                      Tanngeran,
                       <br />
-                      Kreo Larangan
+                      Banten
                     </p>
                   </div>
                 </a>
