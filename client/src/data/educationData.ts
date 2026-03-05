@@ -19,35 +19,25 @@ export const educationData: Record<
         "Panduan lengkap penggunaan essential oil yang aman untuk seluruh keluarga.",
       content: [
         {
-          heading: "Pengenceran (Dilution)",
-          text: "Essential oil sangat pekat dan harus diencerkan dengan carrier oil (seperti minyak kelapa murni, jojoba, atau almond) sebelum dioleskan ke kulit. Jangan pernah mengoleskan essential oil murni langsung ke kulit tanpa pengenceran, kecuali atas saran aromatherapist bersertifikat.",
-          list: [
-            "Bayi (0-2 tahun): 0.5% - 1% (1 tetes per 10ml carrier oil)",
-            "Anak-anak (2-10 tahun): 1% - 2% (2-4 tetes per 10ml carrier oil)",
-            "Dewasa: 2% - 5% (4-10 tetes per 10ml carrier oil)",
-            "Ibu Hamil/Menyusui: 1% (konsultasikan dengan dokter)",
-          ],
-        },
-        {
           heading: "Patch Test (Tes Kulit)",
-          text: "Sebelum menggunakan essential oil baru, selalu lakukan patch test untuk memastikan tidak ada reaksi alergi.",
+          text: "Sebelum menggunakan produk annise herbal selalu lakukan patch test untuk memastikan tidak ada reaksi alergi.",
           list: [
-            "Oleskan sedikit essential oil yang sudah diencerkan di bagian dalam lengan.",
+            "Oleskan sedikit herbal oil dari annise herbal dibagian dalam lengan.",
             "Tunggu 24 jam.",
             "Jika timbul kemerahan atau gatal, hentikan penggunaan.",
           ],
         },
         {
           heading: "Sensitivitas Matahari (Photosensitivity)",
-          text: "Beberapa essential oil, terutama jenis citrus (Lemon, Bergamot, Lime, Grapefruit), bersifat photosensitive. Kulit yang diolesi minyak ini bisa terbakar jika terkena sinar matahari langsung.",
+          text: "Beberapa herbal oil juga menggunakan essential oil yang terdiri dari jenis citrus (Lemon, Bergamot, Lime, Grapefruit), bersifat photosensitive. Kulit yang diolesi herbal oil ini bisa mengakibatkan tingginya sensitifity jika terkena sinar matahari langsung.",
           list: [
-            "Hindari paparan sinar matahari langsung selama 12 jam setelah penggunaan oil citrus.",
+            "Hindari paparan sinar matahari langsung selama 4 jam setelah penggunaan herbal oil yang mengandung citrus.",
             "Gunakan pada malam hari atau area tertutup pakaian.",
           ],
         },
         {
           heading: "Penyimpanan",
-          text: "Simpan essential oil di tempat yang sejuk, kering, dan terhindar dari sinar matahari langsung untuk menjaga kualitasnya. Botol kaca gelap membantu melindungi oil dari kerusakan akibat cahaya.",
+          text: "Simpan produk annise herbal di tempat yang sejuk, kering, dan terhindar dari sinar matahari langsung untuk menjaga kualitasnya. Botol kaca gelap membantu melindungi oil dari kerusakan akibat cahaya.",
         },
       ],
     },
