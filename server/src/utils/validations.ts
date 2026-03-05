@@ -53,8 +53,8 @@ export const ValidateContactForm=(
     // validate phone number 
     if(!data.phone || data.phone.toString().trim().length === 0){
         errors.phone = "Phone number is required" as any;
-    }else if(data.phone.toString().trim().length !== 10){
-        errors.phone = "Phone number must be 10 digits" as any;
+    }else if(data.phone.toString().trim().length >= 10){
+        errors.phone = "Phone number must be 10 - 13 digits" as any;
     }
 
 

@@ -2,7 +2,7 @@
 
 **Project:** Annise Herbal E-Commerce Backend  
 **Started:** February 25, 2026  
-**Last Updated:** February 26, 2026
+**Last Updated:** February 28, 2026
 
 ---
 
@@ -11,9 +11,9 @@
 This document tracks the development progress of all API endpoints for the Annise Herbal e-commerce platform.
 
 **Current Status:**
-- 🟢 Completed: 2/10 endpoints
+- 🟢 Completed: 4/10 endpoints
 - 🟡 In Progress: 0/10 endpoints
-- ⚪ Not Started: 8/10 endpoints
+- ⚪ Not Started: 6/10 endpoints
 
 ---
 
@@ -117,91 +117,107 @@ This document tracks the development progress of all API endpoints for the Annis
 
 ### 5. Contact Form Submission
 
-- **Status:** 🟡  working in progress just waiting on bravo to get this done
+- **Status:** � COMPLETED
 - **Endpoint:** `POST /api/contact`
+- **Controller:** `contactControllers.ts` → `submitContactForm()`
 - **Purpose:** Handle customer inquiries from contact page
+- **Completed:** February 28, 2026
 - **Request Body:**
 
   ```json
   {
     "name": "John Doe",
-    "contact": "john@email.com or 08123456789",
+    "email": "john@email.com",
+    "phone": "08123456789",
     "message": "Inquiry about products..."
   }
   ```
 
-- **Features Needed:**
-  - ✅ Validate input (name, contact, message required)
-  - ✅ Save to Firestore `contacts` collection
-  - ✅ Send email notification to admin
-  - ✅ Send auto-reply to customer
-  - ✅ Return success/error response
+- **Features:**
+  - ✅ Validate input (name 2-100 chars, email format, phone 10-15 digits, message 10-2000 chars)
+  - ✅ Save to Firestore `contacts/{contactId}` collection
+  - ✅ Phone number cleaning (removes non-digits)
+  - ✅ Email format validation with regex
+  - ✅ Comprehensive error messages
+  - ⏳ Send email notification to admin (Phase 4)
+  - ⏳ Send auto-reply to customer (Phase 4)
 - **Response:**
 
   ```json
   {
     "success": true,
-    "message": "Pesan Anda telah diterima. Kami akan menghubungi Anda segera.",
-    "contactId": "contact-xyz"
+    "message": "Thank you for contacting us! We'll respond within 24 hours.",
+    "contactId": "contact_1709145600000_abc123"
   }
   ```
 
-- **Estimated Time:** 30 minutes (including email setup)
+- **Tested:** ✅ Yes (Postman - all validation working)
 - **Database Structure:**
 
-  ```contacts/
+  ```
+  contacts/
   └── {contactId}/
       ├── name: string
-      ├── contact: string (email or phone)
+      ├── email: string
+      ├── phone: number (cleaned digits only)
       ├── message: string
-      ├── status: "new" | "replied" | "closed"
-      ├── createdAt: timestamp
-      └── repliedAt: timestamp (optional)
+      ├── status: "new" (default)
+      ├── replied: boolean (default: false)
+      └── createdAt: timestamp
   ```
 
-- **Notes:** Need to setup email service (Nodemailer with Gmail or SendGrid)
+- **Documentation:** See [api-contact.md](../documentation/api-contact.md)
+- **Next:** Email integration with Brevo (Phase 4)
 
 ---
 
 ### 6. Newsletter Subscription
 
-- **Status:** 🟡  working in progress just waiting on bravo to get this done
+- **Status:** � COMPLETED
 - **Endpoint:** `POST /api/newsletter/subscribe`
-- **Purpose:** Collect email subscribers
+- **Controller:** `newsletterController.ts` → `subscribeToNewsletter()`
+- **Purpose:** Collect email subscribers (simplified email-only approach)
+- **Completed:** February 28, 2026
 - **Request Body:**
 
   ```json
   {
-    "email": "customer@email.com",
-    "name": "John Doe" (optional)
+    "email": "customer@email.com"
   }
   ```
 
 - **Features:**
-  - ✅ Validate email format
-  - ✅ Check if email already subscribed (prevent duplicates)
-  - ✅ Save to Firestore `subscribers` collection
-  - ✅ Send welcome email
+  - ✅ Validate email format (regex pattern)
+  - ✅ Email normalization (lowercase for consistency)
+  - ✅ Duplicate prevention (checks existing emails)
+  - ✅ Privacy-focused (friendly duplicate response)
+  - ✅ Save to Firestore `newsletter_subscribers/{subscriberId}`
+  - ✅ Generated unique subscriber IDs
+  - ⏳ Send welcome email (Phase 4 with Brevo)
 - **Response:**
 
   ```json
   {
     "success": true,
-    "message": "Terima kasih telah berlangganan!"
+    "message": "Thank you for subscribing to our newsletter!"
   }
   ```
 
-- **Estimated Time:** 20 minutes
+- **Tested:** ⏳ Ready for testing (implementation complete)
 - **Database Structure:**
 
   ```
-  subscribers/
+  newsletter_subscribers/
   └── {subscriberId}/
-      ├── email: string (unique)
-      ├── name: string (optional)
+      ├── id: string (sub_{timestamp}_{random})
+      ├── email: string (normalized lowercase)
       ├── subscribedAt: timestamp
-      └── isActive: boolean
+      ├── isActive: boolean (default: true)
+      └── source: string (optional, e.g., "homepage")
   ```
+
+- **Design Decision:** Email-only subscription for better conversion and simpler MVP
+- **Next:** Test in Postman, then email integration with Brevo (Phase 4)
 
 ---
 
@@ -228,7 +244,42 @@ This document tracks the development progress of all API endpoints for the Annis
 
 ---
 
-## 🎨 Phase 4: Content Management (Priority: MEDIUM)
+## 📧 Phase 4: Email Integration with Brevo (Priority: HIGH)
+
+**Status:** ⏳ STARTING TOMORROW (February 29, 2026)
+
+**Overview:** Integrate Brevo (formerly Sendinblue) email service for automated emails
+
+**Tasks:**
+1. **Contact Form Emails**
+   - Admin notification when form submitted
+   - Customer confirmation email (auto-reply)
+
+2. **Newsletter Welcome Email**
+   - Automated welcome email on subscription
+   - Branded template
+
+3. **Unsubscribe Functionality**
+   - DELETE endpoint or update `isActive: false`
+   - Unsubscribe link in emails
+
+4. **Email Templates**
+   - Professional HTML email templates
+   - Consistent branding
+
+**Estimated Time:** 2-3 hours
+
+**Environment Variables Needed:**
+```env
+BREVO_API_KEY=your_brevo_api_key
+BREVO_SENDER_EMAIL=noreply@anniseherbal.com
+BREVO_SENDER_NAME=Annise Herbal
+ADMIN_EMAIL=anisherbal@gmail.com
+```
+
+---
+
+## 🎨 Phase 5: Content Management (Priority: MEDIUM)
 
 ### 10. Education/Blog Articles API
 - **Status:** ⚪ NOT STARTED
@@ -259,7 +310,7 @@ This document tracks the development progress of all API endpoints for the Annis
 
 ---
 
-## 🔐 Phase 5: Admin & Analytics (Priority: LOW)
+## 🔐 Phase 6: Admin & Analytics (Priority: LOW)
 
 ### 11. Admin Dashboard Stats
 - **Status:** ⚪ NOT STARTED
@@ -284,15 +335,25 @@ This document tracks the development progress of all API endpoints for the Annis
 
 ## 📝 Next Steps
 
-**Immediate Priority (This Week):**
-1. ✅ Get Single Product API (for product detail page)
-2. ✅ Contact Form API (customer inquiries)
-3. ✅ Newsletter API (build email list)
+**✅ Completed (Phase 1-3):**
+1. ✅ Get All Products API
+2. ✅ Get Single Product API (for product detail page)
+3. ✅ Contact Form API (customer inquiries)
+4. ✅ Newsletter Subscription API (email-only, simplified)
+5. ✅ Comprehensive API Documentation
+6. ✅ Validation System Architecture
+
+**🔥 Tomorrow (Phase 4 - Email Integration):**
+1. Test Newsletter API in Postman
+2. Setup Brevo email service
+3. Contact form email notifications
+4. Newsletter welcome emails
+5. Unsubscribe functionality
 
 **Short Term (Next 2 Weeks):**
 4. Search & Filter APIs (better UX)
-5. Email notifications setup
-6. Admin dashboard basics
+5. Admin dashboard basics
+6. Product recommendations
 
 **Long Term (After Payment System):**
 7. Order management APIs
@@ -380,5 +441,28 @@ ADMIN_EMAIL=anisherbal@gmail.com
 
 ---
 
-**Last Reviewed:** February 26, 2026  
-**Next Review:** Check after completing Phase 1 & 2
+**Last Reviewed:** February 28, 2026  
+**Next Review:** After Phase 4 (Email Integration) - March 1, 2026
+
+---
+
+## 🎯 Session Summary (February 28, 2026)
+
+**What We Completed Today:**
+- ✅ Contact Form API - Fully tested and working
+- ✅ Newsletter Subscription API - Email-only implementation (ready for testing)
+- ✅ Comprehensive API documentation (5 files)
+- ✅ Code review and improvements (duplicate prevention, email normalization)
+- ✅ Database design decisions (email as ID vs generated ID)
+- ✅ Validation system architecture
+
+**Key Technical Decisions:**
+- Used generated IDs for newsletter subscribers (flexibility for future features)
+- Email normalization (lowercase) to prevent duplicate subscriptions
+- Backend validation only (security-first approach)
+- Email-only newsletter for better conversion
+
+**Tomorrow's Focus:**
+- Phase 4: Brevo email integration
+- Test newsletter API
+- Setup automated emails

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { db } from "../config/firebase";
 import { ProductTypes } from "../types/product";  // Import the existing type!
+import { fetchProductByPath } from "../utils/productHelpers";
 
 // At the top of your file
 interface ProductParams {
@@ -75,17 +76,10 @@ export const getProductById = async (req: Request<ProductParams>, res: Response)
 
       console.log(`🔍 Fetching product with ID: ${category}/${sizeName}/${id}`);
 
-      //build path to specific product 
-      const productRef = db
-      .collection("products")
-      .doc(category)
-      .collection(sizeName)
-      .doc(id);
-
       // fetch the product 
-      const productDoc = await productRef.get();
+      const product = await fetchProductByPath(category, sizeName, id);
 
-      if(!productDoc.exists){
+      if(!product){
          console.log(`❌ Product not found : ${category}/${sizeName}/${id}`);
          // 404 not found issue raised 
          return res.status(404).json({
@@ -94,19 +88,6 @@ export const getProductById = async (req: Request<ProductParams>, res: Response)
             message:`Product with ID '${id}' not found in category '${category}' and size '${sizeName}'`
          });
       }
-
-      // else get the product data
-      const productData = productDoc.data() as ProductTypes;
-
-      //Build complete product 
-      const product: ProductTypes ={
-         ...productData,
-         id: productDoc.id,
-         category:category,
-         sizeName:sizeName
-      }
-
-      console.log(`product found ${JSON.stringify(product)}`);
 
       // send successful response
       res.status(200).json({
@@ -125,3 +106,8 @@ export const getProductById = async (req: Request<ProductParams>, res: Response)
       });
    }
 };
+
+
+
+
+

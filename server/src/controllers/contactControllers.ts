@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { db } from "../config/firebase";
 import { ContactTypes, ContactRequestBody } from "../types/contacts";
-import { ValidateContactForm } from "../untils/validations";
-import { generateUniqueContactId } from "../untils/helpers";
+import { ValidateContactForm } from "../utils/validations";
+import { generateUniqueContactId } from "../utils/helpers";
 
 
 /**

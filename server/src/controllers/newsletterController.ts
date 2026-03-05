@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { db } from "../config/firebase";
 import { NewsletterSubscriberType, NewsletterSubscriptionRequestBody } from "../types/newsletter";
-import { ValidateNewsletterSubscriberEmail } from "../untils/validations";
-import { generateUniqueContactId as  generateUniqueSubscriberId} from "../untils/helpers";
+import { ValidateNewsletterSubscriberEmail } from "../utils/validations";
+import { generateUniqueContactId as  generateUniqueSubscriberId} from "../utils/helpers";
 
 
 /**

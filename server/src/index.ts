@@ -72,15 +72,11 @@ app.use("/api/products", productsRouter);
 // Mount get product by id route
 app.use("/api/products/:category/:sizeName/:id", productsRouter);
 
-
 // Mount send the contact data and sending email
 app.use("/api", contactRoutes);
 
-
 // Mount newsletter subscriber route
 app.use("/api", newsletterSubscriberRoutes);
-
-
 
 
 //welcome route
@@ -120,6 +116,9 @@ if (process.env.NODE_ENV !== "production") {
   app.listen(PORT, () => {
     console.log(`server running on http://localhost:${PORT}`);
     console.log(`Health check: http://localhost:${PORT}/api/health`);
+    console.log(`Products endpoint: http://localhost:${PORT}/api/products`);
+    console.log(`Contact endpoint: http://localhost:${PORT}/api/contact`);
+    console.log(`Newsletter endpoint: http://localhost:${PORT}/api/newsLetterSubscriber`);
   });
 }
 
