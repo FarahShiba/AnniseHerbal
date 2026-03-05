@@ -533,18 +533,16 @@ export const products: Product[] = [
   },
   {
     id: 5,
-    name: "Nozze Oil Dewasa - 15 ml",
+    name: "Nozze Oil - 15 ml",
     category: "Respiratory",
     price: 165000,
     shortDesc: "Minyak Hidung Tersumbat, Minyak Oil Hidung Mampet",
     description:
-      "Nozze Oil Dewasa adalah minyak herbal berbahan essential oil murni yang membantu melegakan hidung tersumbat serta memberikan rasa segar dan lega pada saluran pernapasan. Cocok digunakan sebagai minyak oles hidung mampet dan aromaterapi pernapasan dewasa untuk penggunaan harian.",
+      "Nozze Oil adalah minyak herbal berbahan essential oil yang membantu melegakan hidung tersumbat serta memberikan rasa segar dan lega pada saluran pernapasan. Cocok digunakan sebagai minyak oles hidung mampet dan aromaterapi pernapasan untuk penggunaan harian.",
     benefits: [
       "Membantu melegakan hidung tersumbat dan hidung mampet",
       "Membantu meredakan pilek & bersin-bersin",
       "Membantu memberikan rasa lega pada pernapasan",
-      "Memberikan sensasi segar dan hangat",
-      "Cocok sebagai essential oil pernapasan dewasa",
     ],
     ingredients: [
       "Eucalyptus globulus labiil",
@@ -552,7 +550,7 @@ export const products: Product[] = [
       "Mentha piperita (Peppermint Oil)",
     ],
     usage:
-      "Oleskan 3-5 tetes pada telapak tangan. Balurkan perlahan pada area : Batang hidung, Tulang pipi, Kening, Tenggorokan (dewasa) dan Gunakan sesuai kebutuhan.",
+      "Oleskan 3-5 tetes pada telapak tangan. Balurkan perlahan pada area : Batang hidung, Tulang pipi, Kening, Tenggorokan dan Gunakan sesuai kebutuhan.",
     caution:
       "Hanya untuk pemakaian luar. Hindari area mata dan selaput lendir. Tidak disarankan untuk anak di bawah 2 tahun tanpa pengawasan medis.",
     imageColor: "bg-teal-100",
@@ -566,13 +564,11 @@ export const products: Product[] = [
     price: 165000,
     shortDesc: "Batuk, Flu & Amandel, Pernapasan",
     description:
-      "Fluxent Oil Dewasa adalah minyak aromaterapi herbal berbahan essential oil murni yang membantu melegakan pernapasan serta meredakan ketidak nyamanan akibat flu, pilek, batuk dan tenggorokan tidak nyaman (amandel). Cocok digunakan sebagai aromaterapi pernapasan dewasa untuk penggunaan harian.",
+      "Fluxent Oil adalah minyak aromaterapi herbal berbahan essential oil murni yang membantu melegakan pernapasan serta meredakan ketidak nyamanan akibat flu, pilek, batuk dan sakit tenggorokan.",
     benefits: [
       "Membantu meredakan flu & pilek",
       "Membantu melegakan pernapasan",
       "Membantu mengurangi batuk & rasa tidak nyaman di tenggorokan",
-      "Memberikan sensasi hangat & segar",
-      "Cocok sebagai essential oil pernapasan dewasa",
     ],
     ingredients: [
       "Mentha piperita (Peppermint oil)",
@@ -582,9 +578,9 @@ export const products: Product[] = [
       "Cedrus atlantica",
     ],
     usage:
-      "Tuangkan 2-3 tetes pada tisu, saputangan dan masker. Hirup perlahan seperti bernapas biasanya. Dapat digunakan beberapa kali sehari sesuai kebutuhan. Bisa juga digunakan diffuser.",
+      "Tuangkan 2-3 tetes pada tisu, saputangan dan masker. Hirup perlahan seperti bernapas biasanya. Dapat digunakan beberapa kali sehari sesuai kebutuhan. Bisa juga digunakan pada diffuser.",
     caution:
-      "Hanya untuk inhalasi (dihirup) atau penggunaan pada diffuser. Hindari kontak langsung dengan kulit sensitif tanpa pengenceran.",
+      "Hanya untuk inhalasi (dihirup) atau penggunaan pada diffuser. Hindari kontak langsung dengan kulit sensitif tanpa pengenceran. Hindari penggunaan pada anak usia dibawah 8 tahun.",
     imageColor: "bg-white",
     image: fluxent1,
     images: [fluxent1, fluxentDesc1],

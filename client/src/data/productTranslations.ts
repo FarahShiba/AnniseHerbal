@@ -51,7 +51,7 @@ export const productTranslations = {
         "Perpaduan eksklusif botanical premium dan essential oil alami untuk membantu merawat, melembapkan, dan menyempurnakan tampilan kulit. Menghadirkan sensasi kulit yang lebih halus, lebih bercahaya, dan tampak sempurna dengan kemewahan alami.",
       benefits: [
         "Membantu menghaluskan kulit",
-        "Membantu menghaluskan kulit",
+        "Membantu melembabkan kulit",
         "Membantu menyamarkan flek wajah",
       ],
       ingredients: [
@@ -84,17 +84,16 @@ export const productTranslations = {
         "Oleskan secukupnya progest pada area lambung memutar searah dengan jarum jam. Khusus diare, pijat memutar berlawanan arah jarum jam. Dilakukan 2-3 kali sehari sampai keluhan berkurang / reda.",
     },
     5: {
-      name: "Nozze Oil Dewasa - 15 ml",
+      name: "Nozze Oil - 15 ml",
       category: "Respiratory",
       shortDesc: "Minyak Hidung Tersumbat, Minyak Oil Hidung Mampet",
       description:
-        "Nozze Oil Dewasa adalah minyak herbal berbahan essential oil murni yang membantu melegakan hidung tersumbat serta memberikan rasa segar dan lega pada saluran pernapasan. Cocok digunakan sebagai minyak oles hidung mampet dan aromaterapi pernapasan dewasa untuk penggunaan harian.",
+        "Nozze Oil adalah minyak herbal berbahan essential oil murni yang membantu melegakan hidung tersumbat serta memberikan rasa segar dan lega pada saluran pernapasan. Cocok digunakan sebagai minyak oles hidung mampet dan aromaterapi pernapasan dewasa untuk penggunaan harian.",
       benefits: [
         "Membantu melegakan hidung tersumbat dan hidung mampet",
         "Membantu meredakan pilek & bersin-bersin",
         "Membantu memberikan rasa lega pada pernapasan",
-        "Memberikan sensasi segar dan hangat",
-        "Cocok sebagai essential oil pernapasan dewasa",
+        "Membantu mengatasi peradangan pada dinding sinus",
       ],
       ingredients: [
         "Eucalyptus globulus labiil",
@@ -102,20 +101,18 @@ export const productTranslations = {
         "Mentha piperita (Peppermint Oil)",
       ],
       usage:
-        "Oleskan 3-5 tetes pada telapak tangan. Balurkan perlahan pada area : Batang hidung, Tulang pipi, Kening, Tenggorokan (dewasa) dan Gunakan sesuai kebutuhan.",
+        "Oleskan 3-5 tetes pada telapak tangan. Balurkan perlahan pada area : Batang hidung, Tulang pipi, Kening, Tenggorokan dan Gunakan sesuai kebutuhan.",
     },
     6: {
       name: "Fluxent oil - 10ml",
       category: "Respiratory",
       shortDesc: "Batuk, Flu & Amandel, Pernapasan",
       description:
-        "Fluxent Oil Dewasa adalah minyak aromaterapi herbal berbahan essential oil murni yang membantu melegakan pernapasan serta meredakan ketidak nyamanan akibat flu, pilek, batuk dan tenggorokan tidak nyaman (amandel). Cocok digunakan sebagai aromaterapi pernapasan dewasa untuk penggunaan harian.",
+        "Fluxent Oil adalah minyak aromaterapi herbal berbahan essential oil murni yang membantu melegakan pernapasan serta meredakan ketidak nyamanan akibat flu, pilek, batuk dan sakit tenggorokan.",
       benefits: [
         "Membantu meredakan flu & pilek",
         "Membantu melegakan pernapasan",
         "Membantu mengurangi batuk & rasa tidak nyaman di tenggorokan",
-        "Memberikan sensasi hangat & segar",
-        "Cocok sebagai essential oil pernapasan dewasa",
       ],
       ingredients: [
         "Mentha piperita (Peppermint oil)",
@@ -125,7 +122,7 @@ export const productTranslations = {
         "Cedrus atlantica",
       ],
       usage:
-        "Tuangkan 2-3 tetes pada tisu, saputangan dan masker. Hirup perlahan seperti bernapas biasanya. Dapat digunakan beberapa kali sehari sesuai kebutuhan. Bisa juga digunakan diffuser.",
+        "Tuangkan 2-3 tetes pada tisu, saputangan dan masker. Hirup perlahan seperti bernapas biasanya. Dapat digunakan beberapa kali sehari sesuai kebutuhan. Bisa juga digunakan pada diffuser.",
     },
     7: {
       name: "Fluxent Kids - 10 ml",
@@ -258,13 +255,11 @@ export const productTranslations = {
       category: "Respiratory",
       shortDesc: "Nasal Congestion Oil, Nasal Blockage Oil",
       description:
-        "Nozze Oil Dewasa is a herbal oil made from pure essential oils that helps relieve nasal congestion and provides a fresh and clear feeling in the respiratory tract. Suitable for use as a nasal congestion rub and adult respiratory aromatherapy for daily use.",
+        "Nozze Oil is a herbal oil made from pure essential oils that helps relieve nasal congestion and provides a fresh and clear feeling in the respiratory tract. Suitable for use as a nasal congestion rub and adult respiratory aromatherapy for daily use.",
       benefits: [
         "Helps relieve nasal congestion and stuffiness",
         "Helps relieve colds and sneezing",
         "Helps provide relief for breathing",
-        "Provides a fresh and warm sensation",
-        "Suitable as an essential oil for adult breathing",
       ],
       ingredients: [
         "Eucalyptus globulus labiil",
@@ -272,20 +267,18 @@ export const productTranslations = {
         "Mentha piperita (Peppermint Oil)",
       ],
       usage:
-        "Apply 3-5 drops to the palm of your hand. Gently rub onto the following areas: bridge of the nose, cheekbones, forehead, throat (adults), and use as needed.",
+        "Apply 3-5 drops to the palm of your hand. Gently rub onto the following areas: bridge of the nose, cheekbones, forehead, throat and use as needed.",
     },
     6: {
       name: "Fluxent oil - 10ml",
       category: "Respiratory",
       shortDesc: "Cough, Flu & Tonsils, Respiratory",
       description:
-        "Fluxent Adult Oil is a herbal aromatherapy oil made from pure essential oils that helps ease breathing and relieve discomfort caused by flu, colds, coughs, and sore throats (tonsils). Suitable for use as adult respiratory aromatherapy for daily use.",
+        "Fluxent Oil is a herbal aromatherapy oil made from pure essential oils that helps ease breathing and relieve discomfort caused by flu, colds, coughs, and sore throats (tonsils). Suitable for use as adult respiratory aromatherapy for daily use.",
       benefits: [
         "Helps relieve flu & colds",
         "Helps ease breathing",
         "Helps reduce coughing & throat discomfort",
-        "Provides a warm & refreshing sensation",
-        "Suitable as an essential oil for adult respiratory use",
       ],
       ingredients: [
         "Mentha piperita (Peppermint oil)",
