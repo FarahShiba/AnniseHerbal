@@ -36,8 +36,8 @@ const ContactPage: React.FC<ContactPageProps> = ({ t }) => {
 
               <div className="space-y-8">
                 <a
-                  href="https://www.google.com/maps/search/?api=1&query=Jl.+Kejaksaan+1+No.+3+Kreo+Larangan"
-                  target="_blank"
+                  // href="https://www.google.com/maps/search/?api=1&query=Jl.+Kejaksaan+1+No.+3+Kreo+Larangan"
+                  // target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-4 group cursor-pointer"
                 >
@@ -49,7 +49,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ t }) => {
                       Visit Us
                     </h4>
                     <p className="text-stone-600 leading-relaxed group-hover:text-emerald-800 transition-colors">
-                      Tanngeran,
+                      Tanggerang,
                       <br />
                       Banten
                     </p>
