@@ -1,6 +1,6 @@
 import { OrderItem, PromoCodeUsageType } from '../types/orders';
 import { ShippingMethod } from '../types/orders';
-import { getShippingCost } from './shippingHelpers';
+import { getShippingCost, getShippingEstimate } from './shippingHelpers';
 import { PricingBreakdownType } from '../types/orders';
 import { Order, CreateOrderRequest, PaymentMethod } from '../types/orders';
 import { validateOrderRequest } from './orderValidation';
@@ -163,12 +163,81 @@ export const buildPricingBreakdown = (
  * @param promoCodeData - Optional promo code data (if applied)
  * @returns Complete Order document
  */
-export const buildOrderDocument =  (
-  validItems: validateOrderRequest, 
-  fetchAndBuildOrderItems: fetchAndBuildOrderItems,
-  promoCode?: PromoCodeUsageType,
+export const buildOrderDocument = (
+  orderData: CreateOrderRequest,
+  items: OrderItem[],
+  normalizedPhone: string,
+  promoCodeData?: {
+    code: string;
+    discountType:"percentage" | "fixed"; 
+    discountValue: number;
+    maxDiscount: number;
+  }
+) => {
+  // Step 1: Calculate pricing breakdown
+    const pricingBreakdown =  buildPricingBreakdown(
+      items,
+      orderData.shipping.method, 
+      promoCodeData ? {
+        discountType: promoCodeData.discountType,
+        discountValue:promoCodeData.discountValue,
+        maxDiscount:promoCodeData.maxDiscount
+      }:undefined,
+     );
+     // temp 
+     console.log(`how does the object of pricingBreakdown looks like : ${pricingBreakdown}`);
+  // Step 2: Build customer object
+    const customer ={
+      name: orderData.customer.name, 
+      email: orderData.customer.email,
+      phoneNumber: normalizedPhone,
+      address: orderData.customer.address,
+      city: orderData.customer.city,
+      province: orderData.customer.province,
+      postalCode: orderData.customer.postalCode,
+      specialInstructions: orderData.customer.specialInstructions || null
+    }
+    const shippingMethod = orderData.shipping.method;
+  // Step 3: Build shipping object
+    const shipping = {
+      method: shippingMethod, 
+      cost: getShippingCost(shippingMethod),
+      estimation: getShippingEstimate(shippingMethod)
+    }
+  // temp 
+    console.log(`how does the object of shipping looks like : ${shipping}`);
 
 
+  // Step 4: Build payment object
+    const payment = {
+      method: orderData.paymentMethod,
+      status: "pending" as const,
+      amount: pricingBreakdown.total,
+      // optional fields 
+    }
   
-)
+    let promoCode;
+  // Step 5: Build promo code object (if exists)
+    if(promoCodeData != null){
+        promoCode = {
+          code: promoCodeData.code,
+          discountType: promoCodeData.discountType,
+          discountValue: promoCodeData.discountValue,
+          discountAmount: pricingBreakdown.discount
+        };
+    }else{
+       promoCode = undefined
+    }
+  // Step 6: Set payment initial status values & Return complete order document
+    return {
+    customer,
+    items,
+    shipping,
+    payment,
+    pricing: pricingBreakdown,
+    promoCode,
+    status: "pending" as const,
+    idempotencyKey: orderData.idempotencyKey
+  };
+};
    

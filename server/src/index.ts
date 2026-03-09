@@ -7,6 +7,7 @@ import { error, timeStamp } from "node:console";
 import productsRouter from "./routes/products";
 import contactRoutes from "./routes/contacts";
 import newsletterSubscriberRoutes from "./routes/newsletter";
+import orderRoutes from './routes/orderRoutes';
 
 // load environment variables
 dotenv.config();
@@ -73,11 +74,13 @@ app.use("/api/products", productsRouter);
 app.use("/api/products/:category/:sizeName/:id", productsRouter);
 
 // Mount send the contact data and sending email
-app.use("/api", contactRoutes);
+app.use("/api/", contactRoutes);
 
 // Mount newsletter subscriber route
-app.use("/api", newsletterSubscriberRoutes);
+app.use("/api/", newsletterSubscriberRoutes);
 
+// Mount the create order route
+app.use("/api/orders", orderRoutes);
 
 //welcome route
 app.get("/", (req: Request, res: Response) => {
@@ -87,9 +90,9 @@ app.get("/", (req: Request, res: Response) => {
     endpoints: {
       health: "/api/health",
       products: "/api/products",
-      orders: "/api/orders (coming soon)",
       contact: "/api/contact",
       newsletter: "/api/newsLetterSubscriber",
+      orders: "/api/orders"
     },
   });
 });
@@ -119,6 +122,8 @@ if (process.env.NODE_ENV !== "production") {
     console.log(`Products endpoint: http://localhost:${PORT}/api/products`);
     console.log(`Contact endpoint: http://localhost:${PORT}/api/contact`);
     console.log(`Newsletter endpoint: http://localhost:${PORT}/api/newsLetterSubscriber`);
+    console.log(`Orders endpoint: http://localhost:${PORT}/api/orders`); 
+
   });
 }
 

@@ -2,7 +2,7 @@
 
 **Project:** Annise Herbal E-Commerce Backend  
 **Started:** February 25, 2026  
-**Last Updated:** February 28, 2026
+**Last Updated:** March 9, 2026
 
 ---
 
@@ -11,9 +11,10 @@
 This document tracks the development progress of all API endpoints for the Annise Herbal e-commerce platform.
 
 **Current Status:**
-- 🟢 Completed: 4/10 endpoints
-- 🟡 In Progress: 0/10 endpoints
-- ⚪ Not Started: 6/10 endpoints
+- 🟢 Completed: 5/12 endpoints
+- 🟡 In Progress: 1/12 endpoints (Midtrans integration pending)
+- ⚪ Not Started: 4/12 endpoints
+- ❌ Skipped: 2/12 endpoints (not needed for current workflow)
 
 ---
 
@@ -221,26 +222,86 @@ This document tracks the development progress of all API endpoints for the Annis
 
 ---
 
-## 📦 Phase 3: Order Management (After Payment Integration)
+## 📦 Phase 3: Order Management & Payment Integration
 
-### 7. Create Order (Draft)
-- **Status:** ⚪ NOT STARTED (Will be part of payment system)
+**Workflow:**
+1. User completes checkout → Creates order in Firestore
+2. Midtrans processes payment → Sends email confirmation
+3. Admin receives payment notification → Manually books courier
+4. Courier company provides tracking → Customer tracks via courier system
+
+**Note:** No user dashboard needed - Midtrans email + courier tracking is sufficient
+
+### 7. Create Order
+- **Status:** 🟢 COMPLETED (Basic order creation ready for Midtrans integration)
 - **Endpoint:** `POST /api/orders`
-- **Notes:** This will be implemented when doing payment integration with Midtrans
+- **Controller:** `orderControllers.ts` → `createOrder()`
+- **Completed:** March 9, 2026
+- **Features Completed:**
+  - ✅ Complete order validation (13 validators)
+  - ✅ Product fetching from Firestore (security: prices from database)
+  - ✅ Price calculation (subtotal, shipping, discount, total)
+  - ✅ Order document building with unique IDs
+  - ✅ Save to Firestore `orders/{orderId}`
+  - ✅ Idempotency key for duplicate prevention
+  - ✅ Phone number normalization (08xxx → +628xxx)
+  - ✅ Order types prepared for Midtrans integration
+- **Pending Midtrans Integration:**
+  - ⏳ Midtrans Snap API integration (payment token generation)
+  - ⏳ Webhook handler for payment confirmation
+  - ⏳ Update order status after successful payment
+- **Request Body:**
+  ```json
+  {
+    "customer": {
+      "name": "John Doe",
+      "email": "john@email.com",
+      "phone": "08123456789"
+    },
+    "items": [
+      {
+        "productPath": "products/pain-relief/sizes/100ml/products/{id}",
+        "quantity": 2
+      }
+    ],
+    "shippingDetails": {
+      "address": "Jl. Example 123",
+      "city": "Jakarta",
+      "province": "DKI Jakarta",
+      "postalCode": "12345",
+      "shippingMethod": "standard"
+    },
+    "paymentMethod": "gopay",
+    "idempotencyKey": "unique-key-123"
+  }
+  ```
+- **Tested:** ✅ Yes (Postman - all features working)
+- **Notes:** 850+ lines of code, 10+ bugs fixed during development
 
 ---
 
-### 8. Get Order by ID
-- **Status:** ⚪ NOT STARTED
-- **Endpoint:** `GET /api/orders/:orderId`
-- **Notes:** For order confirmation and tracking pages
+### 8. Get Order by ID ❌ NOT NEEDED
+- **Status:** ⚪ SKIPPED (Not implementing)
+- **Endpoint:** `GET /api/orders/:orderId` (not implemented)
+- **Original Purpose:** Display order tracking page
+- **Why Skipped:** 
+  - ✅ Midtrans sends order confirmation emails directly to customers
+  - ✅ Courier company provides tracking via their system
+  - ✅ No user dashboard or "My Orders" page planned
+  - ✅ Orders processed manually after payment confirmation
+- **Notes:** Simpler workflow - email confirmation + courier tracking is sufficient
 
 ---
 
-### 9. Get Customer Orders
-- **Status:** ⚪ NOT STARTED
-- **Endpoint:** `GET /api/orders?email=customer@email.com`
-- **Notes:** Customer order history
+### 9. Get Customer Orders ❌ NOT NEEDED
+- **Status:** ⚪ SKIPPED (Not implementing)
+- **Endpoint:** `GET /api/orders?email=customer@email.com` (not implemented)
+- **Original Purpose:** Display customer order history
+- **Why Skipped:**
+  - ✅ No user account/dashboard system
+  - ✅ Customers receive order details via Midtrans email
+  - ✅ Order tracking handled by courier company
+- **Notes:** May add later if user accounts are implemented
 
 ---
 
