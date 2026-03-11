@@ -61,7 +61,7 @@ export const translations = {
     section: {
       best_seller: "Koleksi Terlaris",
       best_seller_sub:
-        "Produk favorit keluarga Indonesia untuk mengatasi berbagai keluhan kesehatan sehari-hari secara alami.",
+        "Produk favorit keluarga untuk mengatasi berbagai keluhan kesehatan sehari-hari secara alami.",
       view_all: "Lihat Semua Produk",
       how_to: "Cara Menggunakan",
       how_to_sub:
@@ -81,7 +81,7 @@ export const translations = {
     },
     product: {
       benefits: "Manfaat Utama",
-      composition: "Komposisi",
+      composition: "Komposisi Utama",
       usage: "Cara Pakai",
       back: "Kembali ke Belanja",
       add_cart: "Masukkan Keranjang",
@@ -429,12 +429,10 @@ export const products: Product[] = [
     price: 185000,
     shortDesc: "Minyak Pijat Herbal Pegal Linu, Nyeri Otot & Sendi",
     description:
-      "Max Pain Relief Oil adalah minyak pijat herbal hangat yang diformulasikan untuk membantu meredakan pegal linu, nyeri otot, rematik dan ketidak nyamanan pada sendi setelah aktivitas harian. Cocok digunakan sebagai minyak pijat pegal badan dewasa & lansia.",
+      "Max Pain Relief Oil (MPR) adalah minyak oles herbal hangat yang diformulasikan dari bahan herbal pilihan untuk membantu meredakan pegal linu, nyeri otot, rematik, saraf terjepit, dan ketidaknyamanan pada sendi. Sensasi hangatnya membantu merilekskan otot, melancarkan sirkulasi darah, dan memberikan kenyamanan pada tubuh.",
     benefits: [
-      "Membantu meredakan pegal linu & nyeri otot",
-      "Membantu mengurangi nyeri sendi & rematik",
-      "Memberikan sensasi hangat & rileks pada tubuh",
-      "Cocok sebagai minyak pijat harian setelah kerja / olahraga",
+      "Cocok sebagai minyak pijat harian setelah kerja / olahraga ganti menjadi membantu mengatasi keseleo, saraf terjepit dan masuk angin",
+      "Memberi sensasi hangat... ditaruh paling bawah",
     ],
     ingredients: [
       "Olea europaea (Olive oil)",
@@ -460,7 +458,7 @@ export const products: Product[] = [
     price: 195000,
     shortDesc: "Membantu meredakan wasir luar dan iritasi secara alami.",
     description:
-      "Pelukan hangat dalam botol untuk membantu meredakan wasir luar dan radang. Kombinasi Juniper, boswellia dan helichrysum menghadirkan sensasi menenangkan dengan aroma herbal sehat yang menemani rutinitas perawatan diri di rumah.",
+      "Merupakan inovasi perawatan herbal premium yang dirancang untuk membantu meredakan wasir secara alami, menghadirkan kenyamanan optimal dan mendukung pemulihan dengan lembut.",
     benefits: [
       "Membantu meredakan bengkak dan radang pada wasir luar",
       "Membantu mengurangi rasa tidak nyaman akibat wasir",
@@ -472,7 +470,7 @@ export const products: Product[] = [
       "Helichrysum italicum",
     ],
     usage:
-      "Oleskan tipis pada area wasir luar yang bersih dan kering. Diamkan sejenak, lalu tepuk perlahan hingga meresap. Ulangi sesuai kebutuhan.",
+      "Oleskan tipis pada area wasir luar yang bersih dan kering. Diamkan sejenak, hingga meresap. Ulangi sesuai kebutuhan.",
     caution:
       "Hanya untuk pemakaian luar pada area yang terkena wasir. Hentikan penggunaan jika terjadi iritasi. Konsultasikan dengan dokter jika gejala berlanjut.",
     imageColor: "bg-white",
@@ -487,7 +485,7 @@ export const products: Product[] = [
     price: 210000,
     shortDesc: "Perawatan Kulit Alami",
     description:
-      "Membantu menghaluskan kulit, melembapkan kulit kering dan merawat masalah kulit dengan kandungan minyak essential alami pilihan.",
+      "Perpaduan eksklusif botanical premium dan essential oil alami untuk membantu merawat, melembapkan, dan menyempurnakan tampilan kulit. Menghadirkan sensasi kulit yang lebih halus, lebih bercahaya, dan tampak sempurna dengan kemewahan alami.",
     benefits: ["Menghaluskan kulit", "Melembabkan kulit"],
     ingredients: [
       "Olea europaea (Olive Oil)",
@@ -535,18 +533,16 @@ export const products: Product[] = [
   },
   {
     id: 5,
-    name: "Nozze Oil Dewasa - 15 ml",
+    name: "Nozze Oil - 15 ml",
     category: "Respiratory",
     price: 165000,
     shortDesc: "Minyak Hidung Tersumbat, Minyak Oil Hidung Mampet",
     description:
-      "Nozze Oil Dewasa adalah minyak herbal berbahan essential oil murni yang membantu melegakan hidung tersumbat serta memberikan rasa segar dan lega pada saluran pernapasan. Cocok digunakan sebagai minyak oles hidung mampet dan aromaterapi pernapasan dewasa untuk penggunaan harian.",
+      "Nozze Oil adalah minyak herbal berbahan essential oil yang membantu melegakan hidung tersumbat serta memberikan rasa segar dan lega pada saluran pernapasan. Cocok digunakan sebagai minyak oles hidung mampet dan aromaterapi pernapasan untuk penggunaan harian.",
     benefits: [
       "Membantu melegakan hidung tersumbat dan hidung mampet",
       "Membantu meredakan pilek & bersin-bersin",
       "Membantu memberikan rasa lega pada pernapasan",
-      "Memberikan sensasi segar dan hangat",
-      "Cocok sebagai essential oil pernapasan dewasa",
     ],
     ingredients: [
       "Eucalyptus globulus labiil",
@@ -554,7 +550,7 @@ export const products: Product[] = [
       "Mentha piperita (Peppermint Oil)",
     ],
     usage:
-      "Oleskan 3-5 tetes pada telapak tangan. Balurkan perlahan pada area : Batang hidung, Tulang pipi, Kening, Tenggorokan (dewasa) dan Gunakan sesuai kebutuhan.",
+      "Oleskan 3-5 tetes pada telapak tangan. Balurkan perlahan pada area : Batang hidung, Tulang pipi, Kening, Tenggorokan dan Gunakan sesuai kebutuhan.",
     caution:
       "Hanya untuk pemakaian luar. Hindari area mata dan selaput lendir. Tidak disarankan untuk anak di bawah 2 tahun tanpa pengawasan medis.",
     imageColor: "bg-teal-100",
@@ -568,13 +564,11 @@ export const products: Product[] = [
     price: 165000,
     shortDesc: "Batuk, Flu & Amandel, Pernapasan",
     description:
-      "Fluxent Oil Dewasa adalah minyak aromaterapi herbal berbahan essential oil murni yang membantu melegakan pernapasan serta meredakan ketidak nyamanan akibat flu, pilek, batuk dan tenggorokan tidak nyaman (amandel). Cocok digunakan sebagai aromaterapi pernapasan dewasa untuk penggunaan harian.",
+      "Fluxent Oil adalah minyak aromaterapi herbal berbahan essential oil murni yang membantu melegakan pernapasan serta meredakan ketidak nyamanan akibat flu, pilek, batuk dan sakit tenggorokan.",
     benefits: [
       "Membantu meredakan flu & pilek",
       "Membantu melegakan pernapasan",
       "Membantu mengurangi batuk & rasa tidak nyaman di tenggorokan",
-      "Memberikan sensasi hangat & segar",
-      "Cocok sebagai essential oil pernapasan dewasa",
     ],
     ingredients: [
       "Mentha piperita (Peppermint oil)",
@@ -584,9 +578,9 @@ export const products: Product[] = [
       "Cedrus atlantica",
     ],
     usage:
-      "Tuangkan 2-3 tetes pada tisu, saputangan dan masker. Hirup perlahan seperti bernapas biasanya. Dapat digunakan beberapa kali sehari sesuai kebutuhan. Bisa juga digunakan diffuser.",
+      "Tuangkan 2-3 tetes pada tisu, saputangan dan masker. Hirup perlahan seperti bernapas biasanya. Dapat digunakan beberapa kali sehari sesuai kebutuhan. Bisa juga digunakan pada diffuser.",
     caution:
-      "Hanya untuk inhalasi (dihirup) atau penggunaan pada diffuser. Hindari kontak langsung dengan kulit sensitif tanpa pengenceran.",
+      "Hanya untuk inhalasi (dihirup) atau penggunaan pada diffuser. Hindari kontak langsung dengan kulit sensitif tanpa pengenceran. Hindari penggunaan pada anak usia dibawah 8 tahun.",
     imageColor: "bg-white",
     image: fluxent1,
     images: [fluxent1, fluxentDesc1],
