@@ -8,8 +8,7 @@ import productsRouter from "./routes/products";
 import contactRoutes from "./routes/contacts";
 import newsletterSubscriberRoutes from "./routes/newsletter";
 import orderRoutes from './routes/orderRoutes';
-
-// load environment variables
+import  webhookRoutes  from "./routes/webhook";// load environment variables
 dotenv.config();
 
 // Initiallize express app
@@ -82,6 +81,10 @@ app.use("/api/", newsletterSubscriberRoutes);
 // Mount the create order route
 app.use("/api/orders", orderRoutes);
 
+
+// Mount the midtrans webhook notification controller
+app.use("/api/webhook/midtrans", webhookRoutes);
+
 //welcome route
 app.get("/", (req: Request, res: Response) => {
   res.json({
@@ -92,7 +95,8 @@ app.get("/", (req: Request, res: Response) => {
       products: "/api/products",
       contact: "/api/contact",
       newsletter: "/api/newsLetterSubscriber",
-      orders: "/api/orders"
+      orders: "/api/orders",
+      midtranswebhook: "/api/webhook/midtrans",
     },
   });
 });
@@ -123,7 +127,7 @@ if (process.env.NODE_ENV !== "production") {
     console.log(`Contact endpoint: http://localhost:${PORT}/api/contact`);
     console.log(`Newsletter endpoint: http://localhost:${PORT}/api/newsLetterSubscriber`);
     console.log(`Orders endpoint: http://localhost:${PORT}/api/orders`); 
-
+    console.log(`Orders endpoint: http://localhost:${PORT}/api/webhook/midtrans`);
   });
 }
 

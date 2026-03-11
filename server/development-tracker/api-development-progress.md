@@ -2,7 +2,7 @@
 
 **Project:** Annise Herbal E-Commerce Backend  
 **Started:** February 25, 2026  
-**Last Updated:** March 9, 2026
+**Last Updated:** March 10, 2026
 
 ---
 
@@ -11,8 +11,8 @@
 This document tracks the development progress of all API endpoints for the Annise Herbal e-commerce platform.
 
 **Current Status:**
-- 🟢 Completed: 5/12 endpoints
-- 🟡 In Progress: 1/12 endpoints (Midtrans integration pending)
+- 🟢 Completed: 6/12 endpoints (Midtrans payment integration complete!)
+- 🟡 In Progress: 0/12 endpoints
 - ⚪ Not Started: 4/12 endpoints
 - ❌ Skipped: 2/12 endpoints (not needed for current workflow)
 
@@ -232,11 +232,11 @@ This document tracks the development progress of all API endpoints for the Annis
 
 **Note:** No user dashboard needed - Midtrans email + courier tracking is sufficient
 
-### 7. Create Order
-- **Status:** 🟢 COMPLETED (Basic order creation ready for Midtrans integration)
+### 7. Create Order + Midtrans Payment Integration
+- **Status:** 🟢 COMPLETED (Full payment integration with Midtrans Snap)
 - **Endpoint:** `POST /api/orders`
 - **Controller:** `orderControllers.ts` → `createOrder()`
-- **Completed:** March 9, 2026
+- **Completed:** March 10, 2026
 - **Features Completed:**
   - ✅ Complete order validation (13 validators)
   - ✅ Product fetching from Firestore (security: prices from database)
@@ -245,11 +245,17 @@ This document tracks the development progress of all API endpoints for the Annis
   - ✅ Save to Firestore `orders/{orderId}`
   - ✅ Idempotency key for duplicate prevention
   - ✅ Phone number normalization (08xxx → +628xxx)
-  - ✅ Order types prepared for Midtrans integration
-- **Pending Midtrans Integration:**
-  - ⏳ Midtrans Snap API integration (payment token generation)
-  - ⏳ Webhook handler for payment confirmation
-  - ⏳ Update order status after successful payment
+  - ✅ **Midtrans Snap API integration** (payment token generation)
+  - ✅ **Midtrans transaction builder** (formats order data for payment gateway)
+  - ✅ **Webhook handler** for payment confirmation (`handleMidtransNotification`)
+  - ✅ **Automatic order status update** (pending → paid after successful payment)
+  - ✅ Dual status tracking (top-level `status` + `payment.status`)
+- **Midtrans Configuration:**
+  - Config: `server/src/config/midtrans.ts`
+  - Helpers: `server/src/utils/midtransHelpers.ts`
+  - Webhook Controller: `server/src/controllers/webhookController.ts`
+  - Webhook Route: `POST /api/webhook/midtrans`
+  - Environment: Sandbox (testing mode)
 - **Request Body:**
   ```json
   {
@@ -275,8 +281,66 @@ This document tracks the development progress of all API endpoints for the Annis
     "idempotencyKey": "unique-key-123"
   }
   ```
-- **Tested:** ✅ Yes (Postman - all features working)
-- **Notes:** 850+ lines of code, 10+ bugs fixed during development
+- **Response Example:**
+  ```json
+  {
+    "success": true,
+    "message": "Order created successfully!",
+    "data": {
+      "orderId": "order_1710061234567_abc123",
+      "orderNumber": "ORD-2026-0002",
+      "midtransToken": "66e4fa55-fdac-4ef9-91b5-733b97d1b862",
+      "redirectUrl": "https://app.sandbox.midtrans.com/snap/v3/...",
+      "total": 3145000,
+      "status": "pending"
+    }
+  }
+  ```
+- **Payment Flow:**
+  1. Order created → Returns `midtransToken` and `redirectUrl`
+  2. Frontend opens Snap popup with token
+  3. User completes payment
+  4. Midtrans sends notification to webhook
+  5. Webhook updates order status to "paid"
+- **Tested:** ✅ Yes (Postman - order creation, payment token, webhook all working)
+- **Notes:** 
+  - 850+ lines of code, 10+ bugs fixed during development
+  - Shipping cost properly added to Midtrans item_details for validation
+  - Sandbox test cards: 4811 1111 1111 1114 (success), 4911 1111 1111 1113 (deny)
+
+---
+
+### 7.1. Midtrans Payment Webhook
+- **Status:** 🟢 COMPLETED
+- **Endpoint:** `POST /api/webhook/midtrans`
+- **Controller:** `webhookController.ts` → `handleMidtransNotification()`
+- **Purpose:** Receive payment notifications from Midtrans and update order status
+- **Completed:** March 10, 2026
+- **Features:**
+  - ✅ Receives payment notification from Midtrans servers
+  - ✅ Extracts transaction data (order_id, transaction_status, transaction_id, payment_type)
+  - ✅ Updates order status to "paid" when transaction_status is "settlement"
+  - ✅ Updates both `status` and `payment.status` fields (dual tracking)
+  - ✅ Returns 200 OK to Midtrans (prevents retry loop)
+  - ✅ Error handling with try-catch
+  - ✅ Console logging for debugging
+- **Request Body (from Midtrans):**
+  ```json
+  {
+    "order_id": "order_1710061234567_abc123",
+    "transaction_status": "settlement",
+    "transaction_id": "test-trans-123",
+    "payment_type": "bank_transfer"
+  }
+  ```
+- **Logic:**
+  - If `transaction_status === "settlement"` → Update order to "paid"
+  - Otherwise → Return 200 OK without updating (order stays "pending")
+- **Tested:** ✅ Yes (Postman simulation successful, status updated in Firestore)
+- **Security Note:** Webhook should be secured with signature verification in production
+- **Next Steps:** 
+  - Configure webhook URL in Midtrans dashboard (use ngrok for local testing)
+  - Add signature verification for production security
 
 ---
 
@@ -401,10 +465,18 @@ ADMIN_EMAIL=anisherbal@gmail.com
 2. ✅ Get Single Product API (for product detail page)
 3. ✅ Contact Form API (customer inquiries)
 4. ✅ Newsletter Subscription API (email-only, simplified)
-5. ✅ Comprehensive API Documentation
-6. ✅ Validation System Architecture
+5. ✅ Create Order API (full order processing)
+6. ✅ **Midtrans Payment Integration** (Snap API + Webhook)
+7. ✅ Comprehensive API Documentation
+8. ✅ Validation System Architecture
 
-**🔥 Tomorrow (Phase 4 - Email Integration):**
+**🔥 Next Priority (Frontend Integration):**
+1. Implement Midtrans Snap popup on checkout page
+2. Handle payment success/failure callbacks
+3. Display payment confirmation to users
+4. Test end-to-end payment flow
+
+**Phase 4 - Email Integration (Following Priority):**
 1. Test Newsletter API in Postman
 2. Setup Brevo email service
 3. Contact form email notifications
@@ -412,15 +484,15 @@ ADMIN_EMAIL=anisherbal@gmail.com
 5. Unsubscribe functionality
 
 **Short Term (Next 2 Weeks):**
-4. Search & Filter APIs (better UX)
-5. Admin dashboard basics
-6. Product recommendations
+6. Search & Filter APIs (better UX)
+7. Admin dashboard basics
+8. Product recommendations
 
 **Long Term (After Payment System):**
-7. Order management APIs
-8. Reviews/ratings system
-9. Product recommendations
-10. Analytics dashboard
+9. Configure production Midtrans credentials
+10. Deploy to production environment
+11. Reviews/ratings system
+12. Analytics dashboard
 
 ---
 
@@ -458,7 +530,13 @@ FIREBASE_PROJECT_ID=...
 FIREBASE_PRIVATE_KEY=...
 FIREBASE_CLIENT_EMAIL=...
 
-# To Add
+# Midtrans Payment Gateway (✅ Configured)
+MIDTRANS_SERVER_KEY=Mid-server-...
+MIDTRANS_CLIENT_KEY=Mid-client-...
+MERCHANT_ID=M...
+MIDTRANS_IS_PRODUCTION=false
+
+# To Add (Email Integration)
 EMAIL_SERVICE=gmail
 EMAIL_USER=anisherbal@gmail.com
 EMAIL_PASSWORD=app_specific_password
@@ -484,11 +562,15 @@ ADMIN_EMAIL=anisherbal@gmail.com
 
 - [ ] Add rate limiting to prevent spam on contact form
 - [ ] Add input sanitization for XSS prevention
-- [ ] Setup email service (Nodemailer)
+- [ ] Setup email service (Nodemailer/Brevo)
 - [ ] Add request validation middleware
 - [ ] Add API documentation (Swagger/Postman)
 - [ ] Add unit tests for controllers
 - [ ] Setup error logging (Winston or Sentry)
+- [x] **Midtrans payment integration** ✅ COMPLETED
+- [ ] Frontend Snap popup integration
+- [ ] Midtrans webhook signature verification (production security)
+- [ ] Production Midtrans credentials configuration
 
 ---
 

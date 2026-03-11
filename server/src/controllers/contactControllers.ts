@@ -3,7 +3,7 @@ import { db } from "../config/firebase";
 import { ContactTypes, ContactRequestBody } from "../types/contacts";
 import { ValidateContactForm } from "../utils/validations";
 import { generateUniqueContactId } from "../utils/helpers";
-
+import {sendContactNotificationToAdmin} from "../utils/emailHelpers"
 
 /**
  * Submit Contact Form
@@ -52,7 +52,6 @@ export const submitContactForm = async (
         const contactId = generateUniqueContactId();
         console.log(`✅ Validation passed. Generating ID: ${contactId}`)
 
-
         //step 5: Prepare contact data for database 
         const contactData : ContactTypes = {
             id:contactId,
@@ -68,8 +67,10 @@ export const submitContactForm = async (
         await db.collection('contacts').doc(contactId).set(contactData);
         console.log(`✅ Contact saved successfully: ${contactId}`);
 
-        // Step 7: TODO - Send email notification (tomorrow with Brevo)
-        // await sendEmailNotification(contactData);
+        // Step 7: TODO - Send email notification (temporarily commented for debugging)
+        await sendContactNotificationToAdmin(contactData.name, contactData.email, contactData.phone,
+            contactData.message
+        );
 
         // Step 8: Return success response
         res.status(201).json({

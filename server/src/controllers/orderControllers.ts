@@ -5,6 +5,7 @@ import {fetchAndBuildOrderItems} from "../utils/productHelpers";
 import {buildOrderDocument, generateUniqueOrderId, generateOrderNumber} from "../utils/orderHelpers";
 import { db } from "../config/firebase";
 import { messaging } from "firebase-admin";
+import {buildMidtransTransaction, generatePaymentToken} from "../utils/midtransHelpers";
 
 /**
  * Create a new order
@@ -83,6 +84,15 @@ export const createOrder = async(req:Request, res:Response)=>{
         await db.collection("orders").doc(orderId).set(completeOrder);
         
         console.log("✅ Order saved! ID:", orderId);
+
+
+        // Step 6: Build Midtrans transaction
+        const midtransTransaction = buildMidtransTransaction(orderId, orderData.customer,orderDocument.pricing, orderItems);
+
+        // Step 7: Generate payment token
+        const paymentTokenResponse = await generatePaymentToken(midtransTransaction);
+        // Step 8: Return token + order data
+
         
         //step 6 return the success response 
         return res.status(200).json({
@@ -91,11 +101,14 @@ export const createOrder = async(req:Request, res:Response)=>{
             data:{
                 orderId: completeOrder.orderId,
                 orderNumber: completeOrder.orderNumber,
+                midtransToken: paymentTokenResponse.token,
+                redirectUrl: paymentTokenResponse.redirectUrl,
                 total:completeOrder.pricing.total,
                 status:completeOrder.status
             }
             
         });
+
     } catch (error) {
         console.error("❌ Error in createOrder:", error);
     
