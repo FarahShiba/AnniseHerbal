@@ -3,6 +3,7 @@ import { db } from "../config/firebase";
 import { NewsletterSubscriberType, NewsletterSubscriptionRequestBody } from "../types/newsletter";
 import { ValidateNewsletterSubscriberEmail } from "../utils/validations";
 import { generateUniqueContactId as  generateUniqueSubscriberId} from "../utils/helpers";
+import { sendNewsletterWelcomeEmail, sendNewSubscriberNotificationToAdmin } from "../utils/emailHelpers";
 
 
 /**
@@ -94,11 +95,16 @@ export const submitNewsletterSubscriberForm = async (
         console.log(`✅ Subscriber saved: ${subscriberId}`);
 
 
-        // Step 7: TODO - Send welcome email (tomorrow with Brevo)
-        // await sendWelcomeEmail(normalizedEmail);
+        // Step 7: Send welcome email to subscriber
+        await sendNewsletterWelcomeEmail(normalizedEmail);
+        console.log(`✅ Welcome email sent to: ${normalizedEmail}`);
+
+        // Step 8: Send notification to admin about new subscriber
+        await sendNewSubscriberNotificationToAdmin(normalizedEmail);
+        console.log(`✅ Admin notification sent for: ${normalizedEmail}`);
 
 
-        // step 7: Return success response
+        // step 9: Return success response
         res.status(201).json({ 
             success: true,
             message: "Newsletter subscription successful" });
