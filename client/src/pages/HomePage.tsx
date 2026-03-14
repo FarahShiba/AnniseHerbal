@@ -102,7 +102,7 @@ const HomePage: React.FC<HomePageProps> = ({
                 className="group bg-white rounded-2xl md:rounded-3xl overflow-hidden border border-stone-200 hover:border-emerald-300 flex flex-col hover:shadow-2xl transition-all duration-500 cursor-pointer h-full"
               >
                 {/* Product Image Container */}
-                <div className="relative h-48 md:h-64 lg:h-72 bg-linear-to-br from-stone-50 to-stone-100 overflow-hidden shrink-0">
+                <div className={`relative h-48 md:h-64 lg:h-72 ${product.name.toLowerCase().includes('nozze') ? 'bg-white' : 'bg-linear-to-br from-stone-50 to-stone-100'} overflow-hidden shrink-0`}>
                   {/* Actual Product Image - Reduced padding for larger, more visible product */}
                   <div className="absolute inset-0 flex items-center justify-center p-0 lg:p-4">
                     <img

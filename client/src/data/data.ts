@@ -558,7 +558,7 @@ export const products: Product[] = [
       "Oleskan 3-5 tetes pada telapak tangan. Balurkan perlahan pada area : Batang hidung, Tulang pipi, Kening, Tenggorokan dan Gunakan sesuai kebutuhan.",
     caution:
       "Hanya untuk pemakaian luar. Hindari area mata dan selaput lendir. Tidak disarankan untuk anak di bawah 2 tahun tanpa pengawasan medis.",
-    imageColor: "bg-teal-100",
+    imageColor: "bg-white",
     image: nozze1,
     images: [nozze1, nozze2, nozze3, nozze4],
     tags: ["sinus", "hidung", "pilek", "pernapasan", "napas"],
