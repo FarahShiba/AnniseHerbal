@@ -236,30 +236,30 @@ const TestimonialsSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Marketplace Links - Compact & Modern */}
-        <div className="mt-12 flex justify-center">
-          <div className="inline-flex items-center gap-4 bg-white p-2 pr-6 rounded-full border border-stone-100 shadow-sm">
-            <span className="pl-4 text-xs font-medium text-stone-500 uppercase tracking-wider">
+        {/* Marketplace Links - Semi-Enlarged & Modern */}
+        <div className="mt-14 flex justify-center">
+          <div className="inline-flex items-center gap-5 bg-white p-2.5 pr-7 rounded-full border border-stone-200 shadow-sm hover:shadow-md transition-shadow duration-300">
+            <span className="pl-5 text-sm font-bold text-stone-500 uppercase tracking-widest">
               Available on:
             </span>
-            <div className="h-4 w-px bg-stone-200"></div>
-            <div className="flex gap-3">
+            <div className="h-6 w-px bg-stone-200"></div>
+            <div className="flex gap-4">
               <a
                 href="https://www.tokopedia.com/anniseherbal1?entrance_name=search_suggestion_store&source=universe&st=product"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#42B549]/10 text-[#42B549] hover:bg-[#42B549] hover:text-white transition-all text-xs font-bold group"
+                className="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#42B549]/10 text-[#42B549] hover:bg-[#42B549] hover:text-white transition-all duration-300 text-sm font-bold group hover:-translate-y-0.5"
               >
-                <div className="w-2 h-2 rounded-full bg-current"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-current"></div>
                 Tokopedia
               </a>
               <a
                 href="https://shopee.co.id/anniseherbal"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#EE4D2D]/10 text-[#EE4D2D] hover:bg-[#EE4D2D] hover:text-white transition-all text-xs font-bold group"
+                className="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#EE4D2D]/10 text-[#EE4D2D] hover:bg-[#EE4D2D] hover:text-white transition-all duration-300 text-sm font-bold group hover:-translate-y-0.5"
               >
-                <div className="w-2 h-2 rounded-full bg-current"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-current"></div>
                 Shopee
               </a>
             </div>
