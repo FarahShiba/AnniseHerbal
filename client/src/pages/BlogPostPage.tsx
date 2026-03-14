@@ -5,10 +5,11 @@ import { blogs } from "../data/blogData";
 import type { TranslationData } from "../data/data";
 
 interface BlogPostPageProps {
-  t: TranslationData;
+  t?: TranslationData;
+  lang: 'en' | 'id';
 }
 
-const BlogPostPage: React.FC<BlogPostPageProps> = () => {
+const BlogPostPage: React.FC<BlogPostPageProps> = ({ lang }) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   
@@ -26,14 +27,18 @@ const BlogPostPage: React.FC<BlogPostPageProps> = () => {
   if (!post) {
     return (
       <div className="pt-32 pb-20 px-4 text-center min-h-[60vh] flex flex-col items-center justify-center">
-        <h1 className="text-3xl font-serif text-[#1c1209] mb-4">Artikel tidak ditemukan</h1>
-        <p className="text-stone-600 mb-8">Maaf, artikel yang Anda cari tidak dapat ditemukan.</p>
+        <h1 className="text-3xl font-serif text-[#1c1209] mb-4">
+          {lang === 'en' ? 'Article not found' : 'Artikel tidak ditemukan'}
+        </h1>
+        <p className="text-stone-600 mb-8">
+          {lang === 'en' ? 'Sorry, the article you are looking for could not be found.' : 'Maaf, artikel yang Anda cari tidak dapat ditemukan.'}
+        </p>
         <button
           onClick={() => navigate("/")}
           className="flex items-center gap-2 px-6 py-3 bg-emerald-800 text-white rounded-lg hover:bg-emerald-900 transition-colors"
         >
           <ArrowLeft size={18} />
-          Kembali ke Beranda
+          {lang === 'en' ? 'Back to Home' : 'Kembali ke Beranda'}
         </button>
       </div>
     );
@@ -42,13 +47,13 @@ const BlogPostPage: React.FC<BlogPostPageProps> = () => {
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: post.title,
-        text: post.excerpt,
+        title: post.translations[lang].title,
+        text: post.translations[lang].excerpt,
         url: window.location.href,
       }).catch(console.error);
     } else {
       navigator.clipboard.writeText(window.location.href);
-      alert("Link disalin ke clipboard!");
+      alert(lang === 'en' ? "Link copied to clipboard!" : "Link disalin ke clipboard!");
     }
   };
 
@@ -62,7 +67,7 @@ const BlogPostPage: React.FC<BlogPostPageProps> = () => {
             {/* Header */}
             <header className="mb-8 lg:mb-12">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif text-[#1c1209] leading-tight mb-6">
-                {post.title}
+                {post.translations[lang].title}
               </h1>
               
               <div className="flex flex-wrap items-center justify-between gap-4 py-4 border-y border-stone-200">
@@ -83,7 +88,7 @@ const BlogPostPage: React.FC<BlogPostPageProps> = () => {
                   title="Share article"
                 >
                   <Share2 size={16} />
-                  Bagikan
+                  {lang === 'en' ? 'Share' : 'Bagikan'}
                 </button>
               </div>
             </header>
@@ -94,7 +99,7 @@ const BlogPostPage: React.FC<BlogPostPageProps> = () => {
                 {post.imageUrl ? (
                   <img 
                     src={post.imageUrl} 
-                    alt={post.title} 
+                    alt={post.translations[lang].title} 
                     className="w-full h-full object-cover"
                   />
                 ) : (
@@ -106,7 +111,7 @@ const BlogPostPage: React.FC<BlogPostPageProps> = () => {
 
             {/* Typography-optimized Content */}
             <div className="prose prose-lg md:prose-xl prose-stone max-w-none">
-              {post.content.map((paragraph, index) => {
+              {post.translations[lang].content.map((paragraph, index) => {
                 // Check if it's a list item starting with hyphen
                 if (paragraph.trim().startsWith("- ")) {
                   return (
@@ -150,7 +155,7 @@ const BlogPostPage: React.FC<BlogPostPageProps> = () => {
           <aside className="lg:w-1/3 xl:w-1/4 mt-12 lg:mt-0">
             <div className="sticky top-32">
               <h3 className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-6 border-b border-stone-200 pb-4">
-                Topik Lainnya
+                {lang === 'en' ? 'Other Topics' : 'Topik Lainnya'}
               </h3>
               
               <div className="flex flex-col gap-6">
@@ -165,13 +170,13 @@ const BlogPostPage: React.FC<BlogPostPageProps> = () => {
                        {topic.date}
                     </div>
                     <h4 className="text-lg font-bold text-[#1c1209] mb-3 group-hover:text-emerald-800 transition-colors leading-snug line-clamp-2">
-                      {topic.title}
+                      {topic.translations[lang].title}
                     </h4>
                     <p className="text-stone-500 text-sm line-clamp-3 mb-4 leading-relaxed">
-                      {topic.excerpt}
+                      {topic.translations[lang].excerpt}
                     </p>
                     <span className="text-sm font-bold text-emerald-700 group-hover:text-emerald-900 flex items-center gap-1">
-                      Baca Topik <ArrowLeft className="w-4 h-4 rotate-180 group-hover:translate-x-1 transition-transform" />
+                      {lang === 'en' ? 'Read Topic' : 'Baca Topik'} <ArrowLeft className="w-4 h-4 rotate-180 group-hover:translate-x-1 transition-transform" />
                     </span>
                   </Link>
                 ))}
@@ -179,18 +184,20 @@ const BlogPostPage: React.FC<BlogPostPageProps> = () => {
 
               {/* Newsletter / CTA widget in sidebar */}
               <div className="mt-10 bg-emerald-900 rounded-2xl p-6 text-white text-center shadow-lg shadow-emerald-900/20">
-                <h4 className="font-serif text-2xl mb-3">Dapatkan Tips Sehat</h4>
+                <h4 className="font-serif text-2xl mb-3">
+                  {lang === 'en' ? 'Get Healthy Tips' : 'Dapatkan Tips Sehat'}
+                </h4>
                 <p className="text-emerald-100 text-sm mb-6 leading-relaxed">
-                  Berlangganan untuk menerima artikel terbaru dan penawaran eksklusif langsung ke email Anda.
+                  {lang === 'en' ? 'Subscribe to receive the latest articles and exclusive offers straight to your inbox.' : 'Berlangganan untuk menerima artikel terbaru dan penawaran eksklusif langsung ke email Anda.'}
                 </p>
                 <div className="space-y-3">
                   <input 
                     type="email" 
-                    placeholder="Alamat Email" 
+                    placeholder={lang === 'en' ? 'Email Address' : 'Alamat Email'}
                     className="w-full bg-emerald-800/50 border border-emerald-700 rounded-xl px-4 py-3 text-sm text-white placeholder:text-emerald-300/50 focus:outline-none focus:border-emerald-500 transition-colors"
                   />
                   <button className="w-full bg-white text-emerald-900 font-bold rounded-xl py-3 hover:bg-emerald-50 transition-colors shadow-sm">
-                    Berlangganan
+                    {lang === 'en' ? 'Subscribe' : 'Berlangganan'}
                   </button>
                 </div>
               </div>

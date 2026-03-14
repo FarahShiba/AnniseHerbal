@@ -335,8 +335,8 @@ const App: React.FC = () => {
             path="/resources"
             element={<ResourcesPage t={t} navigateTo={navigateTo} />}
           />
-          <Route path="/blog" element={<BlogPostPage t={t} />} />
-          <Route path="/blog/:id" element={<BlogPostPage t={t} />} />
+          <Route path="/blog" element={<BlogPostPage t={t} lang={lang} />} />
+          <Route path="/blog/:id" element={<BlogPostPage t={t} lang={lang} />} />
           <Route
             path="/education/:type"
             element={<EducationWrapper navigateTo={navigateTo} lang={lang} />}
