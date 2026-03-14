@@ -30,6 +30,7 @@ import EducationDetailPage from "./pages/EducationDetailPage";
 import ShippingPage from "./pages/ShippingPage";
 import AdminPage from "./pages/AdminPage";
 import FAQPage from "./pages/FAQPage";
+import BlogPostPage from "./pages/BlogPostPage";
 
 // Import Components
 import SearchOverlay from "./components/SearchOverlay";
@@ -113,7 +114,6 @@ const App: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Adapter for old navigateTo prop pattern
   const navigateTo = (page: string) => {
     if (page === "home") navigate("/");
     else if (page === "resources-safety") navigate("/education/safety");
@@ -226,6 +226,12 @@ const App: React.FC = () => {
               navigateTo={navigateTo}
             />
             <NavLink
+              page="blog"
+              label={t.nav.blog}
+              isActive={isActive("blog")}
+              navigateTo={navigateTo}
+            />
+            <NavLink
               page="contact"
               label={t.nav.contact}
               isActive={isActive("contact")}
@@ -329,6 +335,8 @@ const App: React.FC = () => {
             path="/resources"
             element={<ResourcesPage t={t} navigateTo={navigateTo} />}
           />
+          <Route path="/blog" element={<BlogPostPage t={t} />} />
+          <Route path="/blog/:id" element={<BlogPostPage t={t} />} />
           <Route
             path="/education/:type"
             element={<EducationWrapper navigateTo={navigateTo} lang={lang} />}

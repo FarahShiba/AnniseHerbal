@@ -14,6 +14,9 @@ import progest1 from "../assets/Progest1.png";
 import progestDesc1 from "../assets/Progestdesc1.jpeg";
 import progestDesc2 from "../assets/Progestdesc2.jpeg";
 import nozze1 from "../assets/nozzeDewasa1.png";
+import nozze2 from "../assets/Nozze2.jpeg";
+import nozze3 from "../assets/Nozze3.jpeg";
+import nozze4 from "../assets/Nozze4.jpeg";
 import fluxent1 from "../assets/fluxent1.png";
 import fluxentDesc1 from "../assets/Fluxentdesc1.jpeg";
 import fluxentKids1 from "../assets/fluxentKids1.png";
@@ -29,6 +32,7 @@ export const translations = {
       shop: "Belanja",
       story: "Tentang Kami",
       resources: "Edukasi",
+      blog: "Blog & News",
       contact: "Kontak",
     },
     hero: {
@@ -227,6 +231,7 @@ export const translations = {
       shop: "Shop",
       story: "Our Story",
       resources: "Resources",
+      blog: "Blog & News",
       contact: "Contact",
     },
     hero: {
@@ -555,6 +560,7 @@ export const products: Product[] = [
       "Hanya untuk pemakaian luar. Hindari area mata dan selaput lendir. Tidak disarankan untuk anak di bawah 2 tahun tanpa pengawasan medis.",
     imageColor: "bg-teal-100",
     image: nozze1,
+    images: [nozze1, nozze2, nozze3, nozze4],
     tags: ["sinus", "hidung", "pilek", "pernapasan", "napas"],
   },
   {
