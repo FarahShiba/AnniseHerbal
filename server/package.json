@@ -1,0 +1,39 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --watch src --exec tsx src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "products:dry-run": "tsx admin/productUploader.ts --file=admin/data/products.csv",
+    "products:upload": "tsx admin/productUploader.ts --file=admin/data/products.csv --execute",
+    "images:dry-run": "tsx admin/imageUploader.ts",
+    "images:upload": "tsx admin/imageUploader.ts --execute"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@getbrevo/brevo": "^4.0.1",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.2.3",
+    "cors": "^2.8.6",
+    "curl": "^0.1.4",
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1",
+    "firebase": "^12.10.0",
+    "firebase-admin": "^13.6.1",
+    "midtrans-client": "^1.4.3",
+    "nodemon": "^3.1.11",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/midtrans-client": "^1.4.0"
+  }
+}

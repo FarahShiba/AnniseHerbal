@@ -1,0 +1,681 @@
+import React, { useState, useEffect } from "react";
+import logoAnnise from "./assets/logoAnniseherbal.png";
+import {
+  Globe,
+  Search,
+  ShoppingBag,
+  Menu,
+  X,
+  Instagram,
+  Facebook,
+  ArrowRight,
+  Phone,
+  Mail,
+} from "lucide-react";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+
+// Import Types (Wajib pakai "type")
+import type { Product, CartItem } from "./types";
+
+// Import Data
+import { translations, type TranslationData } from "./data/data";
+import { subscribeToNewsletter } from "./services/newsletterService";
+
+// Import Pages
+import HomePage from "./pages/HomePage";
+import ShopPage from "./pages/ShopPage";
+import ProductDetailPage from "./pages/ProductDetailPage";
+import CheckoutPage from "./pages/CheckoutPage";
+import StoryPage from "./pages/StoryPage";
+import ResourcesPage from "./pages/ResourcesPage";
+import ContactPage from "./pages/ContactPage";
+import EducationDetailPage from "./pages/EducationDetailPage";
+import ShippingPage from "./pages/ShippingPage";
+import AdminPage from "./pages/AdminPage";
+import FAQPage from "./pages/FAQPage";
+import BlogPostPage from "./pages/BlogPostPage";
+
+// Import Components
+import SearchOverlay from "./components/SearchOverlay";
+import CartDrawer from "./components/CartDrawer";
+import WhatsAppFloat from "./components/WhatsAppFloat";
+import MobileMenu from "./components/MobileMenu";
+import WelcomePopup from "./components/WelcomePopup";
+
+// Import Utils
+// import { getTranslatedProducts } from "./utils/productHelpers";
+import { getAllProducts } from "./services/productService";
+
+// NavLink component defined outside App
+const NavLink: React.FC<{
+  page: string;
+  label: string;
+  isActive: boolean;
+  navigateTo: (page: string) => void;
+}> = ({ page, label, isActive, navigateTo }) => (
+  <button
+    onClick={() => navigateTo(page)}
+    className={`text-sm font-medium tracking-wide transition-all duration-300 relative group ${
+      isActive ? "text-emerald-800" : "text-stone-700 hover:text-emerald-800"
+    }`}
+  >
+    {label}
+    {/* Underline effect */}
+    <span
+      className={`absolute left-0 bottom-0 h-0.5 bg-emerald-800 transition-all duration-300 ${
+        isActive ? "w-full" : "w-0 group-hover:w-full"
+      }`}
+    ></span>
+  </button>
+);
+
+const App: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const [scrolled, setScrolled] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  // --- PRODUCTS STATE (fetched from API) ---
+  const [products, setProducts] = useState<Product[]>([]);
+  const [productsLoading, setProductsLoading] = useState(true);
+  const [productsError, setProductsError] = useState("");
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setProductsLoading(true);
+        const data = await getAllProducts();
+        setProducts(data as Product[]);
+      } catch (error: unknown) {
+        setProductsError("Failed to load products");
+        console.error("Products fetch error:", error);
+      } finally {
+        setProductsLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []); // Fetch once when App mounts
+
+  // --- LANGUAGE STATE ---
+  const [lang, setLang] = useState<"id" | "en">("id");
+  const t = translations[lang];
+
+  // Derived State for Products
+  // const products = React.useMemo(() => getTranslatedProducts(lang), [lang]);
+
+  // Wrapper for setting product to maintain API compatibility with children
+  const handleSetProduct = (product: Product | null) => {
+    if (product) {
+      navigate(`/product/${product.id}`);
+    }
+  };
+
+  // --- CART STATE ---
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    try {
+      const savedCart = localStorage.getItem("cart");
+      return savedCart ? JSON.parse(savedCart) : [];
+    } catch (error) {
+      console.error("Failed to parse cart from local storage", error);
+      return [];
+    }
+  });
+  const [cartOpen, setCartOpen] = useState(false);
+
+  // --- NEWSLETTER STATE ---
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterLoading, setNewsletterLoading] = useState(false);
+  const [newsletterMessage, setNewsletterMessage] = useState("");
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const timer = setTimeout(() => {
+      setMobileMenuOpen(false);
+      setCartOpen(false);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const navigateTo = (page: string) => {
+    if (page === "home") navigate("/");
+    else if (page === "resources-safety") navigate("/education/safety");
+    else if (page === "resources-science") navigate("/education/science");
+    else navigate(`/${page}`);
+  };
+
+  const toggleLang = () => {
+    setLang((prev) => (prev === "id" ? "en" : "id"));
+  };
+
+  // -- SUBSCRIBE NEWSLETTER FUNCTION ---
+  const handleNewsLetterSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault(); // prevent page from refreshing
+
+    if (!newsletterEmail.trim()) {
+      setNewsletterMessage("Please enter your email");
+      return;
+    }
+
+    try {
+      setNewsletterLoading(true);
+      setNewsletterMessage("");
+
+      const response = await subscribeToNewsletter(newsletterEmail);
+
+      setNewsletterMessage(response.message || "Successfully subscribed!");
+      setNewsletterEmail(""); // clear input after succeed
+
+      //clear message after 5 seconds
+      setTimeout(() => setNewsletterMessage(""), 5000);
+    } catch (error) {
+      setNewsletterMessage("Subscription failed. Please try again.");
+      console.error("Newsletter error:", error);
+    } finally {
+      setNewsletterLoading(false); // always turn off loading
+    }
+  };
+
+  // --- CART FUNCTIONS ---
+  const addToCart = (product: Product) => {
+    setCart((prev) => {
+      const existing = prev.find((item) => item.id === product.id);
+      if (existing) {
+        return prev.map((item) =>
+          item.id === product.id ? { ...item, qty: item.qty + 1 } : item,
+        );
+      }
+      return [...prev, { ...product, qty: 1 }];
+    });
+    setCartOpen(true);
+  };
+
+  const removeFromCart = (id: string) => {
+    setCart((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const updateCartQty = (id: string, newQty: number) => {
+    // Change from number to string
+    if (newQty < 1) return;
+    setCart((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, qty: newQty } : item)),
+    );
+  };
+
+  const isActive = (path: string) => {
+    if (path === "home" && location.pathname === "/") return true;
+    return location.pathname.startsWith(`/${path}`);
+  };
+
+  return (
+    <div className="font-sans text-stone-800 bg-[#fafaf9] selection:bg-emerald-200 selection:text-emerald-900 min-h-screen flex flex-col">
+      {/* OVERLAYS */}
+      <WelcomePopup navigateTo={navigateTo} lang={lang} t={t.popup} />
+      <SearchOverlay
+        isOpen={searchOpen}
+        onClose={() => setSearchOpen(false)}
+        setProduct={handleSetProduct}
+        products={products}
+        t={t.search}
+      />
+      <CartDrawer
+        isOpen={cartOpen}
+        onClose={() => setCartOpen(false)}
+        cartItems={cart}
+        onRemove={removeFromCart}
+        onUpdateQty={updateCartQty}
+        onCheckout={() => navigateTo("checkout")}
+        onStartShopping={() => navigateTo("shop")}
+        t={t.cart}
+      />
+
+      {/* WHATSAPP FLOAT BUTTON */}
+      <WhatsAppFloat />
+
+      {/* WELCOME POPUP */}
+      <WelcomePopup navigateTo={navigateTo} lang={lang} t={t.popup} />
+
+      {/* HEADER */}
+      <header
+        className={`fixed w-full z-50 flex flex-col transition-all duration-300 ${
+          scrolled
+            ? "bg-white/95 backdrop-blur-md shadow-sm"
+            : "bg-transparent"
+        }`}
+      >
+        {/* Mobile Contact Top Bar */}
+        <div className="lg:hidden w-full bg-emerald-900 text-stone-100 text-[10px] md:text-xs py-2 px-4 flex justify-between items-center">
+          <a href="tel:+628159118754" className="flex items-center gap-1.5 hover:text-white">
+            <Phone size={12} />
+            +62 815-9118-754
+          </a>
+          <a href="mailto:anisherbal@gmail.com" className="flex items-center gap-1.5 hover:text-white">
+            <Mail size={12} />
+            anisherbal@gmail.com
+          </a>
+        </div>
+
+        <div className="container mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
+          {/* LOGO */}
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => navigateTo("home")}
+          >
+            <img
+              src={logoAnnise}
+              alt="Annise Herbal"
+              className="h-14 md:h-24 w-auto object-contain transition-all hover:scale-105"
+            />
+          </div>
+
+          {/* NAV LINKS */}
+          <nav className="hidden lg:flex items-center gap-8">
+            <NavLink
+              page="home"
+              label={t.nav.home}
+              isActive={isActive("home")}
+              navigateTo={navigateTo}
+            />
+            <NavLink
+              page="shop"
+              label={t.nav.shop}
+              isActive={isActive("shop")}
+              navigateTo={navigateTo}
+            />
+            <NavLink
+              page="story"
+              label={t.nav.story}
+              isActive={isActive("story")}
+              navigateTo={navigateTo}
+            />
+            <NavLink
+              page="resources"
+              label={t.nav.resources}
+              isActive={isActive("resources")}
+              navigateTo={navigateTo}
+            />
+            <NavLink
+              page="blog"
+              label={t.nav.blog}
+              isActive={isActive("blog")}
+              navigateTo={navigateTo}
+            />
+            <NavLink
+              page="contact"
+              label={t.nav.contact}
+              isActive={isActive("contact")}
+              navigateTo={navigateTo}
+            />
+          </nav>
+
+          {/* ACTIONS */}
+          <div className="flex items-center gap-4">
+            {/* Language Toggle */}
+            <button
+              onClick={toggleLang}
+              className="flex items-center gap-1 text-sm font-medium text-stone-700 hover:text-emerald-900 transition-colors"
+            >
+              <Globe size={18} />
+              <span>{lang === "id" ? "ID" : "EN"}</span>
+            </button>
+
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="hidden md:block text-stone-700 hover:text-emerald-900 transition-colors"
+            >
+              <Search size={20} />
+            </button>
+
+            <div
+              className="relative cursor-pointer"
+              onClick={() => setCartOpen(true)}
+            >
+              <ShoppingBag
+                size={20}
+                className="text-stone-700 hover:text-emerald-900 transition-colors"
+              />
+              {cart.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-emerald-700 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">
+                  {cart.length}
+                </span>
+              )}
+            </div>
+
+            <button
+              className="lg:hidden text-stone-800"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main className="grow">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <HomePage
+                products={products}
+                loading={productsLoading}
+                navigateTo={navigateTo}
+                setProduct={handleSetProduct}
+                addToCart={addToCart}
+                t={t}
+                lang={lang}
+              />
+            }
+          />
+          <Route path="/shipping" element={<ShippingPage />} />
+          <Route
+            path="/shop"
+            element={
+              <ShopPage
+                products={products}
+                loading={productsLoading}
+                error={productsError}
+                setProduct={handleSetProduct}
+                addToCart={addToCart}
+                t={t}
+                lang={lang}
+              />
+            }
+          />
+          <Route
+            path="/product/:id"
+            element={
+              <ProductWrapper
+                products={products}
+                loading={productsLoading}
+                navigateTo={navigateTo}
+                addToCart={addToCart}
+                t={t.product}
+                lang={lang}
+              />
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <CheckoutPage
+                cartItems={cart}
+                navigateTo={navigateTo}
+                clearCart={() => setCart([])}
+                t={t.checkout}
+              />
+            }
+          />
+          <Route path="/story" element={<StoryPage t={t} />} />
+          <Route
+            path="/resources"
+            element={<ResourcesPage t={t} navigateTo={navigateTo} />}
+          />
+          <Route path="/blog" element={<BlogPostPage t={t} lang={lang} />} />
+          <Route path="/blog/:id" element={<BlogPostPage t={t} lang={lang} />} />
+          <Route
+            path="/education/:type"
+            element={<EducationWrapper navigateTo={navigateTo} lang={lang} />}
+          />
+          <Route path="/contact" element={<ContactPage t={t} />} />
+          <Route path="/blog" element={<BlogPostPage t={t} lang={lang} />} />
+          <Route
+            path="/blog/:slug"
+            element={<BlogPostPage t={t} lang={lang} />}
+          />
+          <Route path="/faq" element={<FAQPage t={t} />} />
+          <Route path="/admin" element={<AdminPage />} />
+        </Routes>
+      </main>
+
+      <footer className="bg-[#e6dbc9] text-[#1c1209] pt-24 pb-12 border-t border-[#d4c5b0]">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-20">
+            {/* Brand Section - 4 Columns */}
+            <div className="md:col-span-4">
+              <div className="mb-3">
+                <img
+                  src={logoAnnise}
+                  alt="Annise Herbal"
+                  className="h-24 w-auto object-contain mix-blend-multiply"
+                />
+              </div>
+              <p className="text-[#1c1209] leading-relaxed mb-8 max-w-sm text-sm font-medium">
+                {t.footer?.text ||
+                  "Solusi perawatan alami terpercaya untuk keluarga Indonesia sejak 2005."}
+              </p>
+              <div className="flex gap-4">
+                <a
+                  href="https://www.instagram.com/anniseherbal/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-[#1c1209]/5 flex items-center justify-center text-[#1c1209] hover:bg-[#1c1209] hover:text-[#e6dbc9] transition-all duration-300 border border-[#1c1209]/10 hover:border-[#1c1209]"
+                >
+                  <Instagram size={18} />
+                </a>
+                <a
+                  href="#"
+                  className="w-10 h-10 rounded-full bg-[#1c1209]/5 flex items-center justify-center text-[#1c1209] hover:bg-[#1c1209] hover:text-[#e6dbc9] transition-all duration-300 border border-[#1c1209]/10 hover:border-[#1c1209]"
+                >
+                  <Facebook size={18} />
+                </a>
+              </div>
+            </div>
+
+            {/* Links Sections - 2 Columns Each */}
+            <div className="md:col-span-2 md:col-start-6">
+              <h4 className="font-serif text-lg text-[#1c1209] mb-8 font-bold tracking-wide">
+                Shop
+              </h4>
+              <ul className="space-y-4 text-sm text-[#1c1209] font-medium">
+                <li
+                  className="hover:text-[#8c6b4a] cursor-pointer transition-colors"
+                  onClick={() => navigateTo("shop")}
+                >
+                  Best Sellers
+                </li>
+                <li
+                  className="hover:text-[#8c6b4a] cursor-pointer transition-colors"
+                  onClick={() => navigateTo("shop")}
+                >
+                  Pain Relief
+                </li>
+                <li
+                  className="hover:text-[#8c6b4a] cursor-pointer transition-colors"
+                  onClick={() => navigateTo("shop")}
+                >
+                  Kids Series
+                </li>
+                <li
+                  className="hover:text-[#8c6b4a] cursor-pointer transition-colors"
+                  onClick={() => navigateTo("shop")}
+                >
+                  All Products
+                </li>
+              </ul>
+            </div>
+
+            <div className="md:col-span-2">
+              <h4 className="font-serif text-lg text-[#1c1209] mb-8 font-bold tracking-wide">
+                Support
+              </h4>
+              <ul className="space-y-4 text-sm text-[#1c1209] font-medium">
+                <li
+                  className="hover:text-[#8c6b4a] cursor-pointer transition-colors"
+                  onClick={() => navigateTo("contact")}
+                >
+                  {t.nav.contact}
+                </li>
+                <li
+                  className="hover:text-[#8c6b4a] cursor-pointer transition-colors"
+                  onClick={() => navigateTo("resources")}
+                >
+                  Safety Guide
+                </li>
+                <li
+                  className="hover:text-[#8c6b4a] cursor-pointer transition-colors"
+                  onClick={() => navigateTo("shipping")}
+                >
+                  Shipping & Returns
+                </li>
+                <li
+                  className="hover:text-[#8c6b4a] cursor-pointer transition-colors"
+                  onClick={() => navigateTo("faq")}
+                >
+                  FAQ
+                </li>
+              </ul>
+            </div>
+
+            {/* Newsletter - 3 Columns */}
+            <div className="md:col-span-3">
+              <h4 className="font-serif text-lg text-[#1c1209] mb-8 font-bold tracking-wide">
+                Stay Updated
+              </h4>
+              <p className="text-sm text-[#1c1209] mb-6 leading-relaxed font-medium">
+                Dapatkan tips kesehatan alami dan penawaran spesial langsung ke
+                email Anda.
+              </p>
+              <form onSubmit={handleNewsLetterSubscribe} className="relative">
+                <div className="relative">
+                  <input
+                    type="email"
+                    placeholder="Email address"
+                    value={newsletterEmail}
+                    onChange={(e) => setNewsletterEmail(e.target.value)}
+                    disabled={newsletterLoading}
+                    className="w-full bg-[#fbf8f5] border border-[#d4c5b0] rounded-lg px-4 py-3 text-sm text-[#1c1209] placeholder:text-[#1c1209]/40 focus:outline-none focus:border-[#8c6b4a] transition-colors shadow-sm"
+                  />
+                  <button
+                    type="submit"
+                    disabled={newsletterLoading}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-[#8c6b4a] rounded-md text-[#f5efe6] hover:bg-[#6b523a] transition-colors shadow-sm"
+                  >
+                    {newsletterLoading ? "⏳" : <ArrowRight size={16} />}
+                  </button>
+                </div>
+              </form>
+              {newsletterMessage && (
+                <p
+                  className={`mt-2 text-sm ${newsletterMessage.includes("failed") ? "text-red-600" : "text-green-600"}`}
+                >
+                  {newsletterMessage}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="border-t border-[#d4c5b0] pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-[#1c1209]/60">
+            <p>&copy; 2024 Annise Herbal. All rights reserved.</p>
+            <div className="flex gap-8">
+              <span className="hover:text-[#8c6b4a] cursor-pointer transition-colors hover:underline">
+                {t.footer?.privacy || "Privacy Policy"}
+              </span>
+              <span className="hover:text-[#8c6b4a] cursor-pointer transition-colors hover:underline">
+                {t.footer?.terms || "Terms of Service"}
+              </span>
+            </div>
+          </div>
+        </div>
+      </footer>
+      <MobileMenu
+        isOpen={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        navigateTo={navigateTo}
+        currentPage={location.pathname.substring(1) || "home"}
+        t={t}
+        lang={lang}
+        toggleLang={toggleLang}
+        setProduct={handleSetProduct}
+        products={products}
+      />
+    </div>
+  );
+};
+
+// Wrapper components for handling Params
+import { useParams } from "react-router-dom";
+
+const ProductWrapper: React.FC<{
+  products: Product[];
+  loading: boolean;
+  navigateTo: (page: string) => void;
+  addToCart: (product: Product) => void;
+  t: TranslationData["product"];
+  lang: "id" | "en";
+}> = ({ products, loading, navigateTo, addToCart, t, lang }) => {
+  const { id } = useParams<{ id: string }>();
+  // Handle both number/string IDs or Slugs if implemented
+  const product = products.find((p) => p.id === id) || null;
+
+  // Show loading spinner while products are being fetched
+  if (loading) {
+    return (
+      <div className="pt-32 text-center py-20">
+        <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-800"></div>
+        <p className="mt-4 text-stone-600">Loading product...</p>
+      </div>
+    );
+  }
+
+  // Only show "not found" after loading is complete
+  if (!product) {
+    return (
+      <div className="pt-32 text-center py-20">
+        <h2 className="text-2xl font-serif text-stone-800 mb-4">
+          Product not found
+        </h2>
+        <p className="text-stone-600 mb-8">
+          The product you are looking for could not be found.
+        </p>
+        <button
+          onClick={() => navigateTo("shop")}
+          className="px-6 py-3 bg-emerald-800 text-white rounded-lg hover:bg-emerald-900 transition-colors"
+        >
+          Back to Shop
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <ProductDetailPage
+      key={product.id}
+      product={product}
+      navigateTo={navigateTo}
+      addToCart={addToCart}
+      t={t}
+      lang={lang}
+    />
+  );
+};
+
+const EducationWrapper: React.FC<{
+  navigateTo: (page: string) => void;
+  lang: "id" | "en";
+}> = ({ navigateTo, lang }) => {
+  const { type } = useParams<{ type: string }>();
+  // Provide default logic or error handling if type is undefined
+  const safeType = type === "safety" || type === "science" ? type : "safety";
+
+  return (
+    <EducationDetailPage type={safeType} navigateTo={navigateTo} lang={lang} />
+  );
+};
+
+export default App;
