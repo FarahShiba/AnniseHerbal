@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { X, Globe, Search, ChevronRight, ShoppingBag } from "lucide-react";
+import { X, Globe, Search, ChevronRight, ShoppingBag, Phone, Mail } from "lucide-react";
 import type { TranslationData } from "../data/data";
 import { products } from "../data/data";
 import type { Product } from "../types";
@@ -197,7 +197,22 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
                 </button>
               ))}
 
-              <div className="pt-6 mt-4 border-t border-stone-200/60">
+              <div className="pt-6 mt-4 border-t border-stone-200/60 flex flex-col gap-4">
+                <div className="flex flex-col gap-3 py-2">
+                  <a href="tel:+628159118754" className="flex items-center gap-3 text-stone-600 hover:text-emerald-800 transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-emerald-700">
+                      <Phone size={16} />
+                    </div>
+                    <span className="text-sm font-medium">+62 815-9118-754</span>
+                  </a>
+                  <a href="mailto:anisherbal@gmail.com" className="flex items-center gap-3 text-stone-600 hover:text-emerald-800 transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-emerald-700">
+                      <Mail size={16} />
+                    </div>
+                    <span className="text-sm font-medium">anisherbal@gmail.com</span>
+                  </a>
+                </div>
+                
                 <button
                   onClick={() => handleNavigate("shop")}
                   className="w-full bg-emerald-900 text-white rounded-xl py-3.5 font-medium shadow-lg shadow-emerald-900/10 hover:bg-emerald-800 hover:shadow-emerald-900/20 transition-all flex items-center justify-center gap-2"
