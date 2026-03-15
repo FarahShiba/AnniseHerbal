@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X, Globe, Search, ChevronRight, ShoppingBag } from "lucide-react";
 import type { TranslationData } from "../data/data";
-import { products } from "../data/data";
 import type { Product } from "../types";
 import logoAnnise from "../assets/logoAnniseherbal.png";
 
@@ -14,6 +13,7 @@ interface MobileMenuProps {
   lang: "id" | "en";
   toggleLang: () => void;
   setProduct?: (product: Product) => void; // Optional prop for search results
+  products: Product[];
 }
 
 const MobileMenu: React.FC<MobileMenuProps> = ({
@@ -25,6 +25,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
   lang,
   toggleLang,
   setProduct,
+  products,
 }) => {
   const [query, setQuery] = useState("");
   const [shouldRender, setShouldRender] = useState(isOpen);

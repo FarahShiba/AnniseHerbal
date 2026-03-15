@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { X, Search } from "lucide-react";
 import type { Product } from "../types";
-import { products } from "../data/data";
 
 import type { TranslationData } from "../data/data";
 
@@ -9,6 +8,7 @@ interface SearchOverlayProps {
   isOpen: boolean;
   onClose: () => void;
   setProduct: (product: Product) => void;
+  products: Product[];
   t: TranslationData["search"];
 }
 
@@ -16,6 +16,7 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
   isOpen,
   onClose,
   setProduct,
+  products,
   t,
 }) => {
   const [query, setQuery] = useState("");

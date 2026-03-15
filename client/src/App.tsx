@@ -227,6 +227,7 @@ const App: React.FC = () => {
         isOpen={searchOpen}
         onClose={() => setSearchOpen(false)}
         setProduct={handleSetProduct}
+        products={products}
         t={t.search}
       />
       <CartDrawer
@@ -585,6 +586,7 @@ const App: React.FC = () => {
         lang={lang}
         toggleLang={toggleLang}
         setProduct={handleSetProduct}
+        products={products}
       />
     </div>
   );
