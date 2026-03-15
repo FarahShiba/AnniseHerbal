@@ -53,11 +53,17 @@ const NavLink: React.FC<{
 }> = ({ page, label, isActive, navigateTo }) => (
   <button
     onClick={() => navigateTo(page)}
-    className={`text-sm font-medium tracking-wide transition-colors ${
+    className={`text-sm font-medium tracking-wide transition-all duration-300 relative group ${
       isActive ? "text-emerald-800" : "text-stone-700 hover:text-emerald-800"
     }`}
   >
     {label}
+    {/* Underline effect */}
+    <span
+      className={`absolute left-0 bottom-0 h-0.5 bg-emerald-800 transition-all duration-300 ${
+        isActive ? "w-full" : "w-0 group-hover:w-full"
+      }`}
+    ></span>
   </button>
 );
 
@@ -613,8 +619,12 @@ const ProductWrapper: React.FC<{
   if (!product) {
     return (
       <div className="pt-32 text-center py-20">
-        <h2 className="text-2xl font-serif text-stone-800 mb-4">Product not found</h2>
-        <p className="text-stone-600 mb-8">The product you are looking for could not be found.</p>
+        <h2 className="text-2xl font-serif text-stone-800 mb-4">
+          Product not found
+        </h2>
+        <p className="text-stone-600 mb-8">
+          The product you are looking for could not be found.
+        </p>
         <button
           onClick={() => navigateTo("shop")}
           className="px-6 py-3 bg-emerald-800 text-white rounded-lg hover:bg-emerald-900 transition-colors"
