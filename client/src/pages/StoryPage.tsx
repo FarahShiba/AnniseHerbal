@@ -1,6 +1,7 @@
 import React from "react";
 import { ShieldCheck } from "lucide-react";
 import type { TranslationData } from "../data/data";
+import SEO from "../components/SEO";
 import PhotoBunda from "../assets/PhotoBunda.jpg";
 
 interface StoryPageProps {
@@ -9,6 +10,11 @@ interface StoryPageProps {
 
 const StoryPage: React.FC<StoryPageProps> = ({ t }) => (
   <div className="animate-fade-in pt-28 md:pt-48 pb-24 bg-stone-50 min-h-screen">
+    <SEO 
+      title="Our Story | Annise Herbal"
+      description="Learn about Manistri Tambunan, the founder of Annise Herbal, and our commitment to bringing you the best 100% pure essential oils in Indonesia."
+      canonical="https://anniseherbal.com/story"
+    />
     <div className="container mx-auto px-6 max-w-4xl">
       <div className="text-center mb-16">
         <h1 className="text-4xl md:text-5xl font-serif text-emerald-950 mb-4">

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Calendar, User, ArrowLeft, Share2 } from "lucide-react";
 import { blogs } from "../data/blogData";
+import SEO from "../components/SEO";
 import type { TranslationData } from "../data/data";
 
 interface BlogPostPageProps {
@@ -59,6 +60,12 @@ const BlogPostPage: React.FC<BlogPostPageProps> = ({ lang }) => {
 
   return (
     <div className="bg-[#fafaf9] min-h-screen pt-32 md:pt-48 pb-20">
+      <SEO 
+        title={`${post.translations[lang].title} | Annise Herbal Blog`}
+        description={post.translations[lang].excerpt}
+        canonical={`https://anniseherbal.com/blog/${post.id}`}
+        image={post.imageUrl || undefined}
+      />
       <div className="container mx-auto px-4 md:px-6 lg:px-8 max-w-7xl">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
           

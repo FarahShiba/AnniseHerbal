@@ -8,6 +8,7 @@ import {
   Instagram,
   Facebook,
 } from "lucide-react";
+import SEO from "../components/SEO";
 import type { TranslationData } from "../data/data";
 
 interface ContactPageProps {
@@ -17,6 +18,11 @@ interface ContactPageProps {
 const ContactPage: React.FC<ContactPageProps> = ({ t }) => {
   return (
     <div className="animate-fade-in pt-28 md:pt-48 pb-24 bg-white min-h-screen">
+      <SEO 
+        title="Contact Us | Annise Herbal"
+        description="Get in touch with Annise Herbal. We're here to answer your questions about our premium essential oils, health benefits, and aromatheraphy."
+        canonical="https://anniseherbal.com/contact"
+      />
       <div className="container mx-auto px-6 max-w-6xl">
         {/* Header Section */}
         <div className="text-center mb-16">

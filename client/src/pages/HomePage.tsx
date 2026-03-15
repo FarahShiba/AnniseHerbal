@@ -14,6 +14,7 @@ import HeroSlider from "../components/HeroSlider";
 import SectionTitle from "../components/SectionTitle";
 import Button from "../components/Button";
 import TestimonialsSection from "../components/TestimonialsSection";
+import SEO from "../components/SEO";
 import type { Product } from "../types";
 import type { TranslationData } from "../data/data";
 import { getTranslatedProducts } from "../utils/productHelpers";
@@ -35,8 +36,30 @@ const HomePage: React.FC<HomePageProps> = ({
 }) => {
   const products = getTranslatedProducts(lang);
 
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "HealthAndBeautyBusiness",
+    "name": "Annise Herbal",
+    "image": "https://anniseherbal.com/logo.png",
+    "url": "https://anniseherbal.com/",
+    "telephone": "+628159118754",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Tangerang",
+      "addressRegion": "Banten",
+      "addressCountry": "ID"
+    },
+    "description": "Discover premium, 100% pure essential oils for aromatherapy, health, and wellness. Annise Herbal brings nature's best remedies to Indonesia."
+  };
+
   return (
     <div className="animate-fade-in">
+      <SEO 
+        title="Annise Herbal | Premium Essential Oils in Indonesia" 
+        description={t.hero.s1_sub} 
+        canonical="https://anniseherbal.com/" 
+        schemaData={JSON.stringify(localBusinessSchema)}
+      />
       <HeroSlider navigateTo={navigateTo} t={t.hero} />
       <section className="py-20 bg-linear-to-b from-white to-stone-50/50">
         <div className="container mx-auto px-6">

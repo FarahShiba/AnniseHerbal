@@ -8,6 +8,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import Button from "../components/Button";
+import SEO from "../components/SEO";
 import type { Product } from "../types";
 import type { TranslationData } from "../data/data";
 
@@ -140,8 +141,35 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     setOpenSection(openSection === section ? null : section);
   };
 
+  const productSchema = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": productName,
+    "image": images,
+    "description": product.shortDesc,
+    "brand": {
+      "@type": "Brand",
+      "name": "Annise Herbal"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": `https://anniseherbal.com/product/${product.id}`,
+      "priceCurrency": "IDR",
+      "price": product.price,
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  };
+
   return (
     <div className="animate-fade-in pt-28 md:pt-48 pb-24 bg-white min-h-screen">
+      <SEO 
+        title={`${productName} | Annise Herbal Premium Essential Oils`}
+        description={product.shortDesc}
+        canonical={`https://anniseherbal.com/product/${product.id}`}
+        image={product.image}
+        schemaData={JSON.stringify(productSchema)}
+      />
       <div className="container mx-auto px-6 relative">
         <button
           onClick={() => navigateTo("shop")}
@@ -421,13 +449,13 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             <>
               <button
                 onClick={handlePrevImage}
-                className="absolute left-4 md:left-8 z-50 bg-white/10 hover:bg-white/20 text-white p-4 rounded-full backdrop-blur transition-all hidden md:block hover:scale-110"
+                className="absolute left-2 md:left-8 z-50 bg-white/10 hover:bg-white/20 text-white p-2 md:p-4 rounded-full backdrop-blur transition-all hover:scale-110"
               >
                 <ArrowRight className="rotate-180" size={24} />
               </button>
               <button
                 onClick={handleNextImage}
-                className="absolute right-4 md:right-8 z-50 bg-white/10 hover:bg-white/20 text-white p-4 rounded-full backdrop-blur transition-all hidden md:block hover:scale-110"
+                className="absolute right-2 md:right-8 z-50 bg-white/10 hover:bg-white/20 text-white p-2 md:p-4 rounded-full backdrop-blur transition-all hover:scale-110"
               >
                 <ArrowRight size={24} />
               </button>

@@ -3,6 +3,7 @@ import { ShoppingBag } from "lucide-react";
 import type { Product } from "../types";
 import type { TranslationData } from "../data/data";
 import { getTranslatedProducts } from "../utils/productHelpers";
+import SEO from "../components/SEO";
 
 interface ShopPageProps {
   setProduct: (product: Product | null) => void;
@@ -32,6 +33,11 @@ const ShopPage: React.FC<ShopPageProps> = ({
 
   return (
     <div className="animate-fade-in pt-28 md:pt-48 pb-24 min-h-screen bg-stone-50">
+      <SEO 
+        title="Shop Annise Herbal | Buy Pure Essential Oils Online" 
+        description="Browse our collection of premium essential oils including Nozze Oil, Fluxent, and more. Nature's best remedies for your health and wellness." 
+        canonical="https://anniseherbal.com/shop" 
+      />
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-serif text-emerald-950 mb-4">
