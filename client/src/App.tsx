@@ -380,6 +380,7 @@ const App: React.FC = () => {
             element={
               <ProductWrapper
                 products={products}
+                loading={productsLoading}
                 navigateTo={navigateTo}
                 addToCart={addToCart}
                 t={t.product}
@@ -588,17 +589,40 @@ import { useParams } from "react-router-dom";
 
 const ProductWrapper: React.FC<{
   products: Product[];
+  loading: boolean;
   navigateTo: (page: string) => void;
   addToCart: (product: Product) => void;
   t: TranslationData["product"];
   lang: "id" | "en";
-}> = ({ products, navigateTo, addToCart, t, lang }) => {
+}> = ({ products, loading, navigateTo, addToCart, t, lang }) => {
   const { id } = useParams<{ id: string }>();
   // Handle both number/string IDs or Slugs if implemented
   const product = products.find((p) => p.id === id) || null;
 
+  // Show loading spinner while products are being fetched
+  if (loading) {
+    return (
+      <div className="pt-32 text-center py-20">
+        <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-800"></div>
+        <p className="mt-4 text-stone-600">Loading product...</p>
+      </div>
+    );
+  }
+
+  // Only show "not found" after loading is complete
   if (!product) {
-    return <div className="p-20 text-center">Product not found</div>;
+    return (
+      <div className="pt-32 text-center py-20">
+        <h2 className="text-2xl font-serif text-stone-800 mb-4">Product not found</h2>
+        <p className="text-stone-600 mb-8">The product you are looking for could not be found.</p>
+        <button
+          onClick={() => navigateTo("shop")}
+          className="px-6 py-3 bg-emerald-800 text-white rounded-lg hover:bg-emerald-900 transition-colors"
+        >
+          Back to Shop
+        </button>
+      </div>
+    );
   }
 
   return (
