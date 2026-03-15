@@ -173,6 +173,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
                 { page: "shop", label: t.nav.shop },
                 { page: "story", label: t.nav.story },
                 { page: "resources", label: t.nav.resources },
+                { page: "blog", label: t.nav.blog },
                 { page: "contact", label: t.nav.contact },
               ].map((item, idx) => (
                 <button

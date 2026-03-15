@@ -288,6 +288,12 @@ const App: React.FC = () => {
               navigateTo={navigateTo}
             />
             <NavLink
+              page="blog"
+              label={t.nav.blog}
+              isActive={isActive("blog")}
+              navigateTo={navigateTo}
+            />
+            <NavLink
               page="contact"
               label={t.nav.contact}
               isActive={isActive("contact")}
@@ -402,7 +408,11 @@ const App: React.FC = () => {
             element={<EducationWrapper navigateTo={navigateTo} lang={lang} />}
           />
           <Route path="/contact" element={<ContactPage t={t} />} />
-          <Route path="/blog/:slug" element={<BlogPostPage t={t} lang={lang} />} />
+          <Route path="/blog" element={<BlogPostPage t={t} lang={lang} />} />
+          <Route
+            path="/blog/:slug"
+            element={<BlogPostPage t={t} lang={lang} />}
+          />
           <Route path="/faq" element={<FAQPage t={t} />} />
           <Route path="/admin" element={<AdminPage />} />
         </Routes>
