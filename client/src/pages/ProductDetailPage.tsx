@@ -219,7 +219,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         <div className="flex flex-col lg:flex-row gap-16">
           {/* LEFT COLUMN: Gallery */}
           <div className="lg:w-1/2">
-            <div className="sticky top-32">
+            <div>
               {/* Main Image Container - ORIGINAL DESIGN RESTORED */}
               <div
                 className={`aspect-square rounded-3xl ${product.imageColor} flex items-center justify-center relative overflow-hidden group cursor-zoom-in border border-stone-100`}
