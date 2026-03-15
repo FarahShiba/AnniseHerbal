@@ -224,6 +224,12 @@ export const translations = {
         },
       ],
     },
+    popup: {
+      tag: "100% PURE & NATURAL",
+      title: "Dunia Ketenangan",
+      desc: "Temukan rahasia alam untuk tidur lebih nyenyak, bernapas lebih lega, dan hidup bebas nyeri. Sentuhan murni essential oil kami siap menemani hari Anda.",
+      btn: "Eksplorasi Sekarang",
+    },
   },
   en: {
     nav: {
@@ -420,6 +426,12 @@ export const translations = {
           category: "products",
         },
       ],
+    },
+    popup: {
+      tag: "100% PURE & NATURAL",
+      title: "World of Serenity",
+      desc: "Discover nature's secret to sleeping better, breathing easier, and living pain-free. The pure touch of our essential oils is ready to accompany your day.",
+      btn: "Explore Now",
     },
   },
 };

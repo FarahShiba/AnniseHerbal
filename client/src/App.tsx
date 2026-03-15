@@ -39,6 +39,7 @@ import SearchOverlay from "./components/SearchOverlay";
 import CartDrawer from "./components/CartDrawer";
 import WhatsAppFloat from "./components/WhatsAppFloat";
 import MobileMenu from "./components/MobileMenu";
+import WelcomePopup from "./components/WelcomePopup";
 
 // Import Utils
 import { getTranslatedProducts } from "./utils/productHelpers";
@@ -160,6 +161,7 @@ const App: React.FC = () => {
   return (
     <div className="font-sans text-stone-800 bg-[#fafaf9] selection:bg-emerald-200 selection:text-emerald-900 min-h-screen flex flex-col">
       {/* OVERLAYS */}
+      <WelcomePopup navigateTo={navigateTo} lang={lang} t={t.popup} />
       <SearchOverlay
         isOpen={searchOpen}
         onClose={() => setSearchOpen(false)}
