@@ -16,7 +16,7 @@ import Button from "../components/Button";
 import TestimonialsSection from "../components/TestimonialsSection";
 import type { Product } from "../types";
 import type { TranslationData } from "../data/data";
-import { getTranslatedProducts } from "../utils/productHelpers";
+
 
 interface HomePageProps {
   navigateTo: (page: string) => void;
@@ -24,6 +24,8 @@ interface HomePageProps {
   addToCart: (product: Product) => void;
   t: TranslationData;
   lang: "id" | "en";
+  products:Product[];
+  loading:boolean;
 }
 
 const HomePage: React.FC<HomePageProps> = ({
@@ -32,8 +34,10 @@ const HomePage: React.FC<HomePageProps> = ({
   addToCart,
   t,
   lang,
+  products,
+  loading,
 }) => {
-  const products = getTranslatedProducts(lang);
+  // const products = getTranslatedProducts(lang);
 
   return (
     <div className="animate-fade-in">
@@ -94,8 +98,14 @@ const HomePage: React.FC<HomePageProps> = ({
           <SectionTitle subtitle={t.section.best_seller_sub}>
             {t.section.best_seller}
           </SectionTitle>
+          {loading ? (
+              <div className="text-center py-20">
+                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-800"></div>
+                <p className="mt-4 text-stone-600">Loading best sellers...</p>
+              </div>
+            ) : (
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8">
-            {products.slice(0, 4).map((product) => (
+            {products.filter(p => p.isBestSeller).slice(0, 4).map((product) => (
               <div
                 key={product.id}
                 onClick={() => setProduct(product)}
@@ -166,6 +176,7 @@ const HomePage: React.FC<HomePageProps> = ({
               </div>
             ))}
           </div>
+            )}
           <div className="text-center mt-12">
             <Button variant="secondary" onClick={() => navigateTo("shop")}>
               {t.section.view_all}

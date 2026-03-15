@@ -7,8 +7,8 @@ interface CartDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   cartItems: CartItem[];
-  onRemove: (id: number) => void;
-  onUpdateQty: (id: number, newQty: number) => void;
+  onRemove: (id: string) => void;
+  onUpdateQty: (id: string, newQty: number) => void;
   onCheckout: () => void;
   onStartShopping?: () => void;
   t: TranslationData["cart"];

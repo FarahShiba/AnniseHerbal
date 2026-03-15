@@ -17,6 +17,7 @@ import type { Product, CartItem } from "./types";
 
 // Import Data
 import { translations, type TranslationData } from "./data/data";
+import { subscribeToNewsletter } from "./services/newsletterService";
 
 // Import Pages
 import HomePage from "./pages/HomePage";
@@ -38,7 +39,8 @@ import WhatsAppFloat from "./components/WhatsAppFloat";
 import MobileMenu from "./components/MobileMenu";
 
 // Import Utils
-import { getTranslatedProducts } from "./utils/productHelpers";
+// import { getTranslatedProducts } from "./utils/productHelpers";
+import { getAllProducts } from "./services/productService";
 
 // NavLink component defined outside App
 const NavLink: React.FC<{
@@ -65,12 +67,33 @@ const App: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
+  // --- PRODUCTS STATE (fetched from API) ---
+  const [products, setProducts] = useState<Product[]>([]);
+  const [productsLoading, setProductsLoading] = useState(true);
+  const [productsError, setProductsError] = useState("");
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setProductsLoading(true);
+        const data = await getAllProducts();
+        setProducts(data as Product[]);
+      } catch (error: unknown) {
+        setProductsError("Failed to load products");
+        console.error("Products fetch error:", error);
+      } finally {
+        setProductsLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []); // Fetch once when App mounts
+
   // --- LANGUAGE STATE ---
   const [lang, setLang] = useState<"id" | "en">("id");
   const t = translations[lang];
 
   // Derived State for Products
-  const products = React.useMemo(() => getTranslatedProducts(lang), [lang]);
+  // const products = React.useMemo(() => getTranslatedProducts(lang), [lang]);
 
   // Wrapper for setting product to maintain API compatibility with children
   const handleSetProduct = (product: Product | null) => {
@@ -90,6 +113,11 @@ const App: React.FC = () => {
     }
   });
   const [cartOpen, setCartOpen] = useState(false);
+
+  // --- NEWSLETTER STATE ---
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterLoading, setNewsletterLoading] = useState(false);
+  const [newsletterMessage, setNewsletterMessage] = useState("");
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -125,6 +153,34 @@ const App: React.FC = () => {
     setLang((prev) => (prev === "id" ? "en" : "id"));
   };
 
+  // -- SUBSCRIBE NEWSLETTER FUNCTION ---
+  const handleNewsLetterSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault(); // prevent page from refreshing
+
+    if (!newsletterEmail.trim()) {
+      setNewsletterMessage("Please enter your email");
+      return;
+    }
+
+    try {
+      setNewsletterLoading(true);
+      setNewsletterMessage("");
+
+      const response = await subscribeToNewsletter(newsletterEmail);
+
+      setNewsletterMessage(response.message || "Successfully subscribed!");
+      setNewsletterEmail(""); // clear input after succeed
+
+      //clear message after 5 seconds
+      setTimeout(() => setNewsletterMessage(""), 5000);
+    } catch (error) {
+      setNewsletterMessage("Subscription failed. Please try again.");
+      console.error("Newsletter error:", error);
+    } finally {
+      setNewsletterLoading(false); // always turn off loading
+    }
+  };
+
   // --- CART FUNCTIONS ---
   const addToCart = (product: Product) => {
     setCart((prev) => {
@@ -139,11 +195,12 @@ const App: React.FC = () => {
     setCartOpen(true);
   };
 
-  const removeFromCart = (id: number) => {
+  const removeFromCart = (id: string) => {
     setCart((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const updateCartQty = (id: number, newQty: number) => {
+  const updateCartQty = (id: string, newQty: number) => {
+    // Change from number to string
     if (newQty < 1) return;
     setCart((prev) =>
       prev.map((item) => (item.id === id ? { ...item, qty: newQty } : item)),
@@ -282,6 +339,8 @@ const App: React.FC = () => {
             path="/"
             element={
               <HomePage
+                products={products}
+                loading={productsLoading}
                 navigateTo={navigateTo}
                 setProduct={handleSetProduct}
                 addToCart={addToCart}
@@ -295,6 +354,9 @@ const App: React.FC = () => {
             path="/shop"
             element={
               <ShopPage
+                products={products}
+                loading={productsLoading}
+                error={productsError}
                 setProduct={handleSetProduct}
                 addToCart={addToCart}
                 t={t}
@@ -310,6 +372,7 @@ const App: React.FC = () => {
                 navigateTo={navigateTo}
                 addToCart={addToCart}
                 t={t.product}
+                lang={lang}
               />
             }
           />
@@ -447,16 +510,32 @@ const App: React.FC = () => {
                 Dapatkan tips kesehatan alami dan penawaran spesial langsung ke
                 email Anda.
               </p>
-              <div className="relative">
-                <input
-                  type="email"
-                  placeholder="Email address"
-                  className="w-full bg-[#fbf8f5] border border-[#d4c5b0] rounded-lg px-4 py-3 text-sm text-[#1c1209] placeholder:text-[#1c1209]/40 focus:outline-none focus:border-[#8c6b4a] transition-colors shadow-sm"
-                />
-                <button className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-[#8c6b4a] rounded-md text-[#f5efe6] hover:bg-[#6b523a] transition-colors shadow-sm">
-                  <ArrowRight size={16} />
-                </button>
-              </div>
+              <form onSubmit={handleNewsLetterSubscribe} className="relative">
+                <div className="relative">
+                  <input
+                    type="email"
+                    placeholder="Email address"
+                    value={newsletterEmail}
+                    onChange={(e) => setNewsletterEmail(e.target.value)}
+                    disabled={newsletterLoading}
+                    className="w-full bg-[#fbf8f5] border border-[#d4c5b0] rounded-lg px-4 py-3 text-sm text-[#1c1209] placeholder:text-[#1c1209]/40 focus:outline-none focus:border-[#8c6b4a] transition-colors shadow-sm"
+                  />
+                  <button
+                    type="submit"
+                    disabled={newsletterLoading}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-[#8c6b4a] rounded-md text-[#f5efe6] hover:bg-[#6b523a] transition-colors shadow-sm"
+                  >
+                    {newsletterLoading ? "⏳" : <ArrowRight size={16} />}
+                  </button>
+                </div>
+              </form>
+              {newsletterMessage && (
+                <p
+                  className={`mt-2 text-sm ${newsletterMessage.includes("failed") ? "text-red-600" : "text-green-600"}`}
+                >
+                  {newsletterMessage}
+                </p>
+              )}
             </div>
           </div>
 
@@ -496,10 +575,11 @@ const ProductWrapper: React.FC<{
   navigateTo: (page: string) => void;
   addToCart: (product: Product) => void;
   t: TranslationData["product"];
-}> = ({ products, navigateTo, addToCart, t }) => {
+  lang: "id" | "en";
+}> = ({ products, navigateTo, addToCart, t, lang }) => {
   const { id } = useParams<{ id: string }>();
   // Handle both number/string IDs or Slugs if implemented
-  const product = products.find((p) => p.id === Number(id)) || null;
+  const product = products.find((p) => p.id === id) || null;
 
   if (!product) {
     return <div className="p-20 text-center">Product not found</div>;
@@ -512,6 +592,7 @@ const ProductWrapper: React.FC<{
       navigateTo={navigateTo}
       addToCart={addToCart}
       t={t}
+      lang={lang}
     />
   );
 };

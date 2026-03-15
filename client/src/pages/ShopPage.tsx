@@ -1,10 +1,14 @@
+/* eslint-disable no-empty */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import { ShoppingBag } from "lucide-react";
 import type { Product } from "../types";
 import type { TranslationData } from "../data/data";
-import { getTranslatedProducts } from "../utils/productHelpers";
 
 interface ShopPageProps {
+  products: Product[];      
+  loading: boolean;         
+  error: string;            
   setProduct: (product: Product | null) => void;
   addToCart: (product: Product) => void;
   t: TranslationData;
@@ -12,23 +16,27 @@ interface ShopPageProps {
 }
 
 const ShopPage: React.FC<ShopPageProps> = ({
+  products,
+  loading,
+  error,
   setProduct,
   addToCart,
   t,
   lang,
 }) => {
-  const products = getTranslatedProducts(lang);
+  // const products = getTranslatedProducts(lang);
+
+  
+
   const [filter, setFilter] = useState("All");
-  const categories = [
-    "All",
-    "Pain Relief",
-    "Respiratory",
-    "Digestion",
-    "Kids",
-    "Skincare",
-  ];
-  const filteredProducts =
-    filter === "All" ? products : products.filter((p) => p.category === filter);
+  // Get unique categories from products (after they load)
+  const apiCategories = Array.from(new Set(products.map(p => p.category)));
+  const categories = ["All", ...apiCategories];
+
+const filteredProducts =
+  filter === "All" 
+    ? products 
+    : products.filter((p) => p.category === filter);
 
   return (
     <div className="animate-fade-in pt-28 md:pt-48 pb-24 min-h-screen bg-stone-50">
@@ -39,6 +47,28 @@ const ShopPage: React.FC<ShopPageProps> = ({
           </h1>
           <p className="text-stone-600">{t.shop.sub}</p>
         </div>
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center py-20">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-800"></div>
+            <p className="mt-4 text-stone-600">Loading products...</p>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && !loading && (
+          <div className="text-center py-20">
+            <p className="text-red-600 mb-4">{error}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="px-6 py-2 bg-emerald-800 text-white rounded-full hover:bg-emerald-900"
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+        {!loading && !error &&(
+        <>
         <div className="flex flex-wrap justify-center gap-4 mb-16">
           {categories.map((cat) => (
             <button
@@ -126,6 +156,8 @@ const ShopPage: React.FC<ShopPageProps> = ({
             </div>
           ))}
         </div>
+        </>
+        )}
       </div>
     </div>
   );

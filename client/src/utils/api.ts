@@ -22,16 +22,20 @@ export interface ApiResponse<T> {
  * Custom error class for API errors
  */
 export class ApiError extends Error {
+  statusCode: number;
+  details?: Record<string, string>;
+
   constructor(
     message: string,
-    public statusCode: number,
-    public details?: Record<string, string>
+    statusCode: number,
+    details?: Record<string, string>
   ) {
     super(message);
     this.name = 'ApiError';
+    this.statusCode = statusCode;
+    this.details = details;
   }
 }
-
 /**
  * Makes an API request with error handling
  * 

@@ -20,6 +20,10 @@ export interface ProductTypes {
   tags?: string[];
   promotionalTag?: string;
   promotionalTag_en?: string;
+  caution?: string;
+  caution_en?: string;
+  isBestSeller?: boolean;        
+  isBestSeller_en?: boolean;     
   createdAt?: Date;
   updatedAt?: Date;
   sizeName: string;

@@ -16,6 +16,7 @@ interface ProductDetailPageProps {
   navigateTo: (page: string) => void;
   addToCart: (product: Product) => void;
   t: TranslationData["product"];
+  lang: "id" | "en";
 }
 
 const AccordionItem: React.FC<{
@@ -91,6 +92,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   navigateTo,
   addToCart,
   t,
+  lang,
 }) => {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isZoomOpen, setIsZoomOpen] = useState(false);
@@ -103,6 +105,37 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
   if (!product) return <div className="pt-32 text-center">Loading...</div>;
 
+  // Helper function to get localized content
+  const getLocalizedField = (
+    field: keyof Product,
+    fallbackField: keyof Product,
+  ) => {
+    if (lang === "en") {
+      return product[field] || product[fallbackField];
+    }
+    return product[fallbackField];
+  };
+
+  // Get localized values
+  const productName = getLocalizedField("name_en", "name") as string;
+  const productDescription = getLocalizedField(
+    "description_en",
+    "description",
+  ) as string;
+  const productBenefits = getLocalizedField(
+    "benefits_en",
+    "benefits",
+  ) as string[];
+  const productIngredients = getLocalizedField(
+    "ingredients_en",
+    "ingredients",
+  ) as string;
+  const productHowToUse = getLocalizedField(
+    "howToUse_en",
+    "howToUse",
+  ) as string[];
+  const productCaution = getLocalizedField("caution_en", "caution") as string;
+
   const images =
     product.images && product.images.length > 0
       ? product.images
@@ -110,10 +143,8 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const activeImage = images[activeImageIndex];
 
   // Parse Name and Volume
-  // Assuming format like "Max Pain Relief Oil - 100 ml"
-  // If no dash, volume is hidden or part of name
-  const nameParts = product.name.split(" - ");
-  const productName = nameParts[0];
+  const nameParts = productName.split(" - ");
+  const displayName = nameParts[0];
   const productVolume = nameParts.length > 1 ? nameParts[1] : null;
 
   const handleNextImage = (e: React.MouseEvent) => {
@@ -227,7 +258,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           <div className="lg:w-1/2 flex flex-col">
             <div className="mb-2">
               <h1 className="text-4xl lg:text-5xl font-serif text-emerald-950 leading-tight">
-                {productName}
+                {displayName}
               </h1>
               {productVolume && (
                 <p className="text-stone-500 text-lg font-medium mt-2">
@@ -241,7 +272,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             </p>
 
             <div className="prose prose-stone prose-lg max-w-none text-stone-600 mb-10 leading-relaxed font-light">
-              {product.description}
+              {productDescription}
             </div>
 
             <div className="flex gap-4 mb-12">
@@ -270,7 +301,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 icon={<Star size={20} />}
               >
                 <ul className="grid gap-3 pl-2">
-                  {product.benefits.map((benefit, idx) => (
+                  {productBenefits.map((benefit, idx) => (
                     <li
                       key={idx}
                       className="flex items-start text-stone-600 group/item"
@@ -290,9 +321,9 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 onClick={() => toggleSection("ingredients")}
                 icon={<Leaf size={20} />}
               >
-                {Array.isArray(product.ingredients) ? (
+                {Array.isArray(productIngredients) ? (
                   <ul className="grid gap-2 pl-2">
-                    {product.ingredients.map((ing, idx) => (
+                    {productIngredients.map((ing, idx) => (
                       <li
                         key={idx}
                         className="flex items-center text-stone-600 text-sm italic font-medium"
@@ -314,11 +345,26 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 icon={<Wind size={20} />}
               >
                 <div className="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100/50">
-                  <p className="text-stone-600">{product.usage}</p>
+                  {Array.isArray(productHowToUse) &&
+                  productHowToUse.length > 0 ? (
+                    <ul className="space-y-2">
+                      {productHowToUse.map((step, idx) => (
+                        <li
+                          key={idx}
+                          className="text-stone-600 flex items-start"
+                        >
+                          <span className="mr-2">{idx + 1}.</span>
+                          <span>{step}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-stone-600">{String(productHowToUse)}</p>
+                  )}
                 </div>
               </AccordionItem>
 
-              {product.caution && (
+              {productCaution && (
                 <AccordionItem
                   title={t.caution || "Caution"}
                   isOpen={openSection === "caution"}
@@ -326,7 +372,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   icon={<AlertCircle size={20} />}
                 >
                   <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 text-amber-900/80 text-sm leading-relaxed">
-                    <p>{product.caution}</p>
+                    <p>{productCaution}</p>
                   </div>
                 </AccordionItem>
               )}

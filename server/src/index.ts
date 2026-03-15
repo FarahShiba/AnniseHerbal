@@ -70,7 +70,7 @@ app.get("/api/health", async (req: Request, res: Response) => {
 app.use("/api/products", productsRouter);
 
 // Mount get product by id route
-app.use("/api/products/:category/:sizeName/:id", productsRouter);
+// app.use("/api/products/:category/:sizeName/:id", productsRouter);
 
 // Mount send the contact data and sending email
 app.use("/api/", contactRoutes);

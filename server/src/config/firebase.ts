@@ -31,7 +31,7 @@ try {
     // Initialize the Firebase Admin SDK with the service account credentials
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
-      storageBucket: `${serviceAccount.project_id}.appspot.com`,
+      storageBucket: `${serviceAccount.project_id}.firebasestorage.app`,
       databaseURL: `https://${serviceAccount.project_id}.firebaseio.com`, // Add this line if using Realtime Database
     });
 
