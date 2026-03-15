@@ -8,6 +8,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import Button from "../components/Button";
+import SEO from "../components/SEO";
 import type { Product } from "../types";
 import type { TranslationData } from "../data/data";
 
@@ -171,8 +172,38 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     setOpenSection(openSection === section ? null : section);
   };
 
+  const productSchema = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    name: displayName,
+    image: images,
+    description: product.shortDesc,
+    brand: {
+      "@type": "Brand",
+      name: "Annise Herbal",
+    },
+    offers: {
+      "@type": "Offer",
+      url: `https://anniseherbal.com/product/${product.id}`,
+      priceCurrency: "IDR",
+      price: product.price,
+      availability: "https://schema.org/InStock",
+      seller: {
+        "@type": "Organization",
+        name: "Annise Herbal",
+      },
+    },
+  };
+
   return (
     <div className="animate-fade-in pt-28 md:pt-48 pb-24 bg-white min-h-screen">
+      <SEO
+        title={`${displayName} | Annise Herbal`}
+        description={product.shortDesc}
+        canonical={`https://anniseherbal.com/product/${product.id}`}
+        image={images[0]}
+        schemaData={JSON.stringify(productSchema)}
+      />
       <div className="container mx-auto px-6 relative">
         <button
           onClick={() => navigateTo("shop")}

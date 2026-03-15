@@ -14,6 +14,9 @@ import progest1 from "../assets/Progest1.png";
 import progestDesc1 from "../assets/Progestdesc1.jpeg";
 import progestDesc2 from "../assets/Progestdesc2.jpeg";
 import nozze1 from "../assets/nozzeDewasa1.png";
+import nozze2 from "../assets/Nozze2.jpeg";
+import nozze3 from "../assets/Nozze3.jpeg";
+import nozze4 from "../assets/Nozze4.jpeg";
 import fluxent1 from "../assets/fluxent1.png";
 import fluxentDesc1 from "../assets/Fluxentdesc1.jpeg";
 import fluxentKids1 from "../assets/fluxentKids1.png";
@@ -29,6 +32,7 @@ export const translations = {
       shop: "Belanja",
       story: "Tentang Kami",
       resources: "Edukasi",
+      blog: "Blog & News",
       contact: "Kontak",
     },
     hero: {
@@ -221,6 +225,12 @@ export const translations = {
         },
       ],
     },
+    popup: {
+      tag: "100% PURE & NATURAL",
+      title: "Dunia Ketenangan",
+      desc: "Temukan rahasia alam untuk tidur lebih nyenyak, bernapas lebih lega, dan hidup bebas nyeri. Sentuhan murni essential oil kami siap menemani hari Anda.",
+      btn: "Eksplorasi Sekarang",
+    },
   },
   en: {
     nav: {
@@ -228,6 +238,7 @@ export const translations = {
       shop: "Shop",
       story: "Our Story",
       resources: "Resources",
+      blog: "Blog & News",
       contact: "Contact",
     },
     hero: {
@@ -355,7 +366,8 @@ export const translations = {
       title: "Contact Us",
       sub: "Have questions about products or need consultation? Our team is ready to help.",
       form_name: "Full Name",
-      form_contact: "Email / WhatsApp",
+      form_email: "Email",
+      form_number: "WhatsApp Number",
       form_msg: "Message",
       btn_send: "Send Message",
       info_title: "Contact Information",
@@ -416,6 +428,12 @@ export const translations = {
           category: "products",
         },
       ],
+    },
+    popup: {
+      tag: "100% PURE & NATURAL",
+      title: "World of Serenity",
+      desc: "Discover nature's secret to sleeping better, breathing easier, and living pain-free. The pure touch of our essential oils is ready to accompany your day.",
+      btn: "Explore Now",
     },
   },
 };
@@ -554,8 +572,9 @@ export const products: Product[] = [
       "Oleskan 3-5 tetes pada telapak tangan. Balurkan perlahan pada area : Batang hidung, Tulang pipi, Kening, Tenggorokan dan Gunakan sesuai kebutuhan.",
     caution:
       "Hanya untuk pemakaian luar. Hindari area mata dan selaput lendir. Tidak disarankan untuk anak di bawah 2 tahun tanpa pengawasan medis.",
-    imageColor: "bg-teal-100",
+    imageColor: "bg-white",
     image: nozze1,
+    images: [nozze1, nozze2, nozze3, nozze4],
     tags: ["sinus", "hidung", "pilek", "pernapasan", "napas"],
   },
   {

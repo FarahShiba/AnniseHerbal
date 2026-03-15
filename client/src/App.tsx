@@ -31,12 +31,14 @@ import EducationDetailPage from "./pages/EducationDetailPage";
 import ShippingPage from "./pages/ShippingPage";
 import AdminPage from "./pages/AdminPage";
 import FAQPage from "./pages/FAQPage";
+import BlogPostPage from "./pages/BlogPostPage";
 
 // Import Components
 import SearchOverlay from "./components/SearchOverlay";
 import CartDrawer from "./components/CartDrawer";
 import WhatsAppFloat from "./components/WhatsAppFloat";
 import MobileMenu from "./components/MobileMenu";
+import WelcomePopup from "./components/WelcomePopup";
 
 // Import Utils
 // import { getTranslatedProducts } from "./utils/productHelpers";
@@ -235,6 +237,9 @@ const App: React.FC = () => {
       {/* WHATSAPP FLOAT BUTTON */}
       <WhatsAppFloat />
 
+      {/* WELCOME POPUP */}
+      <WelcomePopup navigateTo={navigateTo} lang={lang} t={t.popup} />
+
       {/* HEADER */}
       <header
         className={`fixed w-full z-50 transition-all duration-300 ${
@@ -397,6 +402,7 @@ const App: React.FC = () => {
             element={<EducationWrapper navigateTo={navigateTo} lang={lang} />}
           />
           <Route path="/contact" element={<ContactPage t={t} />} />
+          <Route path="/blog/:slug" element={<BlogPostPage t={t} lang={lang} />} />
           <Route path="/faq" element={<FAQPage t={t} />} />
           <Route path="/admin" element={<AdminPage />} />
         </Routes>
