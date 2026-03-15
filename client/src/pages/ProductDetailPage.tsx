@@ -498,13 +498,13 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             <>
               <button
                 onClick={handlePrevImage}
-                className="absolute left-4 md:left-8 z-50 bg-white/10 hover:bg-white/20 text-white p-4 rounded-full backdrop-blur transition-all hidden md:block hover:scale-110"
+                className="absolute left-2 md:left-8 z-50 bg-white/10 hover:bg-white/20 text-white p-2 md:p-4 rounded-full backdrop-blur transition-all hover:scale-110"
               >
                 <ArrowRight className="rotate-180" size={24} />
               </button>
               <button
                 onClick={handleNextImage}
-                className="absolute right-4 md:right-8 z-50 bg-white/10 hover:bg-white/20 text-white p-4 rounded-full backdrop-blur transition-all hidden md:block hover:scale-110"
+                className="absolute right-2 md:right-8 z-50 bg-white/10 hover:bg-white/20 text-white p-2 md:p-4 rounded-full backdrop-blur transition-all hover:scale-110"
               >
                 <ArrowRight size={24} />
               </button>

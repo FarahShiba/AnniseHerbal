@@ -6,6 +6,7 @@ import SEO from "../components/SEO";
 import type { Product } from "../types";
 import type { TranslationData } from "../data/data";
 
+
 interface ShopPageProps {
   products: Product[];
   loading: boolean;

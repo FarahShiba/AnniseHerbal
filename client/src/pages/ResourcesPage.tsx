@@ -1,6 +1,7 @@
 import React from "react";
 
 import Button from "../components/Button";
+import SEO from "../components/SEO";
 import type { TranslationData } from "../data/data";
 
 import Brosure1 from "../assets/Brosure1.jpeg";
@@ -34,6 +35,11 @@ const ResourcesPage: React.FC<ResourcesPageProps> = ({ t, navigateTo }) => {
 
   return (
     <div className="animate-fade-in pt-28 md:pt-48 pb-24 bg-white min-h-screen">
+      <SEO 
+        title="Resources & Education | Annise Herbal"
+        description="Learn about the safety, science, and correct usage of essential oils with Annise Herbal's educational resources and brochures."
+        canonical="https://anniseherbal.com/resources"
+      />
       <div className="container mx-auto px-6 max-w-4xl">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-serif text-emerald-950 mb-4">
