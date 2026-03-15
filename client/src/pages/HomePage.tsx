@@ -17,7 +17,6 @@ import TestimonialsSection from "../components/TestimonialsSection";
 import SEO from "../components/SEO";
 import type { Product } from "../types";
 import type { TranslationData } from "../data/data";
-import { getTranslatedProducts } from "../utils/productHelpers";
 
 interface HomePageProps {
   navigateTo: (page: string) => void;
@@ -25,6 +24,8 @@ interface HomePageProps {
   addToCart: (product: Product) => void;
   t: TranslationData;
   lang: "id" | "en";
+  products: Product[];
+  loading: boolean;
 }
 
 const HomePage: React.FC<HomePageProps> = ({
@@ -33,31 +34,34 @@ const HomePage: React.FC<HomePageProps> = ({
   addToCart,
   t,
   lang,
+  products,
+  loading,
 }) => {
-  const products = getTranslatedProducts(lang);
+  // const products = getTranslatedProducts(lang);
 
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "HealthAndBeautyBusiness",
-    "name": "Annise Herbal",
-    "image": "https://anniseherbal.com/logo.png",
-    "url": "https://anniseherbal.com/",
-    "telephone": "+628159118754",
-    "address": {
+    name: "Annise Herbal",
+    image: "https://anniseherbal.com/logo.png",
+    url: "https://anniseherbal.com/",
+    telephone: "+628159118754",
+    address: {
       "@type": "PostalAddress",
-      "addressLocality": "Tangerang",
-      "addressRegion": "Banten",
-      "addressCountry": "ID"
+      addressLocality: "Tangerang",
+      addressRegion: "Banten",
+      addressCountry: "ID",
     },
-    "description": "Discover premium, 100% pure essential oils for aromatherapy, health, and wellness. Annise Herbal brings nature's best remedies to Indonesia."
+    description:
+      "Discover premium, 100% pure essential oils for aromatherapy, health, and wellness. Annise Herbal brings nature's best remedies to Indonesia.",
   };
 
   return (
     <div className="animate-fade-in">
-      <SEO 
-        title="Annise Herbal | Premium Essential Oils in Indonesia" 
-        description={t.hero.s1_sub} 
-        canonical="https://anniseherbal.com/" 
+      <SEO
+        title="Annise Herbal | Premium Essential Oils in Indonesia"
+        description={t.hero.s1_sub}
+        canonical="https://anniseherbal.com/"
         schemaData={JSON.stringify(localBusinessSchema)}
       />
       <HeroSlider navigateTo={navigateTo} t={t.hero} />
@@ -117,78 +121,88 @@ const HomePage: React.FC<HomePageProps> = ({
           <SectionTitle subtitle={t.section.best_seller_sub}>
             {t.section.best_seller}
           </SectionTitle>
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8">
-            {products.slice(0, 4).map((product) => (
-              <div
-                key={product.id}
-                onClick={() => setProduct(product)}
-                className="group bg-white rounded-2xl md:rounded-3xl overflow-hidden border border-stone-200 hover:border-emerald-300 flex flex-col hover:shadow-2xl transition-all duration-500 cursor-pointer h-full"
-              >
-                {/* Product Image Container */}
-                <div className={`relative h-48 md:h-64 lg:h-72 ${product.name.toLowerCase().includes('nozze') ? 'bg-white' : 'bg-linear-to-br from-stone-50 to-stone-100'} overflow-hidden shrink-0`}>
-                  {/* Actual Product Image - Reduced padding for larger, more visible product */}
-                  <div className="absolute inset-0 flex items-center justify-center p-0 lg:p-4">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-full object-contain scale-[1.7] md:scale-[2.0] lg:scale-[1.4] group-hover:scale-[1.9] md:group-hover:scale-[2.2] lg:group-hover:scale-[1.6] transition-transform duration-700"
-                    />
-                  </div>
-
-                  {/* Subtle gradient overlay */}
-                  <div className="absolute inset-0 bg-linear-to-t from-white/40 via-transparent to-transparent"></div>
-
-                  {/* Category badge */}
-                  <div className="absolute top-2 left-2 md:top-4 md:left-4 px-2 py-1 md:px-3 md:py-1.5 bg-white/90 backdrop-blur-sm rounded-full">
-                    <span className="text-[10px] md:text-xs font-medium text-emerald-700 uppercase tracking-wide">
-                      {product.category}
-                    </span>
-                  </div>
-
-                  {/* View Detail Button - appears on hover */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setProduct(product);
-                    }}
-                    className="absolute bottom-2 md:bottom-4 left-1/2 -translate-x-1/2 bg-emerald-700 text-white px-4 md:px-6 py-1.5 md:py-2.5 rounded-full text-[10px] md:text-sm font-medium opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-xl hover:bg-emerald-800 whitespace-nowrap"
+          {loading ? (
+            <div className="text-center py-20">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-800"></div>
+              <p className="mt-4 text-stone-600">Loading best sellers...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8">
+              {products
+                .filter((p) => p.isBestSeller)
+                .slice(0, 4)
+                .map((product) => (
+                  <div
+                    key={product.id}
+                    onClick={() => setProduct(product)}
+                    className="group bg-white rounded-2xl md:rounded-3xl overflow-hidden border border-stone-200 hover:border-emerald-300 flex flex-col hover:shadow-2xl transition-all duration-500 cursor-pointer h-full"
                   >
-                    {t.shop.detail}
-                  </button>
-                </div>
-                {/* Product Info */}
-                <div className="p-3 md:p-4 lg:p-6 flex flex-col grow">
-                  <h3 className="font-serif text-sm md:text-lg lg:text-xl text-emerald-950 mb-1 lg:mb-2 group-hover:text-emerald-700 transition-colors line-clamp-1">
-                    {product.name}
-                  </h3>
-                  <p className="text-stone-500 text-[10px] md:text-xs lg:text-sm mb-2 md:mb-4 line-clamp-2 leading-relaxed grow">
-                    {product.shortDesc}
-                  </p>
-
-                  {/* Price and Add to Cart */}
-                  <div className="flex items-center justify-between pt-2 md:pt-4 border-t border-stone-100 mt-auto">
-                    <div>
-                      <div className="text-[9px] md:text-xs text-stone-400 mb-0.5">
-                        Price
+                    {/* Product Image Container */}
+                    <div className="relative h-48 md:h-64 lg:h-72 bg-linear-to-br from-stone-50 to-stone-100 overflow-hidden shrink-0">
+                      {/* Actual Product Image - Reduced padding for larger, more visible product */}
+                      <div className="absolute inset-0 flex items-center justify-center p-0 lg:p-4">
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-full h-full object-contain scale-[1.7] md:scale-[2.0] lg:scale-[1.4] group-hover:scale-[1.9] md:group-hover:scale-[2.2] lg:group-hover:scale-[1.6] transition-transform duration-700"
+                        />
                       </div>
-                      <span className="font-bold text-xs md:text-base lg:text-lg text-emerald-900">
-                        Rp {product.price.toLocaleString("id-ID")}
-                      </span>
+
+                      {/* Subtle gradient overlay */}
+                      <div className="absolute inset-0 bg-linear-to-t from-white/40 via-transparent to-transparent"></div>
+
+                      {/* Category badge */}
+                      <div className="absolute top-2 left-2 md:top-4 md:left-4 px-2 py-1 md:px-3 md:py-1.5 bg-white/90 backdrop-blur-sm rounded-full">
+                        <span className="text-[10px] md:text-xs font-medium text-emerald-700 uppercase tracking-wide">
+                          {product.category}
+                        </span>
+                      </div>
+
+                      {/* View Detail Button - appears on hover */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setProduct(product);
+                        }}
+                        className="absolute bottom-2 md:bottom-4 left-1/2 -translate-x-1/2 bg-emerald-700 text-white px-4 md:px-6 py-1.5 md:py-2.5 rounded-full text-[10px] md:text-sm font-medium opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-xl hover:bg-emerald-800 whitespace-nowrap"
+                      >
+                        {t.shop.detail}
+                      </button>
                     </div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        addToCart(product);
-                      }}
-                      className="p-1.5 md:p-2 lg:p-3 bg-emerald-600 rounded-xl text-white hover:bg-emerald-700 hover:scale-110 transition-all shadow-lg hover:shadow-xl"
-                    >
-                      <ShoppingBag className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
-                    </button>
+                    {/* Product Info */}
+                    <div className="p-3 md:p-4 lg:p-6 flex flex-col grow">
+                      <h3 className="font-serif text-sm md:text-lg lg:text-xl text-emerald-950 mb-1 lg:mb-2 group-hover:text-emerald-700 transition-colors line-clamp-1">
+                        {product.name}
+                      </h3>
+                      <p className="text-stone-500 text-[10px] md:text-xs lg:text-sm mb-2 md:mb-4 line-clamp-2 leading-relaxed grow">
+                        {product.shortDesc}
+                      </p>
+
+                      {/* Price and Add to Cart */}
+                      <div className="flex items-center justify-between pt-2 md:pt-4 border-t border-stone-100 mt-auto">
+                        <div>
+                          <div className="text-[9px] md:text-xs text-stone-400 mb-0.5">
+                            Price
+                          </div>
+                          <span className="font-bold text-xs md:text-base lg:text-lg text-emerald-900">
+                            Rp {product.price.toLocaleString("id-ID")}
+                          </span>
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            addToCart(product);
+                          }}
+                          className="p-1.5 md:p-2 lg:p-3 bg-emerald-600 rounded-xl text-white hover:bg-emerald-700 hover:scale-110 transition-all shadow-lg hover:shadow-xl"
+                        >
+                          <ShoppingBag className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                ))}
+            </div>
+          )}
           <div className="text-center mt-12">
             <Button variant="secondary" onClick={() => navigateTo("shop")}>
               {t.section.view_all}

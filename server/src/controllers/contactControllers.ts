@@ -3,7 +3,7 @@ import { db } from "../config/firebase";
 import { ContactTypes, ContactRequestBody } from "../types/contacts";
 import { ValidateContactForm } from "../utils/validations";
 import { generateUniqueContactId } from "../utils/helpers";
-import {sendContactNotificationToAdmin} from "../utils/emailHelpers"
+import {sendContactNotificationToAdmin, sendContactConfirmationToCustomer} from "../utils/emailHelpers"
 
 /**
  * Submit Contact Form
@@ -67,12 +67,15 @@ export const submitContactForm = async (
         await db.collection('contacts').doc(contactId).set(contactData);
         console.log(`✅ Contact saved successfully: ${contactId}`);
 
-        // Step 7: TODO - Send email notification (temporarily commented for debugging)
+        // Step 7: Send email notification to admin
         await sendContactNotificationToAdmin(contactData.name, contactData.email, contactData.phone,
             contactData.message
         );
 
-        // Step 8: Return success response
+        // Step 8: Send confirmation email to customer
+        await sendContactConfirmationToCustomer(contactData.name, contactData.email);
+
+        // Step 9: Return success response
         res.status(201).json({
             success: true,
             message: "Pesan Anda telah diterima. Kami akan membalas segera!",

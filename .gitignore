@@ -30,6 +30,9 @@ dist-ssr
 .env.test.local
 .env.production.local
 
+#admin side to upload images and product 
+admin
+
 
 # Firebase service account (add this line)
 *serviceAccountKey.json

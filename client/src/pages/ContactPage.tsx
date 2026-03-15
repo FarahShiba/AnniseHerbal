@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   MapPin,
   Phone,
@@ -10,12 +10,86 @@ import {
 } from "lucide-react";
 import SEO from "../components/SEO";
 import type { TranslationData } from "../data/data";
+import { submitContactForm } from "../services/contactService";
 
 interface ContactPageProps {
   t: TranslationData;
 }
 
 const ContactPage: React.FC<ContactPageProps> = ({ t }) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [message, setMessage] = useState("");
+
+  //loading & message state
+  const [loading, setLoading] = useState(false);
+  const [responseMessage, setResponseMessage] = useState("");
+
+  // function submit handler
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault(); // prevent from refreshing the page while we are processing the document
+
+    //validate empty fields of fields
+    // validate name
+    if (!name.trim()) {
+      setResponseMessage("please enter the name");
+      return;
+    }
+    // validate email
+    if (!email.trim()) {
+      setResponseMessage("please enter the email");
+      return;
+    }
+    // validate phone
+    if (!phone.trim()) {
+      setResponseMessage("please enter the phone number");
+      return;
+    }
+    //validate message
+    if (!message.trim()) {
+      setResponseMessage("please enter the message");
+      return;
+    }
+
+    // try catch
+    try {
+      setLoading(true); // set loading to true
+      setResponseMessage(""); // Clear old messages
+
+      // calling contact api
+      const response = await submitContactForm(name, email, phone, message);
+
+      // show success message
+      setResponseMessage(response.message || "Contact form submitted");
+      // Clear form fields
+      setName("");
+      setEmail("");
+      setPhone("");
+      setMessage("");
+      //clear message after 5 seconds
+      setTimeout(() => setResponseMessage(""), 5000);
+    } catch (error: unknown) {
+      // Type guard to check if error is our ApiError
+      if (error && typeof error === "object" && "details" in error) {
+        // Format all validation errors into one message
+        const errorMessages = Object.values(
+          error.details as Record<string, string>,
+        ).join(". ");
+        setResponseMessage(errorMessages);
+      } else if (error && typeof error === "object" && "message" in error) {
+        setResponseMessage((error as { message: string }).message);
+      } else {
+        setResponseMessage(
+          "Failed to submit the contact form. Please try again",
+        );
+      }
+      console.error("Contact form error:", error);
+    } finally {
+      setLoading(false); // always turn off loading
+    }
+  };
+
   return (
     <div className="animate-fade-in pt-28 md:pt-48 pb-24 bg-white min-h-screen">
       <SEO 
@@ -147,7 +221,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ t }) => {
             <h3 className="text-2xl font-serif text-emerald-950 mb-8">
               Send a Message
             </h3>
-            <form className="space-y-6">
+            <form onSubmit={handleContactSubmit} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-stone-700 mb-2">
                   {t.contact.form_name}
@@ -156,17 +230,37 @@ const ContactPage: React.FC<ContactPageProps> = ({ t }) => {
                   type="text"
                   className="w-full px-4 py-3 rounded-lg bg-stone-50 border-0 focus:ring-2 focus:ring-emerald-500/20 text-stone-800 placeholder-stone-400 transition-all"
                   placeholder="Your Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  disabled={loading}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-stone-700 mb-2">
-                  {t.contact.form_contact}
+                  {t.contact.form_email}
                 </label>
                 <input
                   type="text"
                   className="w-full px-4 py-3 rounded-lg bg-stone-50 border-0 focus:ring-2 focus:ring-emerald-500/20 text-stone-800 placeholder-stone-400 transition-all"
-                  placeholder="Email or Phone Number"
+                  placeholder="Email Address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={loading}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-2">
+                  {t.contact.form_number}
+                </label>
+                <input
+                  type="text"
+                  className="w-full px-4 py-3 rounded-lg bg-stone-50 border-0 focus:ring-2 focus:ring-emerald-500/20 text-stone-800 placeholder-stone-400 transition-all"
+                  placeholder="Whatsapp Number"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  disabled={loading}
                 />
               </div>
 
@@ -178,13 +272,35 @@ const ContactPage: React.FC<ContactPageProps> = ({ t }) => {
                   rows={5}
                   className="w-full px-4 py-3 rounded-lg bg-stone-50 border-0 focus:ring-2 focus:ring-emerald-500/20 text-stone-800 placeholder-stone-400 transition-all resize-none"
                   placeholder="How can we help?"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  disabled={loading}
                 ></textarea>
               </div>
 
-              <button className="w-full bg-emerald-900 text-white px-6 py-4 rounded-xl font-medium tracking-wide hover:bg-emerald-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2">
-                <span>{t.contact.btn_send}</span>
-                <Send size={18} />
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-emerald-900 text-white px-6 py-4 rounded-xl font-medium tracking-wide hover:bg-emerald-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2
+             
+              "
+              >
+                {loading ? (
+                  <span>Sending...</span> // Show this when loading
+                ) : (
+                  <>
+                    <span>{t.contact.btn_send}</span>
+                    <Send size={18} />
+                  </>
+                )}
               </button>
+              {responseMessage && (
+                <p
+                  className={`text-sm ${responseMessage.includes("Failed") || responseMessage.includes("please") ? "text-red-600" : "text-green-600"}`}
+                >
+                  {responseMessage}
+                </p>
+              )}
             </form>
           </div>
         </div>
