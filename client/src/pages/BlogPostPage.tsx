@@ -11,11 +11,11 @@ interface BlogPostPageProps {
 }
 
 const BlogPostPage: React.FC<BlogPostPageProps> = ({ lang }) => {
-  const { id } = useParams<{ id: string }>();
+  const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   
-  // If no ID is provided (e.g., from /blog), default to the first/latest post
-  const activeId = id || blogs[0].id;
+  // If no slug is provided (e.g., from /blog), default to the first/latest post
+  const activeId = slug || blogs[0].id;
   const post = blogs.find((b) => b.id === activeId);
 
   // Get other topics for the sidebar
