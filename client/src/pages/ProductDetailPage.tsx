@@ -131,11 +131,12 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     "ingredients_en",
     "ingredients",
   ) as string | string[];
-  const productHowToUse = getLocalizedField(
-    "howToUse_en",
-    "howToUse",
-  ) as string | string[];
-  const productCaution = getLocalizedField("caution_en", "caution") as string | string[];
+  const productHowToUse = getLocalizedField("howToUse_en", "howToUse") as
+    | string
+    | string[];
+  const productCaution = getLocalizedField("caution_en", "caution") as
+    | string
+    | string[];
 
   const images =
     product.images && product.images.length > 0
@@ -446,19 +447,23 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     }
 
                     return cautionList.length > 0 ? (
-                      <ul className="grid gap-2 pl-2">
-                        {cautionList.map((item, idx) => (
-                          <li
-                            key={idx}
-                            className="flex items-center text-stone-600 text-sm italic font-medium"
-                          >
-                            <span className="w-1 h-1 bg-emerald-300 rounded-full mr-3 shrink-0"></span>
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
+                      <div className="bg-amber-50 p-4 rounded-xl border border-amber-100">
+                        <ul className="grid gap-2 pl-2">
+                          {cautionList.map((item, idx) => (
+                            <li
+                              key={idx}
+                              className="flex items-center text-amber-900/80 text-sm italic font-medium"
+                            >
+                              <span className="w-1 h-1 bg-amber-400 rounded-full mr-3 shrink-0"></span>
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     ) : (
-                      <p className="text-stone-600">{String(productCaution)}</p>
+                      <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 text-amber-900/80 text-sm leading-relaxed">
+                        <p>{String(productCaution)}</p>
+                      </div>
                     );
                   })()}
                 </AccordionItem>
