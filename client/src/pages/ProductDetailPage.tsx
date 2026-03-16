@@ -375,24 +375,21 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 onClick={() => toggleSection("usage")}
                 icon={<Wind size={20} />}
               >
-                <div className="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100/50">
-                  {Array.isArray(productHowToUse) &&
-                  productHowToUse.length > 0 ? (
-                    <ul className="space-y-2">
-                      {productHowToUse.map((step, idx) => (
-                        <li
-                          key={idx}
-                          className="text-stone-600 flex items-start"
-                        >
-                          <span className="mr-2">{idx + 1}.</span>
-                          <span>{step}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-stone-600">{String(productHowToUse)}</p>
-                  )}
-                </div>
+                {Array.isArray(productHowToUse) ? (
+                  <ul className="grid gap-2 pl-2">
+                    {productHowToUse.map((step, idx) => (
+                      <li
+                        key={idx}
+                        className="flex items-center text-stone-600 text-sm italic font-medium"
+                      >
+                        <span className="w-1 h-1 bg-emerald-300 rounded-full mr-3 shrink-0"></span>
+                        {step}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-stone-600">{String(productHowToUse)}</p>
+                )}
               </AccordionItem>
 
               {productCaution && (
@@ -402,9 +399,21 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   onClick={() => toggleSection("caution")}
                   icon={<AlertCircle size={20} />}
                 >
-                  <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 text-amber-900/80 text-sm leading-relaxed">
-                    <p>{productCaution}</p>
-                  </div>
+                  {Array.isArray(productCaution) ? (
+                    <ul className="grid gap-2 pl-2">
+                      {productCaution.map((item, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-center text-stone-600 text-sm italic font-medium"
+                        >
+                          <span className="w-1 h-1 bg-emerald-300 rounded-full mr-3 shrink-0"></span>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-stone-600">{productCaution}</p>
+                  )}
                 </AccordionItem>
               )}
             </div>
