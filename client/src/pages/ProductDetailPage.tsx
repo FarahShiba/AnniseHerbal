@@ -130,12 +130,12 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const productIngredients = getLocalizedField(
     "ingredients_en",
     "ingredients",
-  ) as string;
+  ) as string | string[];
   const productHowToUse = getLocalizedField(
     "howToUse_en",
     "howToUse",
-  ) as string[];
-  const productCaution = getLocalizedField("caution_en", "caution") as string;
+  ) as string | string[];
+  const productCaution = getLocalizedField("caution_en", "caution") as string | string[];
 
   const images =
     product.images && product.images.length > 0
@@ -352,21 +352,38 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 onClick={() => toggleSection("ingredients")}
                 icon={<Leaf size={20} />}
               >
-                {Array.isArray(productIngredients) ? (
-                  <ul className="grid gap-2 pl-2">
-                    {productIngredients.map((ing, idx) => (
-                      <li
-                        key={idx}
-                        className="flex items-center text-stone-600 text-sm italic font-medium"
-                      >
-                        <span className="w-1 h-1 bg-emerald-300 rounded-full mr-3 shrink-0"></span>
-                        {ing}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-stone-600">{product.ingredients}</p>
-                )}
+                {(() => {
+                  // Parse ingredients: handle both array and numbered string format
+                  let ingredientList: string[] = [];
+
+                  if (Array.isArray(productIngredients)) {
+                    ingredientList = productIngredients;
+                  } else if (typeof productIngredients === "string") {
+                    // Split by number pattern (e.g., "1. Item 2. Item" -> ["Item", "Item"])
+                    ingredientList = productIngredients
+                      .split(/\d+\.\s*/)
+                      .map((item) => item.trim())
+                      .filter((item) => item.length > 0);
+                  }
+
+                  return ingredientList.length > 0 ? (
+                    <ul className="grid gap-2 pl-2">
+                      {ingredientList.map((ing, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-center text-stone-600 text-sm italic font-medium"
+                        >
+                          <span className="w-1 h-1 bg-emerald-300 rounded-full mr-3 shrink-0"></span>
+                          {ing}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-stone-600">
+                      {String(productIngredients)}
+                    </p>
+                  );
+                })()}
               </AccordionItem>
 
               <AccordionItem
@@ -375,21 +392,36 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 onClick={() => toggleSection("usage")}
                 icon={<Wind size={20} />}
               >
-                {Array.isArray(productHowToUse) ? (
-                  <ul className="grid gap-2 pl-2">
-                    {productHowToUse.map((step, idx) => (
-                      <li
-                        key={idx}
-                        className="flex items-center text-stone-600 text-sm italic font-medium"
-                      >
-                        <span className="w-1 h-1 bg-emerald-300 rounded-full mr-3 shrink-0"></span>
-                        {step}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-stone-600">{String(productHowToUse)}</p>
-                )}
+                {(() => {
+                  // Parse how to use: handle both array and numbered string format
+                  let usageList: string[] = [];
+
+                  if (Array.isArray(productHowToUse)) {
+                    usageList = productHowToUse;
+                  } else if (typeof productHowToUse === "string") {
+                    // Split by number pattern (e.g., "1. Step 2. Step" -> ["Step", "Step"])
+                    usageList = productHowToUse
+                      .split(/\d+\.\s*/)
+                      .map((item) => item.trim())
+                      .filter((item) => item.length > 0);
+                  }
+
+                  return usageList.length > 0 ? (
+                    <ul className="grid gap-2 pl-2">
+                      {usageList.map((step, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-center text-stone-600 text-sm italic font-medium"
+                        >
+                          <span className="w-1 h-1 bg-emerald-300 rounded-full mr-3 shrink-0"></span>
+                          {step}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-stone-600">{String(productHowToUse)}</p>
+                  );
+                })()}
               </AccordionItem>
 
               {productCaution && (
@@ -399,21 +431,36 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   onClick={() => toggleSection("caution")}
                   icon={<AlertCircle size={20} />}
                 >
-                  {Array.isArray(productCaution) ? (
-                    <ul className="grid gap-2 pl-2">
-                      {productCaution.map((item, idx) => (
-                        <li
-                          key={idx}
-                          className="flex items-center text-stone-600 text-sm italic font-medium"
-                        >
-                          <span className="w-1 h-1 bg-emerald-300 rounded-full mr-3 shrink-0"></span>
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-stone-600">{productCaution}</p>
-                  )}
+                  {(() => {
+                    // Parse caution: handle both array and numbered string format
+                    let cautionList: string[] = [];
+
+                    if (Array.isArray(productCaution)) {
+                      cautionList = productCaution;
+                    } else if (typeof productCaution === "string") {
+                      // Split by number pattern (e.g., "1. Item 2. Item" -> ["Item", "Item"])
+                      cautionList = productCaution
+                        .split(/\d+\.\s*/)
+                        .map((item) => item.trim())
+                        .filter((item) => item.length > 0);
+                    }
+
+                    return cautionList.length > 0 ? (
+                      <ul className="grid gap-2 pl-2">
+                        {cautionList.map((item, idx) => (
+                          <li
+                            key={idx}
+                            className="flex items-center text-stone-600 text-sm italic font-medium"
+                          >
+                            <span className="w-1 h-1 bg-emerald-300 rounded-full mr-3 shrink-0"></span>
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-stone-600">{String(productCaution)}</p>
+                    );
+                  })()}
                 </AccordionItem>
               )}
             </div>
