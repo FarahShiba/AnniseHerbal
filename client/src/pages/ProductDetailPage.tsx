@@ -372,7 +372,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                       {ingredientList.map((ing, idx) => (
                         <li
                           key={idx}
-                          className="flex items-center text-stone-600 text-sm italic font-medium"
+                          className="flex items-center text-stone-600 text-sm  font-medium"
                         >
                           <span className="w-1 h-1 bg-emerald-300 rounded-full mr-3 shrink-0"></span>
                           {ing}
@@ -412,7 +412,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                       {usageList.map((step, idx) => (
                         <li
                           key={idx}
-                          className="flex items-center text-stone-600 text-sm italic font-medium"
+                          className="flex items-center text-stone-600 text-sm  font-medium"
                         >
                           <span className="w-1 h-1 bg-emerald-300 rounded-full mr-3 shrink-0"></span>
                           {step}
@@ -452,7 +452,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                           {cautionList.map((item, idx) => (
                             <li
                               key={idx}
-                              className="flex items-center text-amber-900/80 text-sm italic font-medium"
+                              className="flex items-center text-amber-900/80 text-sm  font-medium"
                             >
                               <span className="w-1 h-1 bg-amber-400 rounded-full mr-3 shrink-0"></span>
                               {item}
