@@ -119,16 +119,15 @@ app.use((err: Error, req: Request, res: Response, next: any) => {
 });
 
 //start server
-if (process.env.NODE_ENV !== "production") {
-  app.listen(PORT, () => {
-    console.log(`server running on http://localhost:${PORT}`);
-    console.log(`Health check: http://localhost:${PORT}/api/health`);
-    console.log(`Products endpoint: http://localhost:${PORT}/api/products`);
-    console.log(`Contact endpoint: http://localhost:${PORT}/api/contact`);
-    console.log(`Newsletter endpoint: http://localhost:${PORT}/api/newsLetterSubscriber`);
-    console.log(`Orders endpoint: http://localhost:${PORT}/api/orders`); 
-    console.log(`Orders endpoint: http://localhost:${PORT}/api/webhook/midtrans`);
-  });
-}
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`✅ Health check: /api/health`);
+  console.log(`📦 Products: /api/products`);
+  console.log(`📧 Contact: /api/contact`);
+  console.log(`📰 Newsletter: /api/newsLetterSubscriber`);
+  console.log(`🛒 Orders: /api/orders`);
+  console.log(`🔔 Webhook: /api/webhook/midtrans`);
+});
 
 export default app;
