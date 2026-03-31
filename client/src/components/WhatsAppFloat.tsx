@@ -32,8 +32,10 @@ const WhatsAppFloat: React.FC = () => {
               </div>
             </div>
             <button
+              type="button"
               onClick={() => setIsOpen(false)}
-              className="text-white_80 hover:text-white hover:bg-white/20 p-1 rounded transition-colors"
+              className="text-white/80 hover:text-white hover:bg-white/20 p-1 rounded transition-colors"
+              aria-label="Close chat"
             >
               <X size={20} />
             </button>
@@ -55,6 +57,7 @@ const WhatsAppFloat: React.FC = () => {
             {/* Quick Options */}
             <div className="flex flex-col gap-2 mt-2">
               <button
+                type="button"
                 onClick={() => {
                   setMessage("Halo, saya ingin membeli produk Annise Herbal.");
                   setTimeout(
@@ -70,6 +73,7 @@ const WhatsAppFloat: React.FC = () => {
                 </span>
               </button>
               <button
+                type="button"
                 onClick={() => {
                   setMessage(
                     "Halo, saya ingin konsultasi tentang penggunaan produk.",
@@ -87,6 +91,7 @@ const WhatsAppFloat: React.FC = () => {
                 </span>
               </button>
               <button
+                type="button"
                 onClick={() => {
                   setMessage("Halo, saya ada keperluan lain.");
                   // user might want to type more details for 'other', so just fill input
@@ -119,6 +124,7 @@ const WhatsAppFloat: React.FC = () => {
               type="submit"
               disabled={!message.trim()}
               className="bg-[#25D366] text-white p-2 rounded-full hover:bg-[#20bd5a] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+              aria-label="Send message"
             >
               <Send size={18} />
             </button>
@@ -128,6 +134,7 @@ const WhatsAppFloat: React.FC = () => {
 
       {/* Toggle Button */}
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={`p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 group ${
           isOpen ? "bg-stone-700 text-white" : "bg-[#25D366] text-white"
