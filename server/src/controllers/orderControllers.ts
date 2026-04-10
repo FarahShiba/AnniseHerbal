@@ -19,7 +19,7 @@ export const createOrder = async(req:Request, res:Response)=>{
         console.log("Customer:", orderData.customer.name);
         console.log("Email:", orderData.customer.email);
         console.log("Items count", orderData.items.length);
-        console.log("Shipping Method", orderData.shipping.method);
+        console.log("Shipping Tier", orderData.shipping.tier);
         console.log("Payment method", orderData.paymentMethod);
 
 
@@ -27,6 +27,14 @@ export const createOrder = async(req:Request, res:Response)=>{
         const isValidData = validateOrderRequest(orderData);
 
         if(!isValidData.isValid){
+            console.error("❌ Validation errors:", JSON.stringify(isValidData.errors, null, 2));
+            console.error("❌ Received data:", JSON.stringify({
+                customer: orderData.customer,
+                itemCount: orderData.items?.length,
+                items: orderData.items,
+                shipping: orderData.shipping,
+                paymentMethod: orderData.paymentMethod,
+            }, null, 2));
             return res.status(400).json({
                 success:false,
                 error: "validation Failed",
@@ -55,7 +63,7 @@ export const createOrder = async(req:Request, res:Response)=>{
 
         
         // step 4: Build Order Document
-        const orderDocument = buildOrderDocument(orderData, orderItems, normalizedPhone, undefined);
+        const orderDocument = await buildOrderDocument(orderData, orderItems, normalizedPhone, undefined);
 
         console.log("✅ Order document passed!");
         console.log("Total price:", orderDocument.pricing.total)

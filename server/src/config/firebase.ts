@@ -1,16 +1,26 @@
-import admin, { firestore } from "firebase-admin";
+import admin from "firebase-admin";
+import { getFirestore } from "firebase-admin/firestore";
 import dotenv from "dotenv";
 import path from "path";
 
 // Load environment variables from .env file
 dotenv.config();
 
+const isProduction = process.env.NODE_ENV === "production";
 console.log("🔍 Environment:", process.env.NODE_ENV);
-console.log("🔍 Service Account Path:", process.env.GOOGLE_APPLICATION_CREDENTIALS);
+console.log("🔍 Is Production:", isProduction);
 
 try {
-  // For local development, use the service account key file
-  if (process.env.NODE_ENV !== "production") {
+  if (isProduction) {
+    // In production (Cloud Run), use Application Default Credentials
+    // Cloud Run automatically provides Firebase credentials for the same project
+    console.log("🔍 Initializing Firebase Admin in production mode...");
+    admin.initializeApp({
+      projectId: "annise-herbal",
+    });
+    console.log("✅ Firebase Admin initialized (production mode)");
+  } else {
+    // For local development, use the service account key file
     const serviceAccountPath = process.env.GOOGLE_APPLICATION_CREDENTIALS || "./serviceAccountKey.json";
     const fullPath = path.resolve(serviceAccountPath);
     console.log("🔍 Resolved path:", fullPath);
@@ -23,26 +33,20 @@ try {
       storageBucket: `${serviceAccount.project_id}.firebasestorage.app`,
       databaseURL: `https://${serviceAccount.project_id}.firebaseio.com`,
     });
-
     console.log("✅ Firebase Admin SDK initialized (development)");
-    console.log("✅ Project ID:", serviceAccount.project_id);
-  } else {
-    // In production (Cloud Run), use Application Default Credentials
-    console.log("🔍 Initializing Firebase Admin in production mode...");
-    
-    admin.initializeApp({
-      projectId: "annise-herbal", // Your Firebase project ID
-    });
-    
-    console.log("✅ Firebase Admin initialized (production mode)");
   }
 } catch (error) {
   console.error("❌ Failed to initialize Firebase Admin SDK:", error);
   throw error;
 }
 
-// Initialize Firestore
-const firestoreDb = admin.firestore();
+// Initialize Firestore - use named database if FIRESTORE_DATABASE_ID is set
+const databaseId = process.env.FIRESTORE_DATABASE_ID;
+const firestoreDb = databaseId
+  ? getFirestore(admin.app(), databaseId)
+  : getFirestore();
+
+console.log(`✅ Using Firestore database: ${databaseId || "default"}`);
 
 // Export Firebase services
 export const db = firestoreDb;

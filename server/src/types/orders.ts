@@ -47,13 +47,19 @@ export interface OrderItem {
 }
 
 
-// Section 3: Shipping Method & Details
+// Section 3: Shipping Tier & Details
 export type ShippingMethod = "standard" | "express";
 
+export type ShippingTier = "economy" | "standard" | "express";
+
+
 export interface ShippingDetailsType {
-    method: ShippingMethod;
-    cost: number; // Shipping cost in IDR
-    estimation: string; // e.g., "2-3 Days", "1-2 Hours"
+    tier: ShippingTier;
+    courierUsed: string;  // e.g. "SiCepat - Besok Sampai Tujuan"
+    courierServiceCode: string;  // e.g. "best"
+    weightKg: number;
+    cost: number;
+    estimation: string;
 }
 
 
@@ -159,7 +165,10 @@ export interface CreateOrderRequest {
     };
     items: OrderItemRequest[]; // Only productId + quantity
     shipping: {
-        method: ShippingMethod;
+        tier: ShippingTier;
+        courierUsed: string;
+        courierServiceCode: string;
+        shippingPrice: number;
     };
     paymentMethod: PaymentMethod;
     promoCode?: string; // Optional promo code

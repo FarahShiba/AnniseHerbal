@@ -34,5 +34,5 @@ dist-ssr
 admin
 
 
-# Firebase service account (add this line)
+# Firebase service account 
 *serviceAccountKey.json

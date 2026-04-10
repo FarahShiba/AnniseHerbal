@@ -33,7 +33,7 @@ const HomePage: React.FC<HomePageProps> = ({
   setProduct,
   addToCart,
   t,
-  lang,
+  lang: _lang,
   products,
   loading,
 }) => {

@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Calendar, User, ArrowLeft, Share2 } from "lucide-react";
 import { blogs } from "../data/blogData";
 import SEO from "../components/SEO";
 import type { TranslationData } from "../data/data";
+import { subscribeToNewsletter } from "../services/newsletterService";
 
 interface BlogPostPageProps {
   t?: TranslationData;
@@ -13,6 +14,41 @@ interface BlogPostPageProps {
 const BlogPostPage: React.FC<BlogPostPageProps> = ({ lang }) => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+
+  const [subEmail, setSubEmail] = useState("");
+  const [subLoading, setSubLoading] = useState(false);
+  const [subMessage, setSubMessage] = useState("");
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!subEmail.trim()) {
+      setSubMessage(
+        lang === "en" ? "Please enter your email" : "Masukkan email Anda",
+      );
+      return;
+    }
+    try {
+      setSubLoading(true);
+      setSubMessage("");
+      const response = await subscribeToNewsletter(subEmail);
+      setSubMessage(
+        response.message ||
+          (lang === "en"
+            ? "Successfully subscribed!"
+            : "Berhasil berlangganan!"),
+      );
+      setSubEmail("");
+      setTimeout(() => setSubMessage(""), 5000);
+    } catch {
+      setSubMessage(
+        lang === "en"
+          ? "Subscription failed. Please try again."
+          : "Gagal berlangganan. Coba lagi.",
+      );
+    } finally {
+      setSubLoading(false);
+    }
+  };
 
   // If no slug is provided (e.g., from /blog), default to the first/latest post
   const activeId = slug || blogs[0].id;
@@ -222,18 +258,37 @@ const BlogPostPage: React.FC<BlogPostPageProps> = ({ lang }) => {
                     ? "Subscribe to receive the latest articles and exclusive offers straight to your inbox."
                     : "Berlangganan untuk menerima artikel terbaru dan penawaran eksklusif langsung ke email Anda."}
                 </p>
-                <div className="space-y-3">
+                <form onSubmit={handleSubscribe} className="space-y-3">
                   <input
                     type="email"
+                    value={subEmail}
+                    onChange={(e) => setSubEmail(e.target.value)}
                     placeholder={
                       lang === "en" ? "Email Address" : "Alamat Email"
                     }
                     className="w-full bg-emerald-800/50 border border-emerald-700 rounded-xl px-4 py-3 text-sm text-white placeholder:text-emerald-300/50 focus:outline-none focus:border-emerald-500 transition-colors"
                   />
-                  <button className="w-full bg-white text-emerald-900 font-bold rounded-xl py-3 hover:bg-emerald-50 transition-colors shadow-sm">
-                    {lang === "en" ? "Subscribe" : "Berlangganan"}
+                  <button
+                    type="submit"
+                    disabled={subLoading}
+                    className="w-full bg-white text-emerald-900 font-bold rounded-xl py-3 hover:bg-emerald-50 transition-colors shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {subLoading
+                      ? lang === "en"
+                        ? "Subscribing..."
+                        : "Mendaftar..."
+                      : lang === "en"
+                        ? "Subscribe"
+                        : "Berlangganan"}
                   </button>
-                </div>
+                  {subMessage && (
+                    <p
+                      className={`text-xs mt-1 ${subMessage.toLowerCase().includes("fail") || subMessage.toLowerCase().includes("gagal") ? "text-red-300" : "text-emerald-300"}`}
+                    >
+                      {subMessage}
+                    </p>
+                  )}
+                </form>
               </div>
             </div>
           </aside>

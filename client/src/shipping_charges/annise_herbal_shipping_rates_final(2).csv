@@ -1,0 +1,13 @@
+zone,zone_label,tier,courier,price_per_kg_idr,eta,notes
+1,Seluruh Jawa (All Java),economy,SiCepat / Ninja Express,8000,1-2 hari,Budget option
+1,Seluruh Jawa (All Java),standard,JNE Reguler,10000,1-2 hari,Most popular
+1,Seluruh Jawa (All Java),express,JNE YES,18000,1 hari,Next day guaranteed
+2,Sumatera,economy,Lion Parcel / Ninja Express,36000,2-3 hari,Budget option
+2,Sumatera,standard,JNE Reguler,47000,2-3 hari,Most popular
+2,Sumatera,express,JNE YES,60000,1 hari,Next day guaranteed
+3,Bali / Kalimantan,economy,Ninja Express,27000,2-3 hari,Budget option
+3,Bali / Kalimantan,standard,JNE Reguler,35000,3-5 hari,Most popular
+4,Sulawesi,economy,Lion Parcel,39000,2-3 hari,Budget option
+4,Sulawesi,standard,JNE Reguler,72000,5-7 hari,Most popular
+5,Papua / NTT / Remote,economy,Tiki Reguler,157000,11 hari,Budget option
+5,Papua / NTT / Remote,standard,JNE Reguler,197000,5-9 hari,Most popular

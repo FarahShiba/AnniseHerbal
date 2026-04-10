@@ -1,7 +1,7 @@
 import React from "react";
 
 export interface Product {
-  id: string;
+  id: string | number;
   name: string;
   name_en?: string;
   category: string;
@@ -12,12 +12,13 @@ export interface Product {
   description_en?: string;
   benefits: string[];
   benefits_en?: string[];
-  ingredients: string;
-  ingredients_en?: string;
-  howToUse?: string[];
-  howToUse_en?: string[];
-  caution?: string;
-  caution_en?: string;
+  ingredients: string | string[];
+  ingredients_en?: string | string[];
+  usage?: string | string[];
+  howToUse?: string | string[];
+  howToUse_en?: string | string[];
+  caution?: string | string[];
+  caution_en?: string | string[];
   imageColor: string;
   image: string;
   images?: string[];
@@ -33,11 +34,14 @@ export interface CartItem extends Product {
 }
 
 export interface ShippingOption {
-  id: string;
-  name: string;
-  price: number;
-  eta: string;
-  icon: React.ElementType;
+  tier:        'economy' | 'standard' | 'express';
+  label:       string;
+  price:       number;
+  duration:    string;
+  notes?:      string;
+  courier:     string;   // e.g. "JNE - Yakin Esok Sampai (YES)"
+  courierCode: string;
+  serviceCode: string;
 }
 
 export interface PaymentOption {

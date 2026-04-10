@@ -8,6 +8,7 @@ import productsRouter from "./routes/products";
 import contactRoutes from "./routes/contacts";
 import newsletterSubscriberRoutes from "./routes/newsletter";
 import orderRoutes from './routes/orderRoutes';
+import shippingRoutes from './routes/shippingRoutes';
 import  webhookRoutes  from "./routes/webhook";// load environment variables
 dotenv.config();
 
@@ -20,7 +21,12 @@ app.use(
   cors({
     origin:
       process.env.NODE_ENV == "production"
-        ? ["https://your-netlify-domain.netlify.app"] // todo: replace with an actuall domain
+        ? [
+            "https://annise-herbal.web.app",
+            "https://annise-herbal.firebaseapp.com",
+            "https://anniseherbal.com",
+            "https://www.anniseherbal.com",
+          ]
         : ["http://localhost:5173", "http://localhost:5174"], // Vite default ports
     credentials: true,
   }),
@@ -80,6 +86,9 @@ app.use("/api/", newsletterSubscriberRoutes);
 
 // Mount the create order route
 app.use("/api/orders", orderRoutes);
+
+// Mount shipping rates route (calls Biteship)
+app.use("/api/shipping", shippingRoutes);
 
 
 // Mount the midtrans webhook notification controller

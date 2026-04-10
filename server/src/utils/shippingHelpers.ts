@@ -1,35 +1,19 @@
-import {ShippingMethod} from '../types/orders';
+import { OrderItemRequest } from '../types/orders';
 
-/**
- * Shipping cost configuration
- * These are fixed prices shown to customers
- * Behind the scenes, you can optimize courier selection
- */
-
-const SHIPPING_COSTS = {
-  standard: 25000, // 2-4 days delivery
-  express: 40000,  // 1-2 days delivery
-} as const;
-
-
-const SHIPPING_ESTIMATES = {
-  standard: "2-4 Days",
-  express: "1-2 Days",
-} as const;
-
-
-/**
- * Get shipping cost for a method
- */
-export const getShippingCost = (method: ShippingMethod): number => {
-  return SHIPPING_COSTS[method];
+// Product weight by size name — includes bottle + packaging (grams)
+const SIZE_WEIGHT_GRAMS: Record<string, number> = {
+  '10ml':  100,
+  '15ml':  100,
+  '100ml': 300,
 };
+const DEFAULT_WEIGHT_GRAMS = 200;
 
-/**
- * Get shipping estimate for a method
- */
-export const getShippingEstimate = (method: ShippingMethod): string => {
-  return SHIPPING_ESTIMATES[method];
-};
-
-
+/** Returns total cart weight in kg, rounded UP to whole kg (min 1 kg). */
+export function calculateCartWeightKg(items: OrderItemRequest[]): number {
+  let totalGrams = 0;
+  for (const item of items) {
+    const gramsPerUnit = SIZE_WEIGHT_GRAMS[item.sizeName] ?? DEFAULT_WEIGHT_GRAMS;
+    totalGrams += gramsPerUnit * item.quantity;
+  }
+  return Math.max(1, Math.ceil(totalGrams / 1000));
+}

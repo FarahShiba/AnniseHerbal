@@ -101,7 +101,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
                           {item.name}
                         </h3>
                         <button
-                          onClick={() => onRemove(item.id)}
+                          onClick={() => onRemove(String(item.id))}
                           className="text-stone-300 hover:text-red-500 p-1 -mr-2 transition-colors"
                         >
                           <Trash2 size={16} />
@@ -115,7 +115,9 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
                     <div className="flex items-center mt-3">
                       <div className="flex items-center gap-3 bg-stone-50 rounded-lg p-1 border border-stone-100">
                         <button
-                          onClick={() => onUpdateQty(item.id, item.qty - 1)}
+                          onClick={() =>
+                            onUpdateQty(String(item.id), item.qty - 1)
+                          }
                           className="w-7 h-7 flex items-center justify-center rounded-md bg-white text-stone-600 hover:text-emerald-700 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                           disabled={item.qty <= 1}
                         >
@@ -125,7 +127,9 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
                           {item.qty}
                         </span>
                         <button
-                          onClick={() => onUpdateQty(item.id, item.qty + 1)}
+                          onClick={() =>
+                            onUpdateQty(String(item.id), item.qty + 1)
+                          }
                           className="w-7 h-7 flex items-center justify-center rounded-md bg-white text-stone-600 hover:text-emerald-700 shadow-sm transition-all"
                         >
                           <Plus size={14} />

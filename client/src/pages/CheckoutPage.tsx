@@ -1,9 +1,6 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  Banknote,
   CheckCircle,
-  Truck,
-  Zap,
   Clock,
   User,
   MapPin,
@@ -13,7 +10,7 @@ import {
 } from "lucide-react";
 
 import Button from "../components/Button";
-import type { CartItem, ShippingOption, PaymentOption } from "../types";
+import type { CartItem, ShippingOption } from "../types";
 import type { TranslationData } from "../data/data";
 
 interface CheckoutPageProps {
@@ -26,7 +23,68 @@ interface CheckoutPageProps {
   onSuggestionClick?: (val: string) => void;
 }
 
-import { INDONESIA_DATA, PROVINCES_LIST } from "../data/indonesia-data";
+import { PROVINCES_LIST } from "../data/indonesia-data";
+import { getShippingOptions } from "../data/shippingData";
+import { createOrder } from "../services/orderService";
+
+// Helper function to categorize delivery type and return colors
+const getDeliveryTypeColors = (label: string, duration: string) => {
+  const lowerLabel = label.toLowerCase();
+  const lowerDuration = duration.toLowerCase();
+
+  // Same Day services (8-12 hours)
+  if (
+    lowerLabel.includes("same day") ||
+    lowerDuration.includes("8 - 12 hours") ||
+    lowerDuration.includes("8-12")
+  ) {
+    return {
+      border: "border-red-300",
+      selectedBg: "from-red-50 to-red-100/50",
+      selectedShadow: "shadow-lg shadow-red-200/50",
+      badgeBg: "bg-red-500",
+      badgeText: "text-white",
+      textColor: "text-red-900",
+      labelColor: "text-red-700",
+      badgeUnselectedBg: "bg-red-100",
+      badgeUnselectedText: "text-red-600",
+    };
+  }
+
+  // Next Day services (1 day, 1-1 days, yakin esok, besok)
+  if (
+    lowerLabel.includes("next day") ||
+    lowerLabel.includes("yes") ||
+    lowerLabel.includes("besok") ||
+    lowerDuration.includes("1 - 1") ||
+    lowerDuration.includes("1 day")
+  ) {
+    return {
+      border: "border-amber-300",
+      selectedBg: "from-amber-50 to-amber-100/50",
+      selectedShadow: "shadow-lg shadow-amber-200/50",
+      badgeBg: "bg-amber-500",
+      badgeText: "text-white",
+      textColor: "text-amber-900",
+      labelColor: "text-amber-700",
+      badgeUnselectedBg: "bg-amber-100",
+      badgeUnselectedText: "text-amber-600",
+    };
+  }
+
+  // Regular/Standard (2+ days)
+  return {
+    border: "border-emerald-300",
+    selectedBg: "from-emerald-50 to-emerald-100/50",
+    selectedShadow: "shadow-lg shadow-emerald-200/50",
+    badgeBg: "bg-emerald-500",
+    badgeText: "text-white",
+    textColor: "text-emerald-900",
+    labelColor: "text-emerald-700",
+    badgeUnselectedBg: "bg-emerald-100",
+    badgeUnselectedText: "text-emerald-600",
+  };
+};
 
 interface FloatingInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -106,9 +164,9 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
 }) => {
   const [step, setStep] = useState(1);
   const [shipping, setShipping] = useState<ShippingOption | null>(null);
-  const [payment, setPayment] = useState<PaymentOption | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [pendingPayment, setPendingPayment] = useState(false);
+  const [orderLoading, setOrderLoading] = useState(false);
+  const [orderError, setOrderError] = useState<string | null>(null);
 
   // Form State
   const [firstName, setFirstName] = useState("");
@@ -120,77 +178,71 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
   const [postalCode, setPostalCode] = useState("");
   const [apartment, setApartment] = useState("");
 
-  // Smart Address State
-  const [citySuggestions, setCitySuggestions] = useState<string[]>([]);
-  const [showCitySuggestions, setShowCitySuggestions] = useState(false);
+  // Shipping rates (fetched live from Biteship via backend)
+  const [shippingOptions, setShippingOptions] = useState<ShippingOption[]>([]);
+  const [shippingLoading, setShippingLoading] = useState(false);
 
-  // Validation State
-  const [errors, setErrors] = useState({
-    firstName: false,
-    lastName: false,
-    whatsapp: false,
-    address: false,
-    city: false,
-    province: false,
-    postalCode: false,
+  // Validation State — string = error message, empty = no error
+  const [errors, setErrors] = useState<Record<string, string>>({
+    firstName: "",
+    lastName: "",
+    whatsapp: "",
+    address: "",
+    city: "",
+    province: "",
+    postalCode: "",
   });
+
+  // Field-level validation helpers (mirrors backend rules)
+  const validateField = (field: string, value: string): string => {
+    const v = value.trim();
+    switch (field) {
+      case "firstName":
+      case "lastName": {
+        if (!v) return "Wajib diisi";
+        if (v.length < 2) return "Minimal 2 karakter";
+        if (v.length > 20) return "Maksimal 20 karakter";
+        if (!/^[a-zA-Z\s]+$/.test(v)) return "Hanya huruf dan spasi";
+        return "";
+      }
+      case "whatsapp": {
+        if (!v) return "Wajib diisi";
+        if (!/^08\d{8,11}$/.test(v)) return "Harus diawali 08, 10-13 digit";
+        return "";
+      }
+      case "address": {
+        if (!v) return "Wajib diisi";
+        if (v.length >= 200) return "Maksimal 200 karakter";
+        return "";
+      }
+      case "city": {
+        if (!v) return "Wajib diisi";
+        if (v.length > 20) return "Maksimal 20 karakter";
+        return "";
+      }
+      case "province":
+        return !v ? "Wajib dipilih" : "";
+      case "postalCode": {
+        if (!v) return "Wajib diisi";
+        if (!/^\d{5}$/.test(v)) return "Harus 5 digit angka";
+        return "";
+      }
+      default:
+        return "";
+    }
+  };
+
+  const handleBlur = (field: string, value: string) => {
+    setErrors((prev) => ({ ...prev, [field]: validateField(field, value) }));
+  };
 
   // --- HANDLERS ---
   const handleProvinceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedProv = e.target.value;
     setProvince(selectedProv);
-    if (errors.province) setErrors({ ...errors, province: false });
-
-    // Optional: clear city/zip if they don't match or just focus city
-    // For smoother UX, we won't clear city hard, but we reset suggestions
-    setCitySuggestions(
-      INDONESIA_DATA[selectedProv]?.cities.map((c) => c.name) || [],
-    );
+    setShipping(null);
+    if (errors.province) setErrors({ ...errors, province: "" });
   };
-
-  const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setCity(val);
-    setShowCitySuggestions(true);
-
-    // Filter suggestions based on input if province is selected
-    if (province && INDONESIA_DATA[province]) {
-      const allCities = INDONESIA_DATA[province].cities.map((c) => c.name);
-      const filtered = allCities.filter((c) =>
-        c.toLowerCase().includes(val.toLowerCase()),
-      );
-      setCitySuggestions(filtered);
-    } else {
-      // If no province selected, maybe show popular cities? Or nothing.
-      // For now, let's keep it empty unless province is selected to avoid overwhelming
-      setCitySuggestions([]);
-    }
-
-    if (errors.city) setErrors({ ...errors, city: false });
-  };
-
-  const handleCitySelect = (cityName: string) => {
-    setCity(cityName);
-    setShowCitySuggestions(false);
-
-    // Auto-fill postal code
-    if (province && INDONESIA_DATA[province]) {
-      const cityData = INDONESIA_DATA[province].cities.find(
-        (c) => c.name === cityName,
-      );
-      if (cityData) {
-        setPostalCode(cityData.zip);
-        if (errors.postalCode) setErrors({ ...errors, postalCode: false });
-      }
-    }
-  };
-
-  // Close suggestions when clicking outside
-  useEffect(() => {
-    const handleClick = () => setShowCitySuggestions(false);
-    document.addEventListener("click", handleClick);
-    return () => document.removeEventListener("click", handleClick);
-  }, []);
 
   const subtotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.qty,
@@ -199,217 +251,155 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
   const shippingCost = shipping?.price || 0;
   const total = subtotal + shippingCost;
 
-  // Calculate shipping cost
-  const shippingOptions = useMemo(() => {
-    // If no province selected, show "Select Province" or default
-    if (!province) return [];
-
-    // Determine Zones
-    const isJabodetabek =
-      province === "DKI Jakarta" ||
-      province === "Banten" ||
-      province === "Jawa Barat";
-
-    const isJava =
-      province === "Jawa Tengah" ||
-      province === "Jawa Timur" ||
-      province === "DI Yogyakarta";
-
-    // JNE Rate determination
-    let jnePrice = 40000; // Default (Outside Java)
-    let jneEta = "3-5 Hari";
-
-    if (isJabodetabek) {
-      jnePrice = 10000;
-      jneEta = "1-2 Hari";
-    } else if (isJava) {
-      jnePrice = 20000;
-      jneEta = "2-3 Hari";
+  // Fetch live rates whenever the postal code becomes a valid 5-digit code
+  useEffect(() => {
+    if (!postalCode || !/^\d{5}$/.test(postalCode)) {
+      setShippingOptions([]);
+      return;
     }
-
-    return [
-      {
-        id: "jne",
-        name: "JNE Regular",
-        price: jnePrice,
-        eta: jneEta,
-        icon: Truck,
-      },
-      {
-        id: "gojek-instant",
-        name: "Gojek Instant",
-        price: 20000,
-        eta: "1-2 Jam",
-        icon: Zap,
-        disabled: !isJabodetabek,
-      },
-      {
-        id: "gojek-sameday",
-        name: "Gojek Same Day",
-        price: 18000,
-        eta: "6-8 Jam",
-        icon: Clock,
-        disabled: !isJabodetabek,
-      },
-    ];
-  }, [province]);
-
-  const paymentOptions: PaymentOption[] = [
-    { id: "tf", name: "Bank Transfer (BCA)", icon: Banknote },
-  ];
+    setShippingLoading(true);
+    setShipping(null);
+    getShippingOptions(postalCode, cartItems)
+      .then(setShippingOptions)
+      .catch(() => setShippingOptions([]))
+      .finally(() => setShippingLoading(false));
+  }, [postalCode]);
 
   const handleNextStep1 = () => {
     const newErrors = {
-      firstName: !firstName,
-      lastName: !lastName,
-      whatsapp: !whatsapp,
-      address: !address,
-      city: !city,
-      province: !province,
-      postalCode: !postalCode,
+      firstName: validateField("firstName", firstName),
+      lastName: validateField("lastName", lastName),
+      whatsapp: validateField("whatsapp", whatsapp),
+      address: validateField("address", address),
+      city: validateField("city", city),
+      province: validateField("province", province),
+      postalCode: validateField("postalCode", postalCode),
     };
 
     setErrors(newErrors);
 
-    if (Object.values(newErrors).some((hasError) => hasError)) {
+    if (Object.values(newErrors).some((msg) => msg !== "")) {
       return;
     }
 
     setStep(2);
   };
 
-  const handlePlaceOrder = () => {
-    setPendingPayment(true);
+  const confirmPayment = async () => {
+    setOrderError(null);
+
+    // --- VALIDATION: Check all fields are filled ---
+    if (
+      !firstName ||
+      !lastName ||
+      !whatsapp ||
+      !address ||
+      !city ||
+      !province ||
+      !postalCode
+    ) {
+      setOrderError(
+        "Mohon lengkapi semua data diri Anda sebelum melanjutkan pembayaran.",
+      );
+      return;
+    }
+
+    // --- VALIDATION: Check shipping is selected ---
+    if (!shipping) {
+      setOrderError(
+        "Mohon pilih opsi pengiriman sebelum melanjutkan pembayaran.",
+      );
+      return;
+    }
+
+    // --- All validations passed, proceed with payment ---
+    setOrderLoading(true);
+
+    try {
+      const response = await createOrder({
+        customer: {
+          name: `${firstName} ${lastName}`,
+          email: "customer@anniseherbal.com", // placeholder until email field added
+          phoneNumber: whatsapp,
+          address,
+          city,
+          province,
+          postalCode,
+          specialInstructions: apartment || undefined,
+        },
+        items: cartItems.map((item) => ({
+          productId: String(item.id),
+          category: item.category,
+          quantity: item.qty,
+          sizeName: item.sizeName ?? "100ml",
+        })),
+        shipping: {
+          tier: shipping.tier,
+          courierUsed: shipping.courier,
+          courierServiceCode: shipping.serviceCode,
+          shippingPrice: shipping.price,
+        },
+        paymentMethod: "bank_transfer",
+        idempotencyKey: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      });
+
+      // Open Midtrans Snap payment popup
+      if (response.midtransToken && window.snap) {
+        setOrderLoading(false);
+
+        window.snap.pay(response.midtransToken, {
+          onSuccess: () => {
+            setIsSuccess(true);
+            setTimeout(() => clearCart(), 1000);
+          },
+          onPending: () => {
+            setOrderError(
+              "Pembayaran sedang diproses. Silakan selesaikan pembayaran.",
+            );
+          },
+          onError: () => {
+            setOrderError("Pembayaran gagal. Silakan coba lagi.");
+          },
+          onClose: () => {
+            setOrderError(
+              "Popup pembayaran ditutup. Klik 'Bayar' untuk mencoba lagi.",
+            );
+          },
+        });
+      } else {
+        throw new Error(
+          "Payment system unavailable. Please refresh and try again.",
+        );
+      }
+    } catch (err: unknown) {
+      console.error("❌ Payment error:", err);
+      let msg = "Terjadi kesalahan. Silakan coba lagi.";
+      if (err && typeof err === "object" && "details" in err) {
+        const apiErr = err as {
+          message: string;
+          details?: Record<string, unknown>;
+        };
+        const detailMessages = apiErr.details
+          ? Object.entries(apiErr.details)
+              .map(([key, val]) => {
+                if (typeof val === "object" && val !== null) {
+                  return Object.values(val as Record<string, string>).join(
+                    ", ",
+                  );
+                }
+                return `${key}: ${val}`;
+              })
+              .join(" | ")
+          : "";
+        msg = detailMessages || apiErr.message || msg;
+      } else if (err instanceof Error) {
+        msg = err.message;
+      }
+      setOrderError(msg);
+    } finally {
+      setOrderLoading(false);
+    }
   };
-
-  const confirmPayment = () => {
-    // Simulate Order Saving for Admin Dashboard
-    const newOrder = {
-      id: "ORD-" + Math.floor(Math.random() * 1000000),
-      customer: {
-        name: `${firstName} ${lastName}`,
-        email: "simulated@email.com",
-        whatsapp: whatsapp,
-      },
-      items: cartItems,
-      total: total,
-      status: "paid",
-      date: new Date().toISOString(),
-      paymentMethod: payment?.name || "Unknown",
-    };
-
-    const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]");
-    localStorage.setItem(
-      "orders",
-      JSON.stringify([newOrder, ...existingOrders]),
-    );
-
-    console.log(
-      `[EMAIL SIMULATION] Sending order confirmation to ${firstName} (${whatsapp})...`,
-    );
-    console.log(
-      `[EMAIL SIMULATION] Subject: Order Confirmation #${newOrder.id}`,
-    );
-    console.log(
-      `[EMAIL SIMULATION] Body: Thank you for your order! Your payment of Rp ${total.toLocaleString("id-ID")} has been received.`,
-    );
-
-    setPendingPayment(false);
-    setIsSuccess(true);
-    setTimeout(() => {
-      clearCart();
-    }, 1000);
-  };
-
-  if (pendingPayment) {
-    // STANDARD FLOW (Bank Transfer)
-    return (
-      <div className="pt-32 pb-24 min-h-screen bg-stone-50 flex items-center justify-center animate-fade-in">
-        <div className="bg-white p-8 md:p-12 rounded-3xl shadow-xl max-w-lg w-full mx-4 border border-stone-100">
-          <div className="text-center mb-8">
-            <div className="inline-block px-4 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
-              Menunggu Pembayaran
-            </div>
-            <h2 className="text-2xl md:text-3xl font-serif text-emerald-950 mb-2">
-              Selesaikan Pembayaran
-            </h2>
-            <p className="text-stone-500 text-sm">
-              Selesaikan pembayaran dalam{" "}
-              <span className="text-orange-600 font-bold">23:59:59</span>
-            </p>
-          </div>
-
-          <div className="bg-stone-50 rounded-2xl p-6 mb-8 border border-stone-200">
-            <div className="flex justify-between items-center mb-4 pb-4 border-b border-stone-200">
-              <span className="text-stone-600">Total Pembayaran</span>
-              <span className="font-bold text-xl text-emerald-900">
-                Rp {total.toLocaleString("id-ID")}
-              </span>
-            </div>
-
-            <div className="mb-4">
-              <span className="text-stone-600 text-sm block mb-2">
-                Metode Pembayaran
-              </span>
-              <div className="flex items-center gap-3 font-medium text-emerald-950">
-                {payment?.icon && (
-                  <payment.icon size={20} className="text-emerald-700" />
-                )}
-                {payment?.name}
-              </div>
-            </div>
-
-            {payment?.id === "tf" && (
-              <div className="bg-white p-4 rounded-xl border border-stone-200 relative group cursor-pointer hover:border-emerald-300 transition-colors">
-                <p className="text-xs text-stone-500 font-bold mb-2 uppercase tracking-wide">
-                  Bank Central Asia (BCA)
-                </p>
-                <div className="space-y-1 mb-3">
-                  <p className="text-sm text-stone-600">No. Rekening:</p>
-                  <div className="flex justify-between items-center bg-stone-50 p-2 rounded-lg border border-stone-100">
-                    <p className="font-mono text-lg font-bold text-stone-800 tracking-wider">
-                      4580-187-647
-                    </p>
-                    <button className="text-[10px] font-bold text-emerald-600 uppercase hover:text-emerald-700 px-2 py-1 bg-white rounded-md border border-emerald-100">
-                      Salin
-                    </button>
-                  </div>
-                </div>
-                <div className="space-y-0.5 text-sm text-stone-600">
-                  <p>
-                    <span className="text-stone-400">a/n:</span>{" "}
-                    <span className="font-medium text-emerald-950">
-                      Manistri Tambunan
-                    </span>
-                  </p>
-                  <p>
-                    <span className="text-stone-400">Cabang:</span> Bursa Efek
-                    Sudirman
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="space-y-3">
-            <Button onClick={confirmPayment} className="w-full">
-              Saya Sudah Bayar
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => setPendingPayment(false)}
-              className="w-full"
-            >
-              Ubah Metode Pembayaran
-            </Button>
-            <p className="text-xs text-stone-400 text-center mt-2">
-              Butuh mengubah metode pembayaran? Klik tombol di atas.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   if (isSuccess) {
     return (
@@ -469,9 +459,10 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setFirstName(e.target.value);
                         if (errors.firstName)
-                          setErrors({ ...errors, firstName: false });
+                          setErrors({ ...errors, firstName: "" });
                       }}
-                      error={errors.firstName ? "Wajib diisi" : ""}
+                      onBlur={() => handleBlur("firstName", firstName)}
+                      error={errors.firstName}
                     />
                     <FloatingInput
                       label="Nama Belakang"
@@ -480,9 +471,10 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setLastName(e.target.value);
                         if (errors.lastName)
-                          setErrors({ ...errors, lastName: false });
+                          setErrors({ ...errors, lastName: "" });
                       }}
-                      error={errors.lastName ? "Wajib diisi" : ""}
+                      onBlur={() => handleBlur("lastName", lastName)}
+                      error={errors.lastName}
                     />
                   </div>
                   <FloatingInput
@@ -493,9 +485,10 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setWhatsapp(e.target.value);
                       if (errors.whatsapp)
-                        setErrors({ ...errors, whatsapp: false });
+                        setErrors({ ...errors, whatsapp: "" });
                     }}
-                    error={errors.whatsapp ? "Wajib diisi" : ""}
+                    onBlur={() => handleBlur("whatsapp", whatsapp)}
+                    error={errors.whatsapp}
                   />
                   <div className="relative group">
                     <div className="absolute left-4 top-5 text-stone-400 group-focus-within:text-emerald-600 transition-colors">
@@ -508,8 +501,9 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
                       onChange={(e) => {
                         setAddress(e.target.value);
                         if (errors.address)
-                          setErrors({ ...errors, address: false });
+                          setErrors({ ...errors, address: "" });
                       }}
+                      onBlur={() => handleBlur("address", address)}
                       className={`peer w-full pl-12 pr-4 pt-5 pb-2 rounded-xl border outline-none transition-all placeholder-transparent bg-stone-50/50 focus:bg-white text-stone-800 font-medium ${
                         errors.address
                           ? "border-red-300 focus:border-red-500 bg-red-50/10"
@@ -519,6 +513,11 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
                     <label className="absolute left-12 top-2 text-[10px] font-bold uppercase tracking-wider text-stone-400 transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-stone-500 peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-emerald-600 pointer-events-none">
                       Alamat Lengkap
                     </label>
+                    {errors.address && (
+                      <p className="text-red-500 text-[10px] mt-1 ml-4">
+                        {errors.address}
+                      </p>
+                    )}
                   </div>
 
                   <FloatingInput
@@ -570,38 +569,44 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
                         ></path>
                       </svg>
                     </div>
+                    {errors.province && (
+                      <p className="text-red-500 text-[10px] mt-1 ml-4">
+                        {errors.province}
+                      </p>
+                    )}
                   </div>
 
                   {/* City & Zip Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5 z-10">
-                    <div onClick={(e) => e.stopPropagation()}>
-                      <FloatingInput
-                        label="Kota / Kabupaten"
-                        icon={Building}
-                        value={city}
-                        onChange={handleCityChange}
-                        onFocus={() => {
-                          if (province) setShowCitySuggestions(true);
-                        }}
-                        error={errors.city ? "Wajib diisi" : ""}
-                        suggestions={citySuggestions}
-                        showSuggestions={showCitySuggestions}
-                        onSuggestionClick={handleCitySelect}
-                        autoComplete="off"
-                      />
-                    </div>
-
                     <FloatingInput
-                      label="Kode Pos"
-                      icon={Hash}
-                      value={postalCode}
+                      label="Kota / Kabupaten"
+                      icon={Building}
+                      value={city}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setPostalCode(e.target.value);
-                        if (errors.postalCode)
-                          setErrors({ ...errors, postalCode: false });
+                        setCity(e.target.value);
+                        if (errors.city) setErrors({ ...errors, city: "" });
                       }}
-                      error={errors.postalCode ? "Wajib diisi" : ""}
+                      onBlur={() => handleBlur("city", city)}
+                      error={errors.city}
                     />
+
+                    <div>
+                      <FloatingInput
+                        label="Kode Pos"
+                        icon={Hash}
+                        value={postalCode}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setPostalCode(e.target.value);
+                          if (errors.postalCode)
+                            setErrors({ ...errors, postalCode: "" });
+                        }}
+                        onBlur={() => handleBlur("postalCode", postalCode)}
+                        error={errors.postalCode}
+                      />
+                      <p className="text-xs text-stone-400 mt-1.5 ml-1">
+                        Kode pos digunakan untuk menghitung ongkir
+                      </p>
+                    </div>
                   </div>
                   <div className="pt-6">
                     <Button
@@ -642,102 +647,96 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
 
               {step === 2 && (
                 <div className="space-y-4 animate-fade-in">
-                  {shippingOptions.map((option) => (
-                    <div
-                      key={option.id}
-                      onClick={() => setShipping(option)}
-                      className={`relative flex items-center justify-between p-5 rounded-xl border-2 cursor-pointer transition-all duration-300 ${shipping?.id === option.id ? "border-emerald-600 bg-emerald-50/30 shadow-md" : "border-stone-100 hover:border-emerald-200 hover:bg-stone-50"}`}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div
-                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${shipping?.id === option.id ? "border-emerald-600" : "border-stone-300"}`}
+                  {shippingLoading && (
+                    <p className="text-stone-500 text-sm text-center py-4">
+                      Mengambil harga pengiriman…
+                    </p>
+                  )}
+                  {!shippingLoading && shippingOptions.length === 0 && (
+                    <p className="text-stone-400 text-sm text-center py-4">
+                      Masukkan kode pos yang valid untuk melihat opsi
+                      pengiriman.
+                    </p>
+                  )}
+                  {shippingOptions.map((option) => {
+                    const isSelected =
+                      shipping?.courierCode === option.courierCode &&
+                      shipping?.serviceCode === option.serviceCode;
+                    const colors = getDeliveryTypeColors(
+                      option.label,
+                      option.duration,
+                    );
+                    return (
+                      <div
+                        key={`${option.courierCode}-${option.serviceCode}`}
+                        onClick={() => setShipping(option)}
+                        className={`relative flex items-center justify-between p-5 rounded-xl border-2 cursor-pointer transition-all duration-300 ${isSelected ? `border-emerald-600 bg-gradient-to-r ${colors.selectedBg} ${colors.selectedShadow}` : `${colors.border} hover:border-emerald-400 hover:bg-stone-50/50`}`}
+                      >
+                        <div className="flex items-center gap-4">
+                          <div
+                            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${isSelected ? "border-emerald-600 bg-emerald-50" : "border-stone-300"}`}
+                          >
+                            {isSelected && (
+                              <div className="w-2.5 h-2.5 rounded-full bg-emerald-600" />
+                            )}
+                          </div>
+                          <div
+                            className={`w-12 h-12 rounded-full flex items-center justify-center transition-all font-bold text-sm ${isSelected ? `${colors.badgeBg} ${colors.badgeText} shadow-md` : `${colors.badgeUnselectedBg} ${colors.badgeUnselectedText}`}`}
+                          >
+                            {option.courierCode.substring(0, 2).toUpperCase()}
+                          </div>
+                          <div>
+                            <p
+                              className={`font-serif font-medium text-lg transition-colors ${isSelected ? colors.textColor : "text-stone-700"}`}
+                            >
+                              {option.label}
+                            </p>
+                            {option.courier && (
+                              <p
+                                className={`text-xs font-semibold mt-0.5 uppercase tracking-wide transition-colors ${isSelected ? colors.labelColor : "text-stone-500"}`}
+                              >
+                                {option.courier}
+                              </p>
+                            )}
+                            <p
+                              className={`text-sm font-light flex items-center gap-1 mt-0.5 transition-colors ${isSelected ? colors.labelColor : "text-stone-500"}`}
+                            >
+                              <Clock size={12} className="inline" /> Estimasi:{" "}
+                              {option.duration}
+                            </p>
+                            {option.notes && (
+                              <p
+                                className={`text-xs mt-1 transition-colors ${isSelected ? colors.labelColor : "text-stone-400"}`}
+                              >
+                                {option.notes}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <span
+                          className={`font-semibold text-lg transition-colors ${isSelected ? colors.textColor : "text-stone-700"}`}
                         >
-                          {shipping?.id === option.id && (
-                            <div className="w-2.5 h-2.5 rounded-full bg-emerald-600" />
-                          )}
-                        </div>
-                        <div
-                          className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${shipping?.id === option.id ? "bg-emerald-100/50 text-emerald-700" : "bg-stone-50 text-stone-400"}`}
-                        >
-                          <option.icon size={22} />
-                        </div>
-                        <div>
-                          <p className="font-serif font-medium text-emerald-950 text-lg">
-                            {option.name}
-                          </p>
-                          <p className="text-sm text-stone-500 font-light flex items-center gap-1">
-                            <Clock size={12} className="inline" /> Estimasi:{" "}
-                            {option.eta}
-                          </p>
-                        </div>
+                          Rp {option.price.toLocaleString("id-ID")}
+                        </span>
                       </div>
-                      <span className="font-semibold text-emerald-900 text-lg">
-                        Rp {option.price.toLocaleString("id-ID")}
-                      </span>
-                    </div>
-                  ))}
+                    );
+                  })}
                   <div className="pt-6 flex gap-4">
                     <Button variant="secondary" onClick={() => setStep(1)}>
                       {t.back}
                     </Button>
-                    <Button disabled={!shipping} onClick={() => setStep(3)}>
-                      {t.next_pay}
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Step 3: Pembayaran */}
-            <div
-              className={`bg-white p-6 md:p-8 rounded-2xl shadow-sm border ${step === 3 ? "border-emerald-500 ring-1 ring-emerald-500" : "border-stone-100"}`}
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h3
-                  className={`text-xl font-serif flex items-center gap-3 ${step >= 3 ? "text-emerald-950" : "text-stone-400"}`}
-                >
-                  <span
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 3 ? "bg-emerald-900 text-white" : "bg-stone-200 text-stone-500"}`}
-                  >
-                    3
-                  </span>
-                  {t.step3}
-                </h3>
-              </div>
-
-              {step === 3 && (
-                <div className="space-y-4 animate-fade-in">
-                  {paymentOptions.map((option) => (
-                    <div
-                      key={option.id}
-                      onClick={() => setPayment(option)}
-                      className={`relative flex items-center gap-4 p-5 rounded-xl border-2 cursor-pointer transition-all duration-300 ${payment?.id === option.id ? "border-emerald-600 bg-emerald-50/30 shadow-md" : "border-stone-100 hover:border-emerald-200 hover:bg-stone-50"}`}
+                    <Button
+                      disabled={!shipping || orderLoading}
+                      onClick={confirmPayment}
                     >
-                      <div
-                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${payment?.id === option.id ? "border-emerald-600" : "border-stone-300"}`}
-                      >
-                        {payment?.id === option.id && (
-                          <div className="w-2.5 h-2.5 rounded-full bg-emerald-600" />
-                        )}
-                      </div>
-                      <div
-                        className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${payment?.id === option.id ? "bg-emerald-100/50 text-emerald-700" : "bg-stone-50 text-stone-400"}`}
-                      >
-                        <option.icon size={22} />
-                      </div>
-                      <p className="font-serif font-medium text-emerald-950 text-lg">
-                        {option.name}
-                      </p>
-                    </div>
-                  ))}
-                  <div className="pt-6 flex gap-4">
-                    <Button variant="secondary" onClick={() => setStep(2)}>
-                      {t.back}
-                    </Button>
-                    <Button disabled={!payment} onClick={handlePlaceOrder}>
-                      {t.pay_now}
+                      {orderLoading ? "Memproses..." : t.pay_now}
                     </Button>
                   </div>
+                  {orderError && (
+                    <p className="text-red-500 text-sm mt-3 text-center font-medium">
+                      {orderError}
+                    </p>
+                  )}
                 </div>
               )}
             </div>

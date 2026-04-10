@@ -1,10 +1,7 @@
-import { OrderItem, PromoCodeUsageType } from '../types/orders';
-import { ShippingMethod } from '../types/orders';
-import { getShippingCost, getShippingEstimate } from './shippingHelpers';
-import { PricingBreakdownType } from '../types/orders';
-import { Order, CreateOrderRequest, PaymentMethod } from '../types/orders';
+import { OrderItem, PromoCodeUsageType, PricingBreakdownType, Order, CreateOrderRequest, PaymentMethod } from '../types/orders';
 import { validateOrderRequest } from './orderValidation';
 import { fetchAndBuildOrderItems } from './productHelpers';
+import { calculateCartWeightKg } from './shippingHelpers';
 
 /**
  * Generate unique order ID for database
@@ -92,19 +89,10 @@ export const calculateDiscount = (
  */
 export const calculateOrderTotal = (
   subtotal: number,
-  shippingMethod: ShippingMethod,
+  shippingCost: number,
   discount: number = 0
 ): number => {
-  // Get shipping cost
-  
-  // Calculate: subtotal - discount + shipping
-  const shippingCost = getShippingCost(shippingMethod);
-
-  // Calculate: subtotal - discount + shipping
-  const total = subtotal - discount + shippingCost;
-
-  // Return total
-  return total;
+  return subtotal - discount + shippingCost;
 };
 
 
@@ -119,16 +107,14 @@ export const calculateOrderTotal = (
  */
 export const buildPricingBreakdown = (
   items: OrderItem[],
-  shippingMethod: ShippingMethod,
+  shippingCost: number,
   promoDiscount?: {
     discountType: "percentage" | "fixed";
     discountValue: number;
     maxDiscount?: number;
   }
 ): PricingBreakdownType => {
-  // Calculate subtotal
   const subtotal = calculateSubtotal(items);
-  // Calculate discount (if promo provided)
   let discount = 0;
   if (promoDiscount) {
     discount = calculateDiscount(
@@ -138,18 +124,8 @@ export const buildPricingBreakdown = (
       promoDiscount.maxDiscount
     );
   }
-
-  // Get shipping cost
-  const shippingCost = getShippingCost(shippingMethod);
-  // Calculate total
-  const total = calculateOrderTotal(subtotal, shippingMethod, discount);
-  // Return pricing breakdown object
-  return {
-    subtotal,
-    discount,
-    shippingCost,
-    total
-  };
+  const total = calculateOrderTotal(subtotal, shippingCost, discount);
+  return { subtotal, discount, shippingCost, total };
 };
 
 
@@ -163,7 +139,7 @@ export const buildPricingBreakdown = (
  * @param promoCodeData - Optional promo code data (if applied)
  * @returns Complete Order document
  */
-export const buildOrderDocument = (
+export const buildOrderDocument = async (
   orderData: CreateOrderRequest,
   items: OrderItem[],
   normalizedPhone: string,
@@ -174,38 +150,40 @@ export const buildOrderDocument = (
     maxDiscount: number;
   }
 ) => {
+  const shippingCost = orderData.shipping.shippingPrice;
+
   // Step 1: Calculate pricing breakdown
-    const pricingBreakdown =  buildPricingBreakdown(
-      items,
-      orderData.shipping.method, 
-      promoCodeData ? {
-        discountType: promoCodeData.discountType,
-        discountValue:promoCodeData.discountValue,
-        maxDiscount:promoCodeData.maxDiscount
-      }:undefined,
-     );
-     // temp 
-     console.log(`how does the object of pricingBreakdown looks like : ${pricingBreakdown}`);
+  const pricingBreakdown = buildPricingBreakdown(
+    items,
+    shippingCost,
+    promoCodeData ? {
+      discountType: promoCodeData.discountType,
+      discountValue: promoCodeData.discountValue,
+      maxDiscount: promoCodeData.maxDiscount
+    } : undefined,
+  );
+
   // Step 2: Build customer object
-    const customer ={
-      name: orderData.customer.name, 
-      email: orderData.customer.email,
-      phoneNumber: normalizedPhone,
-      address: orderData.customer.address,
-      city: orderData.customer.city,
-      province: orderData.customer.province,
-      postalCode: orderData.customer.postalCode,
-      specialInstructions: orderData.customer.specialInstructions || null
-    }
-    const shippingMethod = orderData.shipping.method;
-  // Step 3: Build shipping object
-    const shipping = {
-      method: shippingMethod, 
-      cost: getShippingCost(shippingMethod),
-      estimation: getShippingEstimate(shippingMethod)
-    }
-  // temp 
-    console.log(`how does the object of shipping looks like : ${shipping}`);
+  const customer = {
+    name: orderData.customer.name, 
+    email: orderData.customer.email,
+    phoneNumber: normalizedPhone,
+    address: orderData.customer.address,
+    city: orderData.customer.city,
+    province: orderData.customer.province,
+    postalCode: orderData.customer.postalCode,
+    specialInstructions: orderData.customer.specialInstructions || null
+  }
+
+  // Step 3: Build shipping object from frontend data (live Biteship rates)
+  const shipping = {
+    tier: orderData.shipping.tier,
+    courierUsed: orderData.shipping.courierUsed,
+    courierServiceCode: orderData.shipping.courierServiceCode,
+    weightKg: calculateCartWeightKg(orderData.items),
+    cost: shippingCost,
+    estimation: "Estimated arrival within 1-5 business days",
+  };
 
 
   // Step 4: Build payment object

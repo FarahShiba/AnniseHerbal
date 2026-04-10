@@ -13,8 +13,8 @@ RUN npm ci
 # Copy source code and other necessary files
 COPY . .
 
-# Build TypeScript to JavaScript
-RUN npm run build
+# Remove any existing dist folder and rebuild TypeScript fresh
+RUN rm -rf dist && npm run build
 
 # Remove dev dependencies to reduce image size
 RUN npm prune --production

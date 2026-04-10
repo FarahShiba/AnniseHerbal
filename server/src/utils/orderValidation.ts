@@ -7,7 +7,9 @@ import {
   OrderItemRequest
 } from "../types/orders";
 
+import { ShippingTier } from '../types/orders';
 
+const VALID_TIERS: ShippingTier[] = ['economy', 'standard', 'express'];
 /**
  * Order validation utility functions
  */
@@ -276,20 +278,35 @@ export const validateOrderItems = (items: OrderItemRequest[]): {
   return { isValid: true };
 };
 
-// #10: Shipping Method Validator
-export const validateShippingMethod = (method: string): {
-  isValid: boolean;
-  error?: string;
-} => {
-  const validMethods: ShippingMethod[] = ["standard", "express"];
-  
-  if (!validMethods.includes(method as ShippingMethod)) {
-    return { 
-      isValid: false, 
-      error: "Invalid shipping method. Choose 'standard' or 'express'" 
-    };
+// #10: Shipping Validator - validates complete shipping object from Biteship
+export const validateShipping = (
+  shipping: {
+    tier: string;
+    courierUsed: string;
+    courierServiceCode: string;
+    shippingPrice: number;
   }
-  
+): { isValid: boolean; error?: string } => {
+  // Validate tier
+  if (!VALID_TIERS.includes(shipping.tier as ShippingTier)) {
+    return { isValid: false, error: `Invalid shipping tier. Must be: ${VALID_TIERS.join(', ')}` };
+  }
+
+  // Validate courierUsed
+  if (!shipping.courierUsed || shipping.courierUsed.trim().length === 0) {
+    return { isValid: false, error: "Courier name is required" };
+  }
+
+  // Validate courierServiceCode
+  if (!shipping.courierServiceCode || shipping.courierServiceCode.trim().length === 0) {
+    return { isValid: false, error: "Courier service code is required" };
+  }
+
+  // Validate shippingPrice
+  if (typeof shipping.shippingPrice !== 'number' || shipping.shippingPrice <= 0) {
+    return { isValid: false, error: "Shipping price must be a positive number" };
+  }
+
   return { isValid: true };
 };
 
@@ -356,8 +373,8 @@ export const validateOrderRequest = (
         errors.items = itemValidation.error;
     }
 
-    // validate shipping method
-    const shippingValidation = validateShippingMethod(orderData.shipping.method);
+    // validate shipping (full object with Biteship details)
+    const shippingValidation = validateShipping(orderData.shipping);
     if(!shippingValidation.isValid){
         errors.shipping = shippingValidation.error;
     }
