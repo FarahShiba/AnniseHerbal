@@ -23,10 +23,8 @@ const ShopPage: React.FC<ShopPageProps> = ({
   setProduct,
   addToCart,
   t,
-  lang: _lang,
+  lang,
 }) => {
-  // const products = getTranslatedProducts(lang);
-
   const [filter, setFilter] = useState("All");
   // Get unique categories from products (after they load)
   const apiCategories = Array.from(new Set(products.map((p) => p.category)));

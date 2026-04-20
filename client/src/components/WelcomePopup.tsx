@@ -28,13 +28,14 @@ const WelcomePopup: React.FC<WelcomePopupProps> = ({ navigateTo, t }) => {
       !lastSeenTimestamp ||
       now - parseInt(lastSeenTimestamp) > thirtyMinutes
     ) {
+      // Simpan status langsung untuk menghindari bug muncul dua kali akibat re-render
+      localStorage.setItem("hasSeenWelcomePopup", now.toString());
+
       // Delay entrance by 2 seconds to not overwhelm the user immediately
       const timer = setTimeout(() => {
         setShouldRender(true);
         // Small delay for entrance animation
         setTimeout(() => setIsOpen(true), 50);
-        // Mark as seen with current timestamp
-        localStorage.setItem("hasSeenWelcomePopup", now.toString());
       }, 2000);
 
       return () => clearTimeout(timer);

@@ -10,8 +10,8 @@ export const productTranslations = {
       benefits: [
         "Membantu meredakan pegal linu & nyeri otot",
         "Membantu mengurangi nyeri sendi & rematik",
+        "Membantu mengatasi keseleo, saraf terjepit dan masuk angin",
         "Memberikan sensasi hangat & rileks pada tubuh",
-        "Cocok sebagai minyak pijat harian setelah kerja / olahraga",
       ],
       ingredients: [
         "Olea europaea (Olive oil)",
@@ -69,9 +69,7 @@ export const productTranslations = {
       shortDesc: "Meringankan maag dan masalah pencernaan.",
       description:
         "Membantu mengatasi gangguan pencernaan seperti maag, kembung, diare, sembelit dan mual.",
-      benefits: [
-        "Membantu mengatasi gangguan pencernaan seperti : maag, kembung, diare, sembelit dan mual",
-      ],
+      benefits: [],
       ingredients: [
         "Olea europaea fructus",
         "Calendula officinalis",
@@ -81,7 +79,7 @@ export const productTranslations = {
         "Rosmarin officinale folium",
       ],
       usage:
-        "Oleskan secukupnya progest pada area lambung memutar searah dengan jarum jam. Khusus diare, pijat memutar berlawanan arah jarum jam. Dilakukan 2-3 kali sehari sampai keluhan berkurang / reda.",
+        "Okeskan secukupnya Progest Oil pada area lambung 2-3 kali sehari sampai keluhan berkurang / reda",
     },
     5: {
       name: "Nozze Oil - 15 ml",
@@ -180,8 +178,8 @@ export const productTranslations = {
       benefits: [
         "Helps relieve muscle aches and pains",
         "Helps reduce joint pain and rheumatism",
+        "Helps overcome sprains, pinched nerves, and colds",
         "Provides a warm and relaxing sensation to the body",
-        "Suitable as a daily massage oil after work or exercise",
       ],
       ingredients: [
         "Olea europaea (Olive oil)",
@@ -236,9 +234,7 @@ export const productTranslations = {
       shortDesc: "Relieves stomach ulcers and digestive problems.",
       description:
         "Helps overcome digestive disorders such as heartburn, bloating, diarrhea, constipation, and nausea.",
-      benefits: [
-        "Helps overcome digestive disorders such as: heartburn, bloating, diarrhea, constipation, and nausea.",
-      ],
+      benefits: [],
       ingredients: [
         "Olea europaea fruit",
         "Calendula officinalis",

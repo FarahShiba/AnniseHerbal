@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import logoAnnise from "./assets/logoAnniseherbal.png";
+import logoAnnise from "./assets/logoNEW_Annise.png";
 import {
   Globe,
   Search,
@@ -246,30 +246,31 @@ const App: React.FC = () => {
       {/* WHATSAPP FLOAT BUTTON */}
       <WhatsAppFloat />
 
-      {/* WELCOME POPUP */}
-      <WelcomePopup navigateTo={navigateTo} lang={lang} t={t.popup} />
-
       {/* HEADER */}
       <header
         className={`fixed w-full z-50 flex flex-col transition-all duration-300 ${
-          scrolled
-            ? "bg-white/95 backdrop-blur-md shadow-sm"
-            : "bg-transparent"
+          scrolled ? "bg-white/95 backdrop-blur-md shadow-sm" : "bg-transparent"
         }`}
       >
         {/* Mobile Contact Top Bar */}
         <div className="lg:hidden w-full bg-emerald-900 text-stone-100 text-[10px] md:text-xs py-2 px-4 flex justify-between items-center">
-          <a href="tel:+628159118754" className="flex items-center gap-1.5 hover:text-white">
+          <a
+            href="tel:+628159118754"
+            className="flex items-center gap-1.5 hover:text-white"
+          >
             <Phone size={12} />
             +62 815-9118-754
           </a>
-          <a href="mailto:anisherbal@gmail.com" className="flex items-center gap-1.5 hover:text-white">
+          <a
+            href="mailto:anisherbal@gmail.com"
+            className="flex items-center gap-1.5 hover:text-white"
+          >
             <Mail size={12} />
             anisherbal@gmail.com
           </a>
         </div>
 
-        <div className="container mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="container mx-auto px-4 md:px-6 py-1 flex items-center justify-between">
           {/* LOGO */}
           <div
             className="flex items-center gap-2 cursor-pointer"
@@ -278,7 +279,7 @@ const App: React.FC = () => {
             <img
               src={logoAnnise}
               alt="Annise Herbal"
-              className="h-14 md:h-24 w-auto object-contain transition-all hover:scale-105"
+              className="h-[5.5rem] md:h-[7.5rem] w-auto object-contain transition-transform duration-300 hover:scale-105 -ml-2"
             />
           </div>
 
@@ -426,7 +427,10 @@ const App: React.FC = () => {
             element={<ResourcesPage t={t} navigateTo={navigateTo} />}
           />
           <Route path="/blog" element={<BlogPostPage t={t} lang={lang} />} />
-          <Route path="/blog/:id" element={<BlogPostPage t={t} lang={lang} />} />
+          <Route
+            path="/blog/:id"
+            element={<BlogPostPage t={t} lang={lang} />}
+          />
           <Route
             path="/education/:type"
             element={<EducationWrapper navigateTo={navigateTo} lang={lang} />}

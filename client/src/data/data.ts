@@ -227,9 +227,9 @@ export const translations = {
     },
     popup: {
       tag: "100% PURE & NATURAL",
-      title: "Dunia Ketenangan",
-      desc: "Temukan rahasia alam untuk tidur lebih nyenyak, bernapas lebih lega, dan hidup bebas nyeri. Sentuhan murni essential oil kami siap menemani hari Anda.",
-      btn: "Eksplorasi Sekarang",
+      title: "The Essence of Botanical Care",
+      desc: "Setiap tetes menghadirkan kemurnian botani alami, merawat kesehatan tubuh dan menghadirkan keseimbangan pikiran.",
+      btn: "Eksplorasi produk",
     },
   },
   en: {
@@ -431,9 +431,9 @@ export const translations = {
     },
     popup: {
       tag: "100% PURE & NATURAL",
-      title: "World of Serenity",
-      desc: "Discover nature's secret to sleeping better, breathing easier, and living pain-free. The pure touch of our essential oils is ready to accompany your day.",
-      btn: "Explore Now",
+      title: "The Essence of Botanical Care",
+      desc: "Every drop delivers the purity of natural botanicals, nurturing body health and bringing balance to the mind.",
+      btn: "Explore products",
     },
   },
 };
@@ -450,8 +450,10 @@ export const products: Product[] = [
     description:
       "Max Pain Relief Oil (MPR) adalah minyak oles herbal hangat yang diformulasikan dari bahan herbal pilihan untuk membantu meredakan pegal linu, nyeri otot, rematik, saraf terjepit, dan ketidaknyamanan pada sendi. Sensasi hangatnya membantu merilekskan otot, melancarkan sirkulasi darah, dan memberikan kenyamanan pada tubuh.",
     benefits: [
-      "Cocok sebagai minyak pijat harian setelah kerja / olahraga ganti menjadi membantu mengatasi keseleo, saraf terjepit dan masuk angin",
-      "Memberi sensasi hangat... ditaruh paling bawah",
+      "Membantu meredakan pegal linu & nyeri otot",
+      "Membantu mengurangi nyeri sendi & rematik",
+      "Membantu mengatasi keseleo, saraf terjepit dan masuk angin",
+      "Memberikan sensasi hangat & rileks pada tubuh",
     ],
     ingredients: [
       "Olea europaea (Olive oil)",
@@ -529,9 +531,9 @@ export const products: Product[] = [
     price: 175000,
     shortDesc: "Meringankan maag dan masalah pencernaan.",
     description:
-      "Membantu mengatasi gangguan pencernaan seperti maag, kembung, diare, sembelit dan mual.",
+      "Sinergi ekstrak botani dan minyak esensial berkualitas tinggi yang bekerja secara alami untuk meredakan gangguan pencernaan dan menghadirkan kembali kenyamanan tubuh secara menyeluruh.",
     benefits: [
-      "Membantu mengatasi gangguan pencernaan seperti : maag, kembung, diare, sembelit dan mual",
+      "Membantu mengatasi gangguan pencernaan seperti: maag, kembung, diare, sembelit dan mual.",
     ],
     ingredients: [
       "Olea europaea fructus",
@@ -542,9 +544,8 @@ export const products: Product[] = [
       "Rosmarin officinale folium",
     ],
     usage:
-      "Oleskan secukupnya progest pada area lambung memutar searah dengan jarum jam. Khusus diare, pijat memutar berlawanan arah jarum jam. Dilakukan 2-3 kali sehari sampai keluhan berkurang / reda.",
-    caution:
-      "Hanya untuk pemakaian luar. Tidak untuk diminum. Jauhkan dari jangkauan anak-anak.",
+      "Oleskan secukupnya Progest Oil pada area lambung 2-3 kali sehari sampai keluhan berkurang / reda",
+    caution: "Hentikan pemakaian jika terjadi iritasi / alergi",
     imageColor: "bg-white",
     image: progest1,
     images: [progest1, progestDesc1, progestDesc2],

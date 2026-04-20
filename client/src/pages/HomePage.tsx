@@ -33,12 +33,10 @@ const HomePage: React.FC<HomePageProps> = ({
   setProduct,
   addToCart,
   t,
-  lang: _lang,
+  lang,
   products,
   loading,
 }) => {
-  // const products = getTranslatedProducts(lang);
-
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "HealthAndBeautyBusiness",
